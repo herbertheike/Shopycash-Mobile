@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './views/loginview'
 import LoginPhone from './views/loginphone'
+import NextPhone from './views/nextphone'
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -23,6 +24,9 @@ export default function App() {
       <Stack.Screen 
       name={'LoginPhone'}
       component={LoginPhone}/>
+      <Stack.Screen
+      name={'nextphone'}
+      component={NextPhone}/>
     </Stack.Navigator>
     </NavigationContainer>
   );

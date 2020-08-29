@@ -11,7 +11,7 @@ export default function Login(props)
       style={styles.image}
       />
           <View style={styles.login}>
-          <Text style={styles.logintext}>Olá, é bom conhecê-lo</Text>
+          <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
           <Text style={styles.logindesc}>Tentamos encontar uma maneira de adicionar mais opções e deixar o processo mais dinâmico</Text>
                 <TouchableOpacity style={styles.botao}
                     title="Login"
@@ -109,9 +109,10 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       fontSize: 18,
       position: 'relative',
-      marginStart: -90
+     width: 350
     },
     logindesc:{
+      width:350,
       fontSize: 14,
       position: 'relative',
       color: '#999999'

@@ -1,26 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import NextPhone from './nextphone'
 
-export default function LoginPhone(props){
-    const [phonenumber, setText] = useState('');
+export default function NextPhone(props){
+    const { navigate } = props.navigation;
+    const phonenumber = props
+    
     return(
         <KeyboardAvoidingView style={styles.container}>
-            <Text style={styles.logintext}>Digite Seu número</Text>
+            <Text style={styles.logintext}>
+                Código de verificação
+            </Text>
+            <Text style={styles.smalltext}>
+                O codigo de verificação foi enviado para:
+            </Text>
+            <Text style={styles.smalltext}>
+                {JSON.stringify(phonenumber)}
+            </Text>
             <TextInput
             style={styles.number}
             keyboardType='phone-pad'
-            placeholder='(11)9 9999-9999'
-            name={'phonenumber'}
-            onChangeText={phonenumber =>setText(phonenumber)}
             >
 
             </TextInput>
             <TouchableOpacity style={styles.botao}
                     title="Login"
                     color='#ffffff'
-                    onPress={() => props.navigation.navigate('nextphone', {phonenumber: phonenumber})}
+                    onPress={() => props.navigation.navigate('nextphone')}
                 >
                     <Text style={styles.botaotext}>Avançar</Text>
                 </TouchableOpacity>
