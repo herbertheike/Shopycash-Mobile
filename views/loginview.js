@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
-import LoginPhone from './loginphone'
 
 export default function Login(props) {
   return (
@@ -15,7 +14,7 @@ export default function Login(props) {
         <TouchableOpacity style={styles.botao}
           title="Login"
           color='#ffffff'
-          onPress={() => props.navigation.navigate('LoginPhone')}
+          onPress={() => props.navigation.navigate('TelefoneLogin', {screen: 'LoginPhone'})}
         >
           <Text style={styles.botaotext}>Conectar com número de telefone</Text>
         </TouchableOpacity>

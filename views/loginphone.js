@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
-export default function LoginPhone(props) {
+export default function LoginPhone({navigation}) {
     const [phonenumber, setText] = useState('');
     return (
         
@@ -20,7 +20,8 @@ export default function LoginPhone(props) {
             <TouchableOpacity style={styles.botao}
                 title="Login"
                 color='#ffffff'
-                onPress={() => props.navigation.navigate('nextphone', { phonenumber: phonenumber })}
+                onPress={() => navigation.navigate('TelefoneLogin',{screen: 'NextPhone',
+                params: {phonenumber: phonenumber}})}
             >
                 <Text style={styles.botaotext}>Avançar</Text>
             </TouchableOpacity>
