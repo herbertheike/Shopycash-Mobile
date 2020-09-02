@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import NextPhone from './nextphone'
 
 export default function LoginPhone(props) {
     const [phonenumber, setText] = useState('');
     return (
+        
         <KeyboardAvoidingView style={styles.container}>
             <Text style={styles.logintext}>Digite Seu número</Text>
             <TextInput

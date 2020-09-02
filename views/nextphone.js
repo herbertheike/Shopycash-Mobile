@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import lojasMain from './lojasMain'
 
 export default function NextPhone(props) {
 
@@ -24,7 +25,7 @@ export default function NextPhone(props) {
             <TouchableOpacity style={styles.botao}
                 title="Login"
                 color='#ffffff'
-                onPress={() => props.navigation.navigate('nextphone')}>
+                onPress={() => props.navigation.navigate('lojasMain')}>
                 <Text style={styles.botaotext}>Avançar</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
