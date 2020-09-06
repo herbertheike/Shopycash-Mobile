@@ -8,6 +8,7 @@ import Login from './views/loginview'
 import LoginPhone from './views/loginphone'
 import NextPhone from './views/nextphone'
 import LojasMain from './views/lojasMain'
+import GetShopping from './views/getShopping'
 import { Icon } from 'react-native-elements'
 
 const Stack = createStackNavigator();
@@ -15,13 +16,20 @@ const Drawer = createDrawerNavigator();
 const MainStack = createStackNavigator();
 
 
-export default function App ({navigation}){
+class HambButton extends React.Component {
+  render() {
+    // Get it from props
+    const { navigation } = this.props;
+  }
+}
+function App (props){
   return (
     <NavigationContainer>
       <MainStack.Navigator initialRouteName="Home">
         <MainStack.Screen name="Home" component={HomeScreen} options ={{headerShown:false}}/>
         <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
-        <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:true}} />
+        <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
+        <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
       </MainStack.Navigator>
     </NavigationContainer>
   )
@@ -60,20 +68,22 @@ function NoLogin(){
       <Stack.Screen name="login" component={Login} options={{headerShown:false}}/>
   </Stack.Navigator>
 }
+function Shopping(){
+  <Stack.Navigator>
+      <Stack.Screen name="shopping" component={GetShopping} options={{headerShown:false}}/>
+  </Stack.Navigator>
+}
 
 function MainPage({navigation}){
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="LojasMain" component={LojasMain}/>
+    <Drawer.Navigator >
+      <Drawer.Screen name="LojasMain" component={LojasMain} initialRouteName="feed" drawerType='slide' options={{headerShown:true, headerLeft: () =>(
+      <Icon style={{ marginLeft: 20 }} onPress={() => navigation.openDrawer()} name="menu" color="#e80000" size={30}/>)}}/>
     </Drawer.Navigator>
   )
 }
 
-
-
-
-
-
+export default App;
 
 
 /*const LoginStack = createStackNavigator();

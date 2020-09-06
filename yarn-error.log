@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @react-navigation-drawer
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @react-navigation/compat
 
 PATH: 
   C:\Python38\Scripts\;C:\Python38\;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files (x86)\Touch Portal\plugins\adb\platform-tools;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\wamp64\bin\php\php5.6.40;C:\composer;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\herbe\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\herbe\AppData\Local\Programs\Python\Python38-32\;C:\Users\herbe\AppData\Local\Microsoft\WindowsApps;C:\Users\herbe\AppData\Roaming\npm;C:\Users\herbe\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\herbe\AppData\Roaming\Composer\vendor\bin;C:\Users\herbe\.dotnet\tools;C:\Users\herbe\AppData\Local\Yarn\bin
@@ -14,17 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@react-navigation-drawer: Request "https://registry.yarnpkg.com/@react-navigation-drawer" returned a 405
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66105:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140748:22)
-      at Request.emit (events.js:315:20)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141720:10)
-      at Request.emit (events.js:315:20)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141642:12)
-      at Object.onceWrapper (events.js:421:28)
-      at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (_stream_readable.js:1221:12)
-      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+  Error: EPERM: operation not permitted, unlink 'C:\wamp64\www\ReactSCApp\ScAo\node_modules\@babel\generator\node_modules\.bin'
 
 npm manifest: 
   {
@@ -38,6 +28,7 @@ npm manifest:
     },
     "dependencies": {
       "@react-native-community/masked-view": "0.1.10",
+      "@react-navigation/drawer": "^5.9.0",
       "@react-navigation/native": "^5.7.3",
       "@react-navigation/stack": "^5.9.0",
       "expo": "^38.0.10",
@@ -1299,6 +1290,14 @@ Lockfile:
       query-string "^6.13.1"
       react-is "^16.13.0"
       use-subscription "^1.4.0"
+  
+  "@react-navigation/drawer@^5.9.0":
+    version "5.9.0"
+    resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-5.9.0.tgz#e8813df2f1aa5694521c1a46c88d0b42c50fbe6c"
+    integrity sha512-YcuJ9QD4cFyjfXJx6vMsG3u3bfOU/Nt+GvMMl+4rZOxw2LStmubY1jqfsEAli/+dTUHv5kXJf5dF+/GhUCqA5g==
+    dependencies:
+      color "^3.1.2"
+      react-native-iphone-x-helper "^1.2.1"
   
   "@react-navigation/native@^5.7.3":
     version "5.7.3"
