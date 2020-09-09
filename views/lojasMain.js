@@ -10,18 +10,14 @@ import { Dropdown } from 'react-native-material-dropdown-v2';
 
 const Drawer = createDrawerNavigator();
 const url = 'http://localhost:8080/administrativo/shopping'
-const ColorCode = ['rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')'];
+const ColorCode = ['#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061',
+                  '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', 
+                  '#E5454C', '#5653d4', '#08a791','#faa33f'];
 
 function HomeScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const iconnama = ["arrow-forward", "arrow-upward", "art-track", "aspect-ratio", "assessment", "assignment", "assignment-ind", "assignment-late", "assignment-return", "assignment-returned", "assignment-turned-in", "assistant", "assistant-photo", "attach-file", "attach-money", "attachment", "audiotrack", "autorenew", "av-timer", "backspace", "backup", "battery-alert", "battery-charging-full", "battery-full", "battery-std", "battery-unknown", "beach-access", "beenhere", "block", "bluetooth", "bluetooth-audio", "bluetooth-connected", "bluetooth-disabled", "bluetooth-searching", "blur-circular", "blur-linear", "blur-off", "blur-on"]
+  //const iconnama = ["arrow-forward", "arrow-upward", "art-track", "aspect-ratio", "assessment", "assignment", "assignment-ind", "assignment-late", "assignment-return", "assignment-returned", "assignment-turned-in", "assistant", "assistant-photo", "attach-file", "attach-money", "attachment", "audiotrack", "autorenew", "av-timer", "backspace", "backup", "battery-alert", "battery-charging-full", "battery-full", "battery-std", "battery-unknown", "beach-access", "beenhere", "block", "bluetooth", "bluetooth-audio", "bluetooth-connected", "bluetooth-disabled", "bluetooth-searching", "blur-circular", "blur-linear", "blur-off", "blur-on"]
 
   useEffect(() => {
     fetch('http://192.168.0.103:8080/administrativo/segmento/')
@@ -52,53 +48,63 @@ function HomeScreen({ navigation }) {
 
                 <TouchableOpacity style={{
                   width: 100,
-                  height: 120,
                   borderRadius: 7,
-                  backgroundColor: ColorCode[item.idseg],
+                  backgroundColor: ColorCode[item.idseg-1],
                   color: '#FFFFFF',
                   marginHorizontal: 5,
                   alignItems: 'center',
                   padding: 10
                 }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
-                  <Icon name={iconnama[item.idseg]} color="#FFFFFF" size={60} />
                   <Text style={styles.botaotext}>{item.nome}</Text>
                 </TouchableOpacity>
               )}
             />
           )}
         </View>
-      </ScrollView>
-      <View style={{flex:50}}>
-      <ShoppingDropDown />
+        <View >
+      <Lojas />
       </View>
+      </ScrollView>
+      
+      
     </View>
   );
 }
 
-function ShoppingDropDown() {
+function Lojas() {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData, newData, newsetData] = useState([]);
   useEffect(() => {
-    fetch('http://192.168.0.103:8080/administrativo/shopping',{
-        method: 'GET',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'}})
+    fetch('http://192.168.0.103:8080/shopping/lojas')
       .then((response) => response.json())
-      .then((json) => setData(json.Shopping))
-
+      .then((json) => setData(json.lojas))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
   return (
-        <Dropdown
-      dropDownStyle={{ backgroundColor: '#fafafa' }}
-      baseColor='white'
-      itemColor='white'
-      label='Shopping'
-      containerStyle={{ height: 50, width: 375 }}
-      data={data}
-    />
+    <View>
+    {isLoading ? <ActivityIndicator /> : (
+      <FlatList
+        horizontal={true}
+        data={data}
+        keyExtractor={({ id }, idLoja) => id}
+        renderItem={({ item }) => (
+
+          <TouchableOpacity style={{
+            flex: 1,
+            width:'100%',
+            borderRadius: 7,
+            backgroundColor: '#ffffff',
+            alignItems: 'center',
+            padding: 10,
+          }} title="Login" color='#ffffff' onPress={() => alert(item.nomeloja)}>
+            <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
+            <Text style={styles.lojades}>{item.desc}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    )}
+  </View>
   )
 };
 
@@ -133,6 +139,7 @@ const styles = StyleSheet.create({
   },
   ImageStyle: {
     padding: 25,
+
     margin: 10,
     height: 25,
     width: 25,
@@ -182,6 +189,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     position: 'relative',
     color: '#999999'
+  },
+  lojades: {
+    width: '100%',
+    fontSize: 14,
+    position: 'relative',
+    color: '#b9b9b9'
+  },
+  lojastext:{
+    color:'#000000'
   },
   botaotext: {
     fontWeight: 'bold',
