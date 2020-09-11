@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView, SafeAreaView, FlatList } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { Icon, Header } from 'react-native-elements'
+import { Header } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import Getshopping from './getShopping'
 import { Dropdown } from 'react-native-material-dropdown-v2';
+const searchicon = <Icon name="search" size={30} color="#25282B" style={{marginHorizontal:10}} />;
 
 
 
@@ -17,8 +19,8 @@ const ColorCode = ['#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb306
 function HomeScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  //const iconnama = ["arrow-forward", "arrow-upward", "art-track", "aspect-ratio", "assessment", "assignment", "assignment-ind", "assignment-late", "assignment-return", "assignment-returned", "assignment-turned-in", "assistant", "assistant-photo", "attach-file", "attach-money", "attachment", "audiotrack", "autorenew", "av-timer", "backspace", "backup", "battery-alert", "battery-charging-full", "battery-full", "battery-std", "battery-unknown", "beach-access", "beenhere", "block", "bluetooth", "bluetooth-audio", "bluetooth-connected", "bluetooth-disabled", "bluetooth-searching", "blur-circular", "blur-linear", "blur-off", "blur-on"]
-
+ const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{marginHorizontal:10}}/>
+ const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
   useEffect(() => {
     fetch('http://192.168.0.103:8080/administrativo/segmento/')
       .then((response) => response.json())
@@ -28,20 +30,20 @@ function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={<Icon style={{ marginLeft: 20 }} onPress={() => navigation.toggleDrawer()} name="menu" color="#25282B" size={30} />}
-        centerComponent={{ text: 'Shopycash', style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
-        containerStyle={{ backgroundColor: '#EBAD00', justifyContent: 'space-around' }} />
+    <SafeAreaView style={styles.container}>
+      <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
+        centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
+        rightComponent={carticon}
+        containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
       <View style={styles.section}>
-        <Icon style={styles.ImageStyle} onPress={() => navigation.toggleDrawer()} name="search" color="#25282B" size={30} />
-        <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Loja' name={'search'}></TextInput>
+       {searchicon}
+        <TextInput style={{ flex: 1}} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
       </View>
 
-      <ScrollView showsHorizontalScrollIndicator={true} scrollEventThrottle={500} decelerationRate={'normal'}>
-        <View>
+        <View style={{height:120}}>
           {isLoading ? <ActivityIndicator /> : (
             <FlatList
-              horizontal={true}
+              horizontal
               data={data}
               keyExtractor={({ id }, idseg) => id}
               renderItem={({ item }) => (
@@ -61,19 +63,19 @@ function HomeScreen({ navigation }) {
             />
           )}
         </View>
-        <View >
+        <View  style={{margin:10, flex:1, flexDirection:'row', alignItems: 'center'}}>
       <Lojas />
       </View>
-      </ScrollView>
       
       
-    </View>
+    </SafeAreaView>
   );
 }
 
 function Lojas() {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData, newData, newsetData] = useState([]);
+  const [data, setData] = useState([]);
+  const staricon = <Icon name='star' size= {12}/>
   useEffect(() => {
     fetch('http://192.168.0.103:8080/shopping/lojas')
       .then((response) => response.json())
@@ -85,21 +87,28 @@ function Lojas() {
     <View>
     {isLoading ? <ActivityIndicator /> : (
       <FlatList
-        horizontal={true}
-        data={data}
+         data={data}
         keyExtractor={({ id }, idLoja) => id}
         renderItem={({ item }) => (
 
           <TouchableOpacity style={{
-            flex: 1,
-            width:'100%',
-            borderRadius: 7,
+            marginVertical: 5,
+            borderRadius: 5,
+            borderWidth: 0.5,
+            borderColor: '#565656',
             backgroundColor: '#ffffff',
-            alignItems: 'center',
             padding: 10,
           }} title="Login" color='#ffffff' onPress={() => alert(item.nomeloja)}>
-            <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
-            <Text style={styles.lojades}>{item.desc}</Text>
+            <View  style={{flex:1, flexDirection:'row'}}>
+              <Image  style={{width:60, height:60, marginRight:5}} source={{uri: item.logo}} />
+                <View style={{flexDirection:'column'}}>
+                <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
+                  <View  style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <Text style={styles.starloja}>{staricon} - 4,93 - {item.segmento} - 5.0km</Text>
+                    <Text style={styles.lojades}>{item.desc}</Text>
+                    </View>
+                </View>
+            </View>
           </TouchableOpacity>
         )}
       />
@@ -136,6 +145,11 @@ const styles = StyleSheet.create({
   image: {
     width: 250,
     height: 100,
+  },
+  imageloja: {
+    width: 60,
+    height: 60,
+    
   },
   ImageStyle: {
     padding: 25,
@@ -197,7 +211,16 @@ const styles = StyleSheet.create({
     color: '#b9b9b9'
   },
   lojastext:{
+    fontWeight: 'bold',
     color:'#000000'
+  },
+  starloja:{
+    fontWeight: 'bold',
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontSize: 10,
+    color: '#ED9950',
   },
   botaotext: {
     fontWeight: 'bold',
