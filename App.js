@@ -9,6 +9,7 @@ import LoginPhone from './views/loginphone'
 import NextPhone from './views/nextphone'
 import LojasMain from './views/lojasMain'
 import GetShopping from './views/getShopping'
+import LojaDetail from './views/lojadetail'
 import { Icon } from 'react-native-elements'
 
 const Stack = createStackNavigator();
@@ -16,12 +17,6 @@ const Drawer = createDrawerNavigator();
 const MainStack = createStackNavigator();
 
 
-class HambButton extends React.Component {
-  render() {
-    // Get it from props
-    const { navigation } = this.props;
-  }
-}
 function App (props){
   return (
     <NavigationContainer>
@@ -30,6 +25,7 @@ function App (props){
         <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
         <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
         <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
+        <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
       </MainStack.Navigator>
     </NavigationContainer>
   )

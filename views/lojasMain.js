@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView, SafeAreaView, FlatList } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
 import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import Getshopping from './getShopping'
 import { Dropdown } from 'react-native-material-dropdown-v2';
-const searchicon = <Icon name="search" size={30} color="#25282B" style={{marginHorizontal:10}} />;
-
-
+const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();
 const url = 'http://localhost:8080/administrativo/shopping'
-const ColorCode = ['#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061',
-                  '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791','#faa33f', '#b6644f', '#fb3061', 
-                  '#E5454C', '#5653d4', '#08a791','#faa33f'];
+const ColorCode = ['#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061',
+  '#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061',
+  '#E5454C', '#5653d4', '#08a791', '#faa33f'];
 
-function HomeScreen({ navigation }) {
+  
+
+function HomeScreen(props) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
- const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{marginHorizontal:10}}/>
- const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
+  const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
+  const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => props.navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
   useEffect(() => {
     fetch('http://192.168.0.103:8080/administrativo/segmento/')
       .then((response) => response.json())
@@ -28,6 +29,7 @@ function HomeScreen({ navigation }) {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,38 +38,38 @@ function HomeScreen({ navigation }) {
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
       <View style={styles.section}>
-       {searchicon}
-        <TextInput style={{ flex: 1}} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
+        {searchicon}
+        <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
       </View>
 
-        <View style={{height:120}}>
-          {isLoading ? <ActivityIndicator /> : (
-            <FlatList
-              horizontal
-              data={data}
-              keyExtractor={({ id }, idseg) => id}
-              renderItem={({ item }) => (
+      <View style={{ height: 120 }}>
+        {isLoading ? <ActivityIndicator /> : (
+          <FlatList
+            horizontal
+            data={data}
+            keyExtractor={({ id }, idseg) => id}
+            renderItem={({ item }) => (
 
-                <TouchableOpacity style={{
-                  width: 100,
-                  borderRadius: 7,
-                  backgroundColor: ColorCode[item.idseg-1],
-                  color: '#FFFFFF',
-                  marginHorizontal: 5,
-                  alignItems: 'center',
-                  padding: 10
-                }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
-                  <Text style={styles.botaotext}>{item.nome}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          )}
-        </View>
-        <View  style={{margin:10, flex:1, flexDirection:'row', alignItems: 'center'}}>
-      <Lojas />
+              <TouchableOpacity style={{
+                width: 100,
+                borderRadius: 7,
+                backgroundColor: ColorCode[item.idseg - 1],
+                color: '#FFFFFF',
+                marginHorizontal: 5,
+                alignItems: 'center',
+                padding: 10
+              }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
+                <Text style={styles.botaotext}>{item.nome}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </View>
-      
-      
+      <View style={{ margin: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <Lojas props={{ props }} />
+      </View>
+
+
     </SafeAreaView>
   );
 }
@@ -75,7 +77,23 @@ function HomeScreen({ navigation }) {
 function Lojas() {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const staricon = <Icon name='star' size= {12}/>
+  const navigation = useNavigation();
+  const staricon = <Icon name='star' size={12} />
+
+  const wait = (timeout) => {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
     fetch('http://192.168.0.103:8080/shopping/lojas')
       .then((response) => response.json())
@@ -85,35 +103,37 @@ function Lojas() {
   }, []);
   return (
     <View>
-    {isLoading ? <ActivityIndicator /> : (
-      <FlatList
-         data={data}
-        keyExtractor={({ id }, idLoja) => id}
-        renderItem={({ item }) => (
+      {isLoading ? <ActivityIndicator /> : (
+        <FlatList
+          data={data}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          keyExtractor={({ id }, idLoja) => id}
+          renderItem={({ item }) => (
 
-          <TouchableOpacity style={{
-            marginVertical: 5,
-            borderRadius: 5,
-            borderWidth: 0.5,
-            borderColor: '#565656',
-            backgroundColor: '#ffffff',
-            padding: 10,
-          }} title="Login" color='#ffffff' onPress={() => alert(item.nomeloja)}>
-            <View  style={{flex:1, flexDirection:'row'}}>
-              <Image  style={{width:60, height:60, marginRight:5}} source={{uri: item.logo}} />
-                <View style={{flexDirection:'column'}}>
-                <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
-                  <View  style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+            <TouchableOpacity style={{
+              marginVertical: 5,
+              borderRadius: 5,
+              borderWidth: 0.5,
+              borderColor: '#565656',
+              backgroundColor: '#ffffff',
+              padding: 10,
+            }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <Image style={{ width: 60, height: 60, marginRight: 5 }} source={{ uri: item.logo }} />
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
+                  <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Text style={styles.starloja}>{staricon} - 4,93 - {item.segmento} - 5.0km</Text>
                     <Text style={styles.lojades}>{item.desc}</Text>
-                    </View>
+                  </View>
                 </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-    )}
-  </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
+    </View>
   )
 };
 
@@ -124,6 +144,7 @@ export default function lojasMain() {
     <Drawer.Navigator>
       <Drawer.Screen name="home" component={HomeScreen} />
       <Drawer.Screen name="Shopping" component={Getshopping} />
+      <Drawer.Screen name="loja" component={Lojas} />
     </Drawer.Navigator>
   );
 }
@@ -131,7 +152,7 @@ export default function lojasMain() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column',
+    flexDirection: 'column',
     backgroundColor: '#e8e8e8',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -149,7 +170,7 @@ const styles = StyleSheet.create({
   imageloja: {
     width: 60,
     height: 60,
-    
+
   },
   ImageStyle: {
     padding: 25,
@@ -210,11 +231,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     color: '#b9b9b9'
   },
-  lojastext:{
+  lojastext: {
     fontWeight: 'bold',
-    color:'#000000'
+    color: '#000000'
   },
-  starloja:{
+  starloja: {
     fontWeight: 'bold',
     position: 'relative',
     flexDirection: 'row',
