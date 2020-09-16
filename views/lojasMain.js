@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import { Header } from 'react-native-elements'
@@ -18,6 +18,23 @@ const ColorCode = ['#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb30
   
 
 function HomeScreen(props) {
+//refresh
+const wait = (timeout) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+}
+
+const [refreshing, setRefreshing] = React.useState(false);
+
+const onRefresh = React.useCallback(() => {
+  setRefreshing(true);
+
+  wait(2000).then(() => setRefreshing(false));
+}, []);
+
+
+
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
@@ -32,11 +49,19 @@ function HomeScreen(props) {
   
 
   return (
+
     <SafeAreaView style={styles.container}>
-      <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
+
+    <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
         centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
+    <ScrollView
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}
+      >
+
+      
       <View style={styles.section}>
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
@@ -47,6 +72,7 @@ function HomeScreen(props) {
           <FlatList
             horizontal
             data={data}
+            
             keyExtractor={({ id }, idseg) => id}
             renderItem={({ item }) => (
 
@@ -70,6 +96,7 @@ function HomeScreen(props) {
       </View>
 
 
+    </ScrollView>
     </SafeAreaView>
   );
 }
@@ -80,19 +107,7 @@ function Lojas() {
   const navigation = useNavigation();
   const staricon = <Icon name='star' size={12} />
 
-  const wait = (timeout) => {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  }
-
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+  
 
   useEffect(() => {
     fetch('http://192.168.0.103:8080/shopping/lojas')
@@ -106,8 +121,7 @@ function Lojas() {
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
           data={data}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+         refreshing={true}
           keyExtractor={({ id }, idLoja) => id}
           renderItem={({ item }) => (
 
@@ -154,8 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#e8e8e8',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+
   },
   cashbackdesk: {
     fontSize: 60,
