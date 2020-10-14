@@ -4,10 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, Scr
 import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
-const AnimatedCustomScrollView = Animated.createAnimatedComponent()
-
-
-
+const AnimatedCustomScrollView = Animated.createAnimatedComponent() 
 
 export default function Getloja(props) {
     const lojaparam = props.route.params.params.id;
@@ -19,12 +16,12 @@ export default function Getloja(props) {
     const [data, setData] = useState([]);
     const staricon = <Icon name='star' size={12} />
     useEffect(() => {
-        fetch('http://192.168.0.103:8080/shopping/loja/' + lojaparam)
+        fetch('http://192.168.0.107:8080/shopping/loja/' + lojaparam) 
             .then((response) => response.json())
             .then((json) => setData(json.loja))
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
-    }, []);
+    }, []); 
 
     return (
         <ParallaxScrollView backgroundColor='#E8e8e8'
@@ -38,7 +35,7 @@ export default function Getloja(props) {
                     containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
             )}
             stickyHeaderHeight={100}
-            fadeOutForeground={true}
+            fadeOutForeground={true} 
             indicatorStyle={'white'}
             renderBackground={() => (
                 <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 }}>
@@ -97,7 +94,7 @@ function Produtos() {
     
   
     useEffect(() => {
-      fetch('http://192.168.0.103:8080/loja/produto/'+route.params.params.id)
+      fetch('http://192.168.0.107:8080/loja/produto/'+route.params.params.id)
         .then((response) => response.json())
         .then((json) => setData(json.Produtos))
         .catch((error) => console.error(error))

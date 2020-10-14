@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
+import FBLogin from './FBLogin.js'
 
 export default function Login(props) {
   return (
@@ -22,7 +23,7 @@ export default function Login(props) {
           title="Login"
           color='#ffffff'
         >
-          <Text style={styles.botaotext}>Conectar com Facebook</Text>
+          <FBLogin />
         </TouchableOpacity>
         <TouchableOpacity style={styles.botaogoogle}
           title="Login"

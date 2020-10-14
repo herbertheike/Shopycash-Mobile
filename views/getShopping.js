@@ -10,7 +10,7 @@ export default function Getshopping({navigation}) {
     const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
     useEffect(() => {
-      fetch('http://192.168.0.103:8080/administrativo/shopping')
+      fetch('http://192.168.0.107:8080/administrativo/shopping')
         .then((response) => response.json())
         .then((json) => setData(json.Shoppings))
         .catch((error) => console.error(error))
