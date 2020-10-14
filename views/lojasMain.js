@@ -6,8 +6,6 @@ import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import Getshopping from './getShopping'
-import { Dropdown } from 'react-native-material-dropdown-v2';
-import { Item } from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();

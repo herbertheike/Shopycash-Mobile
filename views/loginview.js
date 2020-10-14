@@ -1,6 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import FBLogin from './FBLogin.js'
+import GLogin from './GLogin'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const fbicon = <Icon name='facebook-f' size={30} color="#25282B" />
 
 export default function Login(props) {
   return (
@@ -9,9 +13,11 @@ export default function Login(props) {
         source={require('../assets/logo.png')}
         style={styles.image}
       />
+      <FBLogin />
       <View style={styles.login}>
         <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
         <Text style={styles.logindesc}>Tentamos encontar uma maneira de adicionar mais opções e deixar o processo mais dinâmico</Text>
+        
         <TouchableOpacity style={styles.botao}
           title="Login"
           color='#ffffff'
@@ -19,18 +25,8 @@ export default function Login(props) {
         >
           <Text style={styles.botaotext}>Conectar com número de telefone</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botaofacebook}
-          title="Login"
-          color='#ffffff'
-        >
-          <FBLogin />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.botaogoogle}
-          title="Login"
-          color='#ffffff'
-        >
-          <Text style={styles.botaotext}>Conectar com Google</Text>
-        </TouchableOpacity>
+        
+         <GLogin />
         <TouchableOpacity style={styles.botaosemlogin}
           title="Login"
           color='#ffffff'
@@ -64,8 +60,8 @@ const styles = StyleSheet.create({
     marginTop: 100
   },
   botao: {
-    width: 350,
-    height: 50,
+    width: "100%",
+    height:60,
     borderRadius: 15,
     backgroundColor: '#EBAD00',
     color: '#FFFFFF',
@@ -75,18 +71,17 @@ const styles = StyleSheet.create({
     padding: 10
   },
   botaofacebook: {
-    width: 350,
-    height: 50,
+    width: "100%",
+    height:60,
     borderRadius: 15,
     backgroundColor: '#3b589a',
     marginTop: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10
+    padding: 20
   },
   botaogoogle: {
-    width: 350,
-    height: 50,
+    width: "100%",
+    height:60,
     borderRadius: 15,
     backgroundColor: '#508df8',
     marginTop: 10,
@@ -95,8 +90,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   botaosemlogin: {
-    width: 350,
-    height: 50,
+    width: "100%",
+    height:60,
     borderRadius: 15,
     backgroundColor: '#8bb8f9',
     marginTop: 10,

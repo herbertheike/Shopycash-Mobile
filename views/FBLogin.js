@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Facebook from 'expo-facebook';
 
 export default function FBLogin() {
@@ -8,7 +9,7 @@ export default function FBLogin() {
   const [userData, setUserData] = useState(null);
   const [isImageLoading, setImageLoadStatus] = useState(false);
 
-  Facebook.initializeAsync(445672353479326, "ShopyCash");
+  Facebook.initializeAsync("445672353479326", "ShopyCash");
 
   facebookLogIn = async () => {
     try {
@@ -18,7 +19,7 @@ export default function FBLogin() {
         expires,
         permissions,
         declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync('897285013968583', {
+      } = await Facebook.logInWithReadPermissionsAsync("445672353479326", {
         permissions: ['public_profile'],
       });
       if (type === 'success') {
@@ -62,7 +63,7 @@ export default function FBLogin() {
       :
       <View style={styles.container}>
         <TouchableOpacity style={styles.loginBtn} onPress={this.facebookLogIn}>
-          <Text style={{ color: "#fff" }}>Entrar com o Facebook</Text>
+          <Text >Entrar com o Facebook</Text>
         </TouchableOpacity>
       </View>
   );
@@ -70,16 +71,15 @@ export default function FBLogin() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#e9ebee',
     alignItems: 'center',
     justifyContent: 'center',
   },
   loginBtn: {
-    width: 350,
-    height: 50,
+    width: "100%",
+    height:60,
     borderRadius: 15,
-    backgroundColor: '#3b589a',
+    backgroundColor: '#508df8',
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',

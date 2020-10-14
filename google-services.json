@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "98141338607",
+    "firebase_url": "https://shopycash-19409.firebaseio.com",
+    "project_id": "shopycash-19409",
+    "storage_bucket": "shopycash-19409.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98141338607:android:d26ae530b6bf906cb9d41a",
+        "android_client_info": {
+          "package_name": "com.shopycash.sc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98141338607-v51deoh7rrspktp5pabcfduees498eba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shopycash.sc",
+            "certificate_hash": "32a05c169337b53463db64164e560e8f14e1456b"
+          }
+        },
+        {
+          "client_id": "98141338607-n26pq4qoa860dijhbdvoh9hgcteo1if4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98141338607-n26pq4qoa860dijhbdvoh9hgcteo1if4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
