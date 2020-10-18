@@ -40,6 +40,7 @@ export default function Getshopping({navigation}) {
       
     );
   };
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,

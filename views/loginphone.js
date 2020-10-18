@@ -1,32 +1,62 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import * as React from "react";
+import {ActivityIndicator,Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, KeyboardAvoidingView} from "react-native";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import * as firebase from "firebase";
 
 export default function LoginPhone({navigation}) {
-    const [phonenumber, setText] = useState('');
-    return (
-        
-        <KeyboardAvoidingView style={styles.container}>
-            <Text style={styles.logintext}>Digite Seu número</Text>
-            <TextInput
-                style={styles.number}
-                keyboardType='phone-pad'
-                placeholder='(11)9 9999-9999'
-                name={'phonenumber'}
-                onChangeText={phonenumber => setText(phonenumber)}
-            >
+  const recaptchaVerifier = React.useRef(null);
+  const [phoneNumber, setPhoneNumber] = React.useState();
+  const [verificationId, setVerificationId] = React.useState();
+  const [verificationCode, setVerificationCode] = React.useState();
+  const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
+  const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')
+    ? { text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device."}
+    : undefined);
+    const Activityindicator = () => (
+      <ActivityIndicator animating={true} color={Colors.red800} />
+    );
 
-            </TextInput>
-            <TouchableOpacity style={styles.botao}
-                title="Login"
-                color='#ffffff'
-                onPress={() => navigation.navigate('TelefoneLogin',{screen: 'NextPhone',
-                params: {phonenumber: phonenumber}})}
-            >
-                <Text style={styles.botaotext}>Avançar</Text>
-            </TouchableOpacity>
-        </KeyboardAvoidingView>
-    )
+  return (
+    <KeyboardAvoidingView style={styles.container}>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={firebaseConfig}
+        title='Verificação de identidade!'
+    cancelLabel='Fechar'
+      />
+      <Text style={styles.logintext}>Enter phone number</Text>
+      <TextInput
+        style={styles.number}
+        placeholder="+55 11 9 9999 9999"
+        autoFocus
+        autoCompleteType="tel"
+        textAlign={'center'}
+        keyboardType="phone-pad"
+        textContentType="telephoneNumber"
+        onChangeText={(phoneNumber) => setPhoneNumber('+55'+phoneNumber)}
+      />
+      <Button
+        title="Enviar codigo"
+        disabled={!phoneNumber}
+        onPress={async () => {
+          try {
+            const phoneProvider = new firebase.auth.PhoneAuthProvider();
+            const verificationId = await phoneProvider.verifyPhoneNumber(
+              phoneNumber,
+              recaptchaVerifier.current
+            );
+            setVerificationId(verificationId);
+            alert( "O codigo foi enviado para o seu telefone."),
+            <Activityindicator />,
+            navigation.navigate('TelefoneLogin',{screen: 'NextPhone',
+          params: {phonenumber: phoneNumber, verificationId: verificationId}});
+          } catch (err) {
+            alert (`Error: ${err.message}`)
+          }
+        }}
+      />
+    </KeyboardAvoidingView>
+  );
 }
 const styles = StyleSheet.create({
     container: {

@@ -59,8 +59,6 @@ const onRefresh = React.useCallback(() => {
     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}
       >
-
-      
       <View style={styles.section}>
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>

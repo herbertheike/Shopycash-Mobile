@@ -1,13 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import * as firebase from "firebase";
 
-export default function NextPhone(props) {
+export default function NextPhone({navigation, route}) {
 
-    const phonenumber = props.route.params.phonenumber;
+    const phonenumber = route.params.phonenumber;
+    
+
+    const recaptchaVerifier = React.useRef(null);
+    const [phoneNumber, setPhoneNumber] = React.useState();
+    const verificationId = route.params.verificationId;
+    const [verificationCode, setVerificationCode] = React.useState();
+    const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
+    const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')
+      ? { text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device."}
+      : undefined);
 
     return (
         <KeyboardAvoidingView style={styles.container}>
+            <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={firebaseConfig}
+      />
             <Text style={styles.logintext}>
                 Código de verificação
             </Text>
@@ -19,14 +35,37 @@ export default function NextPhone(props) {
             </Text>
             <TextInput
                 style={styles.number}
-                keyboardType='phone-pad'>
+                keyboardType='phone-pad'
+                textAlign={'center'}
+                onChangeText={setVerificationCode}>
             </TextInput>
             <TouchableOpacity style={styles.botao}
                 title="Login"
                 color='#ffffff'
-                onPress={() => props.navigation.navigate('MainPage')}>
+                onPress={async () => {
+                    try {
+                      const credential = firebase.auth.PhoneAuthProvider.credential(
+                        verificationId,
+                        verificationCode
+                      );
+                      await firebase.auth().signInWithCredential(credential);
+                      alert("Usuario autenticado com sucesso"),
+                      navigation.navigate('Registro')
+                    } catch (err) {
+                     alert(`Error: ${err.message}`);
+                    }
+                  }}>
                 <Text style={styles.botaotext}>Avançar</Text>
             </TouchableOpacity>
+            {message ? (
+        <TouchableOpacity
+          style={[StyleSheet.absoluteFill, { backgroundColor: 0xffffffee, justifyContent: "center" }]}
+          onPress={() => showMessage(undefined)}>
+          <Text style={{color: message.color || "black", fontSize: 17, textAlign: "center", margin: 20, }}>
+            {message.text}
+          </Text>
+        </TouchableOpacity>
+      ) : undefined}
         </KeyboardAvoidingView>
     )
 }

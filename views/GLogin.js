@@ -1,9 +1,13 @@
 import React from 'react';
-import { Text,TouchableOpacity, StyleSheet } from 'react-native';
+import { Text,TouchableOpacity, StyleSheet, ScrollView, Button} from 'react-native';
 import * as GoogleSignIn from 'expo-google-sign-in';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 export default class GLogin extends React.Component {
-  state = { user: null };
+  state = { user: null, isLoggedin:false, currentUser:null };
+  
 
   componentDidMount() {
     this.initAsync();
@@ -19,38 +23,56 @@ export default class GLogin extends React.Component {
 
   _syncUserWithStateAsync = async () => {
     const user = await GoogleSignIn.signInSilentlyAsync();
-    this.setState({ user });
+    this.setState({ user, isLoggedin: true });
   };
 
   signOutAsync = async () => {
     await GoogleSignIn.signOutAsync();
-    this.setState({ user: null });
+    this.setState({ user: null , isLoggedin: false});
+  };
+
+  getCurrentUser = async () => {
+    const currentUser = await GoogleSignin.getCurrentUser();
+    this.setState({ currentUser });
   };
 
   signInAsync = async () => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
+      const {displayName, email, photoURL } = GoogleSignIn.getCurrentUser();
+      const navigation = useNavigation();
+      
       if (type === 'success') {
         this._syncUserWithStateAsync();
       }
     } catch ({ message }) {
-      alert('login: Error:' + message);
+      alert('Login error:' + message);
     }
   };
+
 
   onPress = () => {
-    if (this.state.user) {
+    if (this.state.user && this.state.isLoggedin == true) {
       this.signOutAsync();
+      
+      
     } else {
       this.signInAsync();
+      
     }
   };
-
+  f
+  
   render() {
-    return  <TouchableOpacity style={styles.botaogoogle} onPress={this.onPress}>
+    return (
+             <TouchableOpacity style={styles.section} onPress={this.onPress}>
             <Text >Entrar com o Google</Text>
             </TouchableOpacity>
+
+            
+            
+    )        
   }
 }
 const styles = StyleSheet.create({
@@ -129,6 +151,26 @@ const styles = StyleSheet.create({
     },
     botaotext: {
       fontWeight: 'bold',
-      color: '#FFFFFF'
+      color: '#080833'
+    },
+    section: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      borderWidth: 0,
+      borderColor: '#000',
+      height: 60,
+      borderRadius: 5,
+      margin: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+  
+      elevation: 5,
     }
   });

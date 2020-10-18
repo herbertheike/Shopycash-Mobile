@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
-import FBLogin from './FBLogin.js'
-import GLogin from './GLogin'
+import { StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const fbicon = <Icon name='facebook-f' size={30} color="#25282B" />
@@ -13,7 +12,6 @@ export default function Login(props) {
         source={require('../assets/logo.png')}
         style={styles.image}
       />
-      <FBLogin />
       <View style={styles.login}>
         <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
         <Text style={styles.logindesc}>Tentamos encontar uma maneira de adicionar mais opções e deixar o processo mais dinâmico</Text>
@@ -21,19 +19,16 @@ export default function Login(props) {
         <TouchableOpacity style={styles.botao}
           title="Login"
           color='#ffffff'
-          onPress={() => props.navigation.navigate('TelefoneLogin', {screen: 'LoginPhone'})}
-        >
+          onPress={() => props.navigation.navigate('TelefoneLogin', {screen: 'LoginPhone'})}>
           <Text style={styles.botaotext}>Conectar com número de telefone</Text>
         </TouchableOpacity>
-        
-         <GLogin />
         <TouchableOpacity style={styles.botaosemlogin}
           title="Login"
-          color='#ffffff'
-        >
-          <Text style={styles.botaotext}>Entrar sem cadastro</Text>
+          color='#ffffff'>
+          <Text style={styles.botaotext} onPress={() => props.navigation.navigate('MainPage')}>Entrar sem cadastro</Text>
         </TouchableOpacity>
       </View>
+      
     </KeyboardAvoidingView>
   )
 }

@@ -10,11 +10,24 @@ import NextPhone from './views/nextphone'
 import LojasMain from './views/lojasMain'
 import GetShopping from './views/getShopping'
 import LojaDetail from './views/lojadetail'
+import GetRegistro from './views/getregistro'
 import { Icon } from 'react-native-elements'
+import * as firebase from "firebase";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MainStack = createStackNavigator();
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ",
+  authDomain: "shopycash-19409.firebaseapp.com",
+  databaseURL: "https://shopycash-19409.firebaseio.com",
+  projectId: "shopycash-19409",
+  storageBucket: "shopycash-19409.appspot.com",
+  appId: "1:98141338607:android:d26ae530b6bf906cb9d41a",
+};
+
+firebase.initializeApp(firebaseConfig);
 
 
 function App (props){
@@ -26,6 +39,7 @@ function App (props){
         <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
         <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
         <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
+        <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
       </MainStack.Navigator>
     </NavigationContainer>
   )
@@ -45,24 +59,6 @@ function TelefoneLogin(){
         <Stack.Screen name="NextPhone" component={NextPhone} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
-}
-
-function FacebookLogin(){
-    <Stack.Navigator>
-      <Stack.Screen name="login" component={Login} options={{headerShown:false}}/>
-    </Stack.Navigator>
-}
-
-function GoogleLogin(){
-  <Stack.Navigator>
-    <Stack.Screen name="login" component={Login} options={{headerShown:false}}/>
-  </Stack.Navigator>
-}
-
-function NoLogin(){
-  <Stack.Navigator>
-      <Stack.Screen name="login" component={Login} options={{headerShown:false}}/>
-  </Stack.Navigator>
 }
 function Shopping(){
   <Stack.Navigator>
