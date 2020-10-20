@@ -89,11 +89,8 @@ function Produtos() {
     const [data, setData] = useState([]);
     const navigation = useNavigation();
     const route = useRoute();
-    const staricon = <Icon name='star' size={12} />
-  
-    
-  
-    useEffect(() => {
+
+     useEffect(() => {
       fetch('http://192.168.0.107:8080/loja/produto/'+route.params.params.id)
         .then((response) => response.json())
         .then((json) => setData(json.Produtos))
@@ -102,20 +99,22 @@ function Produtos() {
     }, []);
     return (
       <View>
-          <FlatList
-          style={{margin:5}}
-            data={data}
-           refreshing={true}
-            keyExtractor={({ id }, idLoja) => id}
-            renderItem={({ item }) => (<Text>{item.categoria}</Text>)} />
-        {isLoading ? <ActivityIndicator /> : (
+          {isLoading ? <ActivityIndicator /> : (
           <FlatList
           style={{margin:5}}
             data={data}
            refreshing={true}
             keyExtractor={({ id }, idLoja) => id}
             renderItem={({ item }) => (
-  
+            <View>
+                <Text>{item.categoria}</Text>
+            
+            <FlatList
+          style={{margin:5}}
+            data={data}
+           refreshing={true}
+            keyExtractor={({ id }, idLoja) => id}
+            renderItem={({ item }) => (<View>
               <TouchableOpacity style={{
                 borderRadius: 5,
                 borderWidth: 0.3,
@@ -123,8 +122,8 @@ function Produtos() {
                 backgroundColor: '#ffffff',
                 padding: 10,
                 marginTop: 5,
-                width:'100%'
-              }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
+                width:'100%'}} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
+                
                 <View style={{ flex: 2, flexDirection: 'row-reverse'}}>
                   <Image style={{ width: 80, height: 80, padding:50}} source={{ uri: item.imagem }} />
                   <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -136,11 +135,13 @@ function Produtos() {
                   </View>
                 </View>
               </TouchableOpacity>
+              </View>
+                )}/>
+                </View>
+            )} />
+            
             )}
-          />
-        )}
-      </View>
-    )
+            </View>     )
   };
 
 const styles = StyleSheet.create({

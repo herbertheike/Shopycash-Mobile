@@ -14,6 +14,7 @@ import GetRegistro from './views/getregistro'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MainStack = createStackNavigator();

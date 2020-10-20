@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView,TouchableOpacity,Button } from 'react-native';
 import FBLogin from './FBLogin'
 import GLogin from './GLogin'
+
 
 
 export default function registro({navigation}) {
@@ -14,13 +15,13 @@ export default function registro({navigation}) {
                   <FBLogin />
               <Text style={styles.logintext}>Google</Text>
                   <GLogin />
+
+                  
           </View>
           <TouchableOpacity style={styles.botaotext}
           title="Login"
           color='#ffffff'>
           <Button title={'Avançar'}
-          disabled={!phoneNumber}
-          style={styles.botaotext}
           onPress={() => navigation.navigate('MainPage')}/>
         </TouchableOpacity>
   </KeyboardAvoidingView>

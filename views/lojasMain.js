@@ -49,16 +49,15 @@ const onRefresh = React.useCallback(() => {
 
   return (
 
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}>
 
     <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
         centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
-    <ScrollView
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}
-      >
+    <ScrollView>
       <View style={styles.section}>
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>

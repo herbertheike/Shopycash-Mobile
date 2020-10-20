@@ -1,176 +1,176 @@
+import * as AppAuth from 'expo-google-app-auth';
+import * as Constants from 'expo-constants';
+import * as  GoogleSignIn  from 'expo-google-sign-in';
 import React from 'react';
-import { Text,TouchableOpacity, StyleSheet, ScrollView, Button} from 'react-native';
-import * as GoogleSignIn from 'expo-google-sign-in';
-import { useNavigation } from '@react-navigation/native';
+import { Image, StyleSheet, Text, View, Platform } from 'react-native';
+
+import GoogleSignInButton from './GoogleSignInButton';
+
+const { OAuthRedirect, URLSchemes } = AppAuth;
+
+
+const clientIdForUseInTheExpoClient =
+  '98141338607-n26pq4qoa860dijhbdvoh9hgcteo1if4.apps.googleusercontent.com';
+const yourClientIdForUseInStandalone = Platform.select({
+  android:
+  '98141338607-n26pq4qoa860dijhbdvoh9hgcteo1if4.apps.googleusercontent.com'
+});
 
 
 
-export default class GLogin extends React.Component {
-  state = { user: null, isLoggedin:false, currentUser:null };
-  
+export default class App extends React.Component {
+  state = { user: null };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.initAsync();
   }
 
   initAsync = async () => {
-    await GoogleSignIn.initAsync({
-      // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      clientId: '<YOUR_IOS_CLIENT_ID>',
+   try  {
+     await GoogleSignIn.initAsync({
     });
-    this._syncUserWithStateAsync();
+  } catch ({ message }) {
+    alert('GoogleSignIn.initAsync(): ' + message);
+  }
   };
+  
 
   _syncUserWithStateAsync = async () => {
     const user = await GoogleSignIn.signInSilentlyAsync();
-    this.setState({ user, isLoggedin: true });
+    console.log('_syncUserWithStateAsync', { user });
+    this.setState({ user });
   };
 
   signOutAsync = async () => {
-    await GoogleSignIn.signOutAsync();
-    this.setState({ user: null , isLoggedin: false});
-  };
-
-  getCurrentUser = async () => {
-    const currentUser = await GoogleSignin.getCurrentUser();
-    this.setState({ currentUser });
+    try {
+      await GoogleSignIn.signOutAsync();
+      this.setState({ user: null });
+    } catch ({ message }) {
+      alert('signOutAsync: ' + message);
+    }
   };
 
   signInAsync = async () => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
-      const {displayName, email, photoURL } = GoogleSignIn.getCurrentUser();
-      const navigation = useNavigation();
-      
       if (type === 'success') {
         this._syncUserWithStateAsync();
       }
     } catch ({ message }) {
-      alert('Login error:' + message);
+      alert('login: Error:' + message);
     }
   };
 
+  _syncUserWithStateAsync = async () => {
+    /*
+      const user = await GoogleSignIn.signInSilentlyAsync();
+      this.setState({ user });
+    */
 
-  onPress = () => {
-    if (this.state.user && this.state.isLoggedin == true) {
-      this.signOutAsync();
-      
-      
+    const data = await GoogleSignIn.signInSilentlyAsync();
+    console.log({ data });
+    if (data) {
+      const photoURL = await GoogleSignIn.getPhotoAsync(256);
+      const user = await GoogleSignIn.getCurrentUserAsync();
+      this.setState({
+        user: {
+          ...user.toJSON(),
+          photoURL: photoURL || user.photoURL,
+        },
+      });
     } else {
-      this.signInAsync();
-      
+      this.setState({ user: null });
     }
   };
-  f
-  
-  render() {
-    return (
-             <TouchableOpacity style={styles.section} onPress={this.onPress}>
-            <Text >Entrar com o Google</Text>
-            </TouchableOpacity>
 
-            
-            
-    )        
+  get buttonTitle() {
+    return this.state.user ? 'Sign-Out of Google' : 'Sign-In with Google';
+  }
+
+  render() {
+    const scheme = {
+      OAuthRedirect,
+      URLSchemes,
+    };
+    const { user } = this.state;
+    return (
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        {user && <GoogleProfile {...user} />}
+        <GoogleSignInButton onPress={this._toggleAuth}>
+          {this.buttonTitle}
+        </GoogleSignInButton>
+        <Text>AppAuth: {JSON.stringify(scheme, null, 2)}</Text>
+      </View>
+    );
+  }
+
+  _toggleAuth = () => {
+    console.log('Toggle', !!this.state.user);
+    if (this.state.user) {
+      this._signOutAsync();
+    } else {
+      this._signInAsync();
+    }
+  };
+
+  _signOutAsync = async () => {
+    try {
+      // await GoogleSignIn.disconnectAsync();
+      await GoogleSignIn.signOutAsync();
+      console.log('Log out successful');
+    } catch ({ message }) {
+      console.error('Demo: Error: logout: ' + message);
+    } finally {
+      this.setState({ user: null });
+    }
+  };
+
+  _signInAsync = async () => {
+    try {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      console.log({ type, user });
+      if (type === 'success') {
+        this._syncUserWithStateAsync();
+      }
+    } catch ({ message }) {
+      console.error('login: Error:' + message);
+    }
+  };
+}
+
+class GoogleProfile extends React.PureComponent {
+  render() {
+    const { photoURL, displayName, email } = this.props;
+    return (
+      <View style={styles.container}>
+        {photoURL && (
+          <Image
+            source={{
+              uri: photoURL,
+            }}
+            style={styles.image}
+          />
+        )}
+        <View style={{ marginLeft: 12 }}>
+          <Text style={styles.text}>{displayName}</Text>
+          <Text style={styles.text}>{email}</Text>
+        </View>
+      </View>
+    );
   }
 }
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#EBAD00',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    image: {
-      width: 250,
-      height: 100,
-    },
-    login: {
-      backgroundColor: '#ffffff',
-      width: '100%',
-      borderRadius: 15,
-      position: 'relative',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 20,
-      marginBottom: -350,
-      marginTop: 100
-    },
-    botao: {
-      width: "100%",
-      height:60,
-      borderRadius: 15,
-      backgroundColor: '#EBAD00',
-      color: '#FFFFFF',
-      marginTop: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 10
-    },
-    botaofacebook: {
-      width: "100%",
-      height:60,
-      borderRadius: 15,
-      backgroundColor: '#3b589a',
-      marginTop: 10,
-      alignItems: 'center',
-      padding: 20
-    },
-    botaogoogle: {
-      width: "100%",
-      height:60,
-      borderRadius: 15,
-      backgroundColor: '#508df8',
-      marginTop: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 10
-    },
-    botaosemlogin: {
-      width: "100%",
-      height:60,
-      borderRadius: 15,
-      backgroundColor: '#8bb8f9',
-      marginTop: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 10
-    },
-    logintext: {
-      fontWeight: 'bold',
-      fontSize: 18,
-      position: 'relative',
-      width: 350
-    },
-    logindesc: {
-      width: 350,
-      fontSize: 14,
-      position: 'relative',
-      color: '#999999'
-    },
-    botaotext: {
-      fontWeight: 'bold',
-      color: '#080833'
-    },
-    section: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      borderWidth: 0,
-      borderColor: '#000',
-      height: 60,
-      borderRadius: 5,
-      margin: 10,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-  
-      elevation: 5,
-    }
-  });
+  container: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  image: { width: 128, borderRadius: 64, aspectRatio: 1 },
+  text: { color: 'black', fontSize: 16, fontWeight: '600' },
+});

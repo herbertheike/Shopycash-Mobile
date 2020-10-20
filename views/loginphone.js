@@ -24,7 +24,7 @@ export default function LoginPhone({navigation}) {
         title='Verificação de identidade!'
     cancelLabel='Fechar'
       />
-      <Text style={styles.logintext}>Enter phone number</Text>
+      <Text style={styles.logintext}>Insira seu numero de telefone</Text>
       <TextInput
         style={styles.number}
         placeholder="+55 11 9 9999 9999"
