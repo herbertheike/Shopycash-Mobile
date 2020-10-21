@@ -1,9 +1,12 @@
 import * as React from "react";
-import {ActivityIndicator,Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, KeyboardAvoidingView} from "react-native";
+import {Alert ,ActivityIndicator,Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, KeyboardAvoidingView} from "react-native";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 
+
 export default function LoginPhone({navigation}) {
+
+  
   const recaptchaVerifier = React.useRef(null);
   const [phoneNumber, setPhoneNumber] = React.useState();
   const [verificationId, setVerificationId] = React.useState();
@@ -27,16 +30,16 @@ export default function LoginPhone({navigation}) {
       <Text style={styles.logintext}>Insira seu numero de telefone</Text>
       <TextInput
         style={styles.number}
-        placeholder="+55 11 9 9999 9999"
+        placeholder="11 9 9999 9999"
         autoFocus
         autoCompleteType="tel"
         textAlign={'center'}
         keyboardType="phone-pad"
         textContentType="telephoneNumber"
-        onChangeText={(phoneNumber) => setPhoneNumber('+55'+phoneNumber)}
+        onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
       />
-      <Button
-        title="Enviar codigo"
+      <TouchableOpacity
+      style={styles.botao}
         disabled={!phoneNumber}
         onPress={async () => {
           try {
@@ -46,15 +49,31 @@ export default function LoginPhone({navigation}) {
               recaptchaVerifier.current
             );
             setVerificationId(verificationId);
-            alert( "O codigo foi enviado para o seu telefone."),
+            Alert.alert(
+              'Shopycash',
+              'Codigo enviar para: '+phoneNumber,
+              [
+                { text: 'OK'}
+              ],
+              { cancelable: false }
+            );
             <Activityindicator />,
             navigation.navigate('TelefoneLogin',{screen: 'NextPhone',
           params: {phonenumber: phoneNumber, verificationId: verificationId}});
           } catch (err) {
-            alert (`Error: ${err.message}`)
+            Alert.alert(
+              'Shopycash',
+              `Error: ${err.message}`,
+              [
+                { text: 'OK'}
+              ],
+              { cancelable: false }
+            );
           }
         }}
-      />
+      >
+        <Text style={styles.botaotext}>Enviar Codigo</Text>
+            </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -66,7 +85,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     number: {
-        width: '80%',
+        width: '50%',
         height: 60,
         borderColor: 'black',
         backgroundColor: '#FFFFFF',
@@ -76,12 +95,12 @@ const styles = StyleSheet.create({
         padding: 15
     },
     botao: {
-        width: '80%',
+        width: '50%',
         height: 60,
         borderRadius: 15,
         backgroundColor: '#EBAD00',
         color: '#FFFFFF',
-        marginTop: 30,
+        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10

@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+
+import React, { Component } from 'react';
+import { AppRegistry,StyleSheet, Text,View, Image,TextInput, Button, TouchableHighlight} from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer'
@@ -14,10 +14,10 @@ import GetRegistro from './views/getregistro'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
-
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MainStack = createStackNavigator();
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ",
@@ -29,22 +29,23 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+class App  extends React.Component{
 
-
-function App (props){
-  return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Home">
-        <MainStack.Screen name="Home" component={HomeScreen} options ={{headerShown:false}}/>
-        <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
-        <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
-        <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
-        <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
-        <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
-      </MainStack.Navigator>
-    </NavigationContainer>
-  )
+        render() {
+          return (
+            <NavigationContainer>
+              <MainStack.Navigator initialRouteName="Home">
+                <MainStack.Screen name="Home" component={HomeScreen} options ={{headerShown:false}}/>
+                <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
+                <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
+                <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
+              </MainStack.Navigator>
+            </NavigationContainer>
+          )
         }
+      }
 
 function HomeScreen() {
   return (

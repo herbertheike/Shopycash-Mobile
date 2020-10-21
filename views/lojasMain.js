@@ -19,7 +19,7 @@ const ColorCode = ['#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb30
 function HomeScreen(props) {
 //refresh
 const wait = (timeout) => {
-  return new Promise(resolve => {
+  return new Promise(resolve => { 
     setTimeout(resolve, timeout);
   });
 }
@@ -49,7 +49,7 @@ const onRefresh = React.useCallback(() => {
 
   return (
 
-    <SafeAreaView style={styles.container}
+    <ScrollView style={styles.container}
     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}>
 
@@ -92,7 +92,7 @@ const onRefresh = React.useCallback(() => {
 
 
     </ScrollView>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 

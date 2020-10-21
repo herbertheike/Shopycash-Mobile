@@ -1,5 +1,4 @@
 import * as AppAuth from 'expo-google-app-auth';
-import * as Constants from 'expo-constants';
 import * as  GoogleSignIn  from 'expo-google-sign-in';
 import React from 'react';
 import { Image, StyleSheet, Text, View, Platform } from 'react-native';
@@ -63,11 +62,6 @@ export default class App extends React.Component {
   };
 
   _syncUserWithStateAsync = async () => {
-    /*
-      const user = await GoogleSignIn.signInSilentlyAsync();
-      this.setState({ user });
-    */
-
     const data = await GoogleSignIn.signInSilentlyAsync();
     console.log({ data });
     if (data) {
@@ -142,7 +136,7 @@ export default class App extends React.Component {
 
 class GoogleProfile extends React.PureComponent {
   render() {
-    const { photoURL, displayName, email } = this.props;
+    const { uid, photoURL, displayName, email } = this.props;
     return (
       <View style={styles.container}>
         {photoURL && (

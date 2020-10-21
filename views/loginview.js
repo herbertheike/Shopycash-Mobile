@@ -1,13 +1,43 @@
 import React,{ useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Modal } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import * as firebase from "firebase";
 
-const telefoneicon = <Icon name='mobile' size={30} color="#ffffff" />
-const nologinicon = <Icon name='eye' size={30} color="#ffffff" />
+export default class Login extends React.Component{
+  state = {modalVisible : false}
 
+  constructor(props){
+    super(props);
+  };
 
-export default function Login(props) {
-  const [modalVisible, setModalVisible] = useState(false);
+  componentDidMount() {
+    this.checkIfLoggedin();
+    
+  }
+
+  setModalVisible(){
+    
+    this.setState({modalVisible: true});
+  }
+  
+  checkIfLoggedin = () =>{
+    
+    firebase.auth().onAuthStateChanged(user =>  
+    {
+      if (user)
+      {
+        this.props.navigation.navigate('MainPage');
+      }else{
+        this.props.navigation.navigate('login');
+      }
+    }
+    );
+  }
+
+render(){ 
+  const {modalVisible} = this.state;
+  const telefoneicon = <Icon name='mobile' size={30} color="#ffffff" />
+  const nologinicon = <Icon name='eye' size={30} color="#ffffff" />
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Image
@@ -18,7 +48,7 @@ export default function Login(props) {
       <TouchableOpacity
         style={styles.openButton}
         onPress={() => {
-          setModalVisible(true);
+          this.setState({modalVisible: true});
         }}
       >
         <Text style={styles.textStyle}>Cadastrar</Text>
@@ -33,13 +63,13 @@ export default function Login(props) {
             <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
               <Text style={styles.logindesc}>Tentamos encontar uma maneira de adicionar mais opções e deixar o processo mais dinâmico</Text>
                 <TouchableOpacity style={styles.botao} title="LoginTelefone" color='#ffffff'
-                onPress={() => props.navigation.navigate('TelefoneLogin',{screen: 'LoginPhone'},
-                setTimeout(() => setModalVisible(false)), 1)}>
+                onPress={() => this.props.navigation.navigate('TelefoneLogin',{screen: 'LoginPhone'},
+                setTimeout(() => this.setState({modalVisible: false})), 1)}>
                   {telefoneicon}<Text style={styles.botaotext} >Conectar com número de telefone</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.botaosemlogin} title="NoLogin" color='#ffffff'
-                onPress={() => props.navigation.navigate('MainPage',
-                setTimeout(() => setModalVisible(false)),1)}>
+                onPress={() => this.props.navigation.navigate('MainPage',
+                setTimeout(() =>  this.setState({modalVisible: false})),1)}>
                   {nologinicon}<Text style={styles.botaotext} >Entrar sem cadastro</Text>
                 </TouchableOpacity>
           </View>
@@ -47,6 +77,7 @@ export default function Login(props) {
       </Modal>
     </KeyboardAvoidingView>
   )
+  }
 }
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
+import { Alert, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
@@ -49,7 +49,14 @@ export default function NextPhone({navigation, route}) {
                         verificationCode
                       );
                       await firebase.auth().signInWithCredential(credential);
-                      alert("Usuario autenticado com sucesso"),
+                      Alert.alert(
+                        'Shopycash',
+                        'Autenticado com sucesso',
+                        [
+                          { text: 'OK'}
+                        ],
+                        { cancelable: false }
+                      );
                       navigation.navigate('Registro')
                     } catch (err) {
                      alert(`Error: ${err.message}`);
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     number: {
-        width: '80%',
+        width: '50%',
         height: 60,
         borderColor: 'black',
         backgroundColor: '#FFFFFF',
@@ -87,12 +94,12 @@ const styles = StyleSheet.create({
         padding: 15
     },
     botao: {
-        width: '80%',
+        width: '50%',
         height: 60,
         borderRadius: 15,
         backgroundColor: '#EBAD00',
         color: '#FFFFFF',
-        marginTop: 30,
+        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10
