@@ -34,6 +34,7 @@
     "react-native-fbsdk": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-google-signin": "^2.1.1",
+    "react-native-indicators": "^0.17.0",
     "react-native-material-dropdown-v2": "^0.11.1",
     "react-native-paper": "^4.1.0",
     "react-native-parallax-scroll-view": "^0.21.3",

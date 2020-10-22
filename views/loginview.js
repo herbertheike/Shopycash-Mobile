@@ -6,40 +6,13 @@ import * as firebase from "firebase";
 export default class Login extends React.Component{
   state = {modalVisible : false}
 
-  constructor(props){
-    super(props);
-  };
-
-  componentDidMount() {
-    this.checkIfLoggedin();
-    
-  }
-
-  setModalVisible(){
-    
-    this.setState({modalVisible: true});
-  }
-  
-  checkIfLoggedin = () =>{
-    
-    firebase.auth().onAuthStateChanged(user =>  
-    {
-      if (user)
-      {
-        this.props.navigation.navigate('MainPage');
-      }else{
-        this.props.navigation.navigate('login');
-      }
-    }
-    );
-  }
 
 render(){ 
   const {modalVisible} = this.state;
   const telefoneicon = <Icon name='mobile' size={30} color="#ffffff" />
   const nologinicon = <Icon name='eye' size={30} color="#ffffff" />
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.container}>
       <Image
         source={require('../assets/logo.png')}
         style={styles.image}
@@ -47,11 +20,12 @@ render(){
 
       <TouchableOpacity
         style={styles.openButton}
+        activeOpacity={0.3}
         onPress={() => {
           this.setState({modalVisible: true});
         }}
       >
-        <Text style={styles.textStyle}>Cadastrar</Text>
+        <Text style={styles.logintext}>Entrar</Text>
       </TouchableOpacity>
       <Modal
         animationType="fade"
@@ -75,7 +49,7 @@ render(){
           </View>
         </View>
       </Modal>
-    </KeyboardAvoidingView>
+    </View>
   )
   }
 }
@@ -99,33 +73,32 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
+    width: '95%',
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 5
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#F19422",
+    backgroundColor: "#40B29D",
     borderRadius: 5,
     height:60,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginTop: 15,
     padding: 20, 
-    shadowColor: "#000",
+    shadowColor: "black",
     shadowOffset: {
-      width: 2,
-      height: 2
+      width: 0,
+      height: -10
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+    shadowOpacity: 100,
+    shadowRadius: 0,
   },
   image: {
     width: '100%',
@@ -155,10 +128,10 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
-      height: 2
+      height: 20
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 100,
+    shadowRadius: 0,
     elevation: 5
   },
   botaosemlogin: {
@@ -183,9 +156,9 @@ const styles = StyleSheet.create({
   },
   logintext: {
     fontWeight: 'bold',
-    fontSize: 18,
-    position: 'relative',
-    width: 350
+    fontSize: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logindesc: {
     width: 350,

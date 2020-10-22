@@ -6,6 +6,7 @@ import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import Getshopping from './getShopping'
+import { render } from 'react-dom';
 const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();
@@ -32,8 +33,6 @@ const onRefresh = React.useCallback(() => {
   wait(2000).then(() => setRefreshing(false));
 }, []);
 
-
-
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
@@ -49,15 +48,12 @@ const onRefresh = React.useCallback(() => {
 
   return (
 
-    <ScrollView style={styles.container}
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} tintColor='#e35555'/>}>
+    <SafeAreaView style={styles.container}>
 
     <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
         centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
-    <ScrollView>
       <View style={styles.section}>
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
@@ -68,7 +64,7 @@ const onRefresh = React.useCallback(() => {
           <FlatList
             horizontal
             data={data}
-            keyExtractor={({ id }, idseg) => id}
+            keyExtractor={({ id }, item) => id}
             renderItem={({ item }) => (
 
               <TouchableOpacity style={{
@@ -89,10 +85,7 @@ const onRefresh = React.useCallback(() => {
       <View style={{ margin: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <Lojas props={{ props }} />
       </View>
-
-
-    </ScrollView>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
