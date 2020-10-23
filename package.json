@@ -19,6 +19,7 @@
     "@react-navigation/stack": "^5.9.0",
     "expo": "^38.0.10",
     "expo-app-auth": "~9.1.1",
+    "expo-cli": "^3.28.1",
     "expo-constants": "~9.1.1",
     "expo-facebook": "~8.2.1",
     "expo-firebase-recaptcha": "^1.2.0",
@@ -28,7 +29,7 @@
     "firebase": "7.9.0",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
-    "react-native": "^0.63.2",
+    "react-native": "^0.63.3",
     "react-native-country-code-telephone-input": "^0.0.9",
     "react-native-elements": "^2.3.1",
     "react-native-fbsdk": "^2.0.0",
@@ -50,5 +51,6 @@
     "@babel/core": "^7.8.6",
     "babel-preset-expo": "~8.1.0"
   },
-  "private": true
+  "private": true,
+  "version": "0.0.0"
 }
