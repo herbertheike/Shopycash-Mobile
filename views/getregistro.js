@@ -1,9 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView,TouchableOpacity,Button } from 'react-native';
-import FBLogin from './FBLogin'
-import GLogin from './GLogin'
-
-
 
 export default function registro({navigation}) {
    

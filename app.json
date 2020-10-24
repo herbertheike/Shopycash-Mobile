@@ -26,7 +26,9 @@
       "package": "com.shopycash.sc",
       "googleServicesFile": "./google-services.json"
     },
+    "facebookScheme": "fb445672353479326",
     "facebookAutoInitEnabled": true,
+    "facebookDisplayName": "ShopyCash",
     "facebookAppId":"445672353479326"
   }
 }

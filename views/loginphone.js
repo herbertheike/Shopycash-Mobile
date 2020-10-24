@@ -41,7 +41,7 @@ export default function LoginPhone({navigation}) {
       <TouchableOpacity
       style={styles.botao}
         disabled={!phoneNumber}
-        onPress={async () => {
+        onPress={/*async () => {
           try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
@@ -57,9 +57,9 @@ export default function LoginPhone({navigation}) {
               ],
               { cancelable: false }
             );
-            <Activityindicator />,
+            <Activityindicator />,*/
             navigation.navigate('TelefoneLogin',{screen: 'NextPhone',
-          params: {phonenumber: phoneNumber, verificationId: verificationId}});
+          params: {phonenumber: phoneNumber, verificationId: verificationId}})/*
           } catch (err) {
             Alert.alert(
               'Shopycash',
@@ -70,7 +70,7 @@ export default function LoginPhone({navigation}) {
               { cancelable: false }
             );
           }
-        }}
+        }*/}
       >
         <Text style={styles.botaotext}>Enviar Codigo</Text>
             </TouchableOpacity>

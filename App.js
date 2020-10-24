@@ -4,7 +4,7 @@ import { AppRegistry,StyleSheet, Text,View, Image,TextInput, Button, TouchableHi
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer'
-import Login from './views/loginview'
+import LoginSelect from './views/loginview'
 import LoginPhone from './views/loginphone'
 import NextPhone from './views/nextphone'
 import LojasMain from './views/lojasMain'
@@ -12,6 +12,8 @@ import GetShopping from './views/getShopping'
 import LojaDetail from './views/lojadetail'
 import GetRegistro from './views/getregistro'
 import LoadingScreen from './views/loadingScreen'
+import Cadastro from './views/Cadastro'
+import Login from './views/Login'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
@@ -44,6 +46,8 @@ class App  extends React.Component{
                 <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
                 <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Cadastro" component={Cadastro} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Login" component={Login} options ={{headerShown:false}}/>
               </MainStack.Navigator>
             </NavigationContainer>
           )
@@ -53,7 +57,7 @@ class App  extends React.Component{
 function HomeScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="login" component={Login} options={{headerShown:false}}/>
+      <Stack.Screen name="LoginSelect" component={LoginSelect} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
 }

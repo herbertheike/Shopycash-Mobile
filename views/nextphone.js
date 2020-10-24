@@ -42,7 +42,7 @@ export default function NextPhone({navigation, route}) {
             <TouchableOpacity style={styles.botao}
                 title="Login"
                 color='#ffffff'
-                onPress={async () => {
+                onPress={/*async () => {
                     try {
                       const credential = firebase.auth.PhoneAuthProvider.credential(
                         verificationId,
@@ -57,11 +57,11 @@ export default function NextPhone({navigation, route}) {
                         ],
                         { cancelable: false }
                       );
-                      navigation.navigate('Registro')
+                      */navigation.navigate('Registro')/*
                     } catch (err) {
                      alert(`Error: ${err.message}`);
                     }
-                  }}>
+                  }*/}>
                 <Text style={styles.botaotext}>Avançar</Text>
             </TouchableOpacity>
             {message ? (

@@ -31,9 +31,10 @@ class LoadingScreen extends React.Component{
       function (user){
       if (user)
       {
+        
         this.props.navigation.navigate('Home');
       }else{
-        this.props.navigation.navigate('Mainpage');
+        this.props.navigation.navigate('MainPage');
       }
     }.bind(this)
     );

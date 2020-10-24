@@ -36,10 +36,15 @@ render(){
           <View style={styles.modalView}>
             <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
               <Text style={styles.logindesc}>Tentamos encontar uma maneira de adicionar mais opções e deixar o processo mais dinâmico</Text>
-                <TouchableOpacity style={styles.botao} title="LoginTelefone" color='#ffffff'
-                onPress={() => this.props.navigation.navigate('TelefoneLogin',{screen: 'LoginPhone'},
+                <TouchableOpacity style={styles.botao} title="Login" color='#ffffff'
+                onPress={() => this.props.navigation.navigate('Login',
                 setTimeout(() => this.setState({modalVisible: false})), 1)}>
-                  {telefoneicon}<Text style={styles.botaotext} >Conectar com número de telefone</Text>
+                  {telefoneicon}<Text style={styles.botaotext} >Logar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.botao} title="Cadastro" color='#ffffff'
+                onPress={() => this.props.navigation.navigate('Cadastro',
+                setTimeout(() => this.setState({modalVisible: false})), 1)}>
+                  {telefoneicon}<Text style={styles.botaotext} >Cadastrar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.botaosemlogin} title="NoLogin" color='#ffffff'
                 onPress={() => this.props.navigation.navigate('MainPage',
