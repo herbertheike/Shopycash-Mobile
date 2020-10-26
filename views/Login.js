@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView,  ActivityIndicator, TouchableWithoutFeedback, Keyboard} from "react-native";
+import { StyleSheet, View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import "firebase/firestore";
 import firebase from "firebase";
 import * as Facebook from 'expo-facebook'
@@ -23,36 +23,72 @@ class Login extends React.Component {
       );
     }
   }
+
+  //Login Email e senha
   async signInWithEmail() {
     await firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(this.onLoginSuccess.bind(this))
+      .then(
+        await function emailPassProfile() {
+          const user = firebase.auth().currentUser;
+          firebase
+            .database()
+            .ref('/user/' + user.uid)
+            .update({
+              lastLogIn: Date.now()
+            })
+        },
+        this.onLoginSuccess.bind(this))
       .catch(error => {
-          let errorCode = error.code;
-          let errorMessage = error.message;
-          if (errorCode == 'auth/weak-password') {
-              this.onLoginFailure.bind(this)('Weak Password!');
-          } else {
-              this.onLoginFailure.bind(this)(errorMessage);
-          }
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        if (errorCode == 'auth/weak-password') {
+          this.onLoginFailure.bind(this)('Senha Fraca!');
+        } else {
+          this.onLoginFailure.bind(this)(errorMessage);
+        }
       });
   }
+
+  //Login Facebook
   async signInWithFacebook() {
     try {
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync('445672353479326', {
+      await Facebook.initializeAsync('445672353479326');
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile'],
       });
       if (type === 'success') {
         await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         const facebookProfileData = await firebase.auth().signInWithCredential(credential);
+        if (facebookProfileData.additionalUserInfo.isNewUser) {
+          await firebase
+            .database()
+            .ref('/user/' + facebookProfileData.user.uid)
+            .set({
+              loginType: 'Facebook',
+              email: facebookProfileData.user.email,
+              photoURL: facebookProfileData.additionalUserInfo.profile.picture,
+              displayName: facebookProfileData.user.displayName,
+              createAt: Date.now()
+            })
+        } else {
+          firebase
+            .database()
+            .ref('/user/' + facebookProfileData.user.uid)
+            .update({
+              lastLogIn: Date.now()
+            })
+        }
         this.onLoginSuccess.bind(this)
       }
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
   }
+
+  //Login Google
   async signInWithGoogle() {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
@@ -60,8 +96,27 @@ class Login extends React.Component {
       const data = await GoogleSignIn.GoogleAuthentication.prototype.toJSON();
       if (type === 'success') {
         await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-        const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+        const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken);
         const googleProfileData = await firebase.auth().signInWithCredential(credential);
+        if (googleProfileData.additionalUserInfo.isNewUser) {
+          await firebase
+            .database()
+            .ref('/user/' + googleProfileData.user.uid)
+            .set({
+              loginType: 'Google',
+              email: googleProfileData.user.email,
+              photoURL: googleProfileData.additionalUserInfo.profile.picture,
+              displayName: googleProfileData.user.displayName,
+              createAt: Date.now()
+            })
+        } else {
+          firebase
+            .database()
+            .ref('/user/' + googleProfileData.user.uid)
+            .update({
+              lastLogIn: Date.now()
+            })
+        }
         this.onLoginSuccess.bind(this);
       }
     } catch ({ message }) {
@@ -76,8 +131,8 @@ class Login extends React.Component {
         }}
       >
         <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <Text style={{ fontSize: 32, fontWeight: "700", color: "gray" }}>
+          <KeyboardAvoidingView style={styles.container}>
+            <Text style={{ fontSize: 32, fontWeight: "bold", color: "black" }}>
               ShopyCash
             </Text>
             <View style={styles.form}>
@@ -114,11 +169,11 @@ class Login extends React.Component {
               {this.state.error}
             </Text>
             <TouchableOpacity
-              style={{ width: '86%', marginTop: 10 }}
+              style={{ width: '86%', margin: 10, alignItems: 'center', justifyContent: 'center'}}
               onPress={() => this.signInWithEmail()}>
-                  <Text>Entrar</Text>
+              <Text styles={{ fontSize:18, fontWeight:'bold'}}>Entrar</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{ width: "86%", marginTop: 10 }}
               onPress={() => this.signInWithFacebook()}>
               <View style={styles.button}>
@@ -133,7 +188,7 @@ class Login extends React.Component {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{ width: "86%", marginTop: 10 }}
               onPress={() => this.signInWithGoogle()}>
               <View style={styles.googleButton}>
@@ -168,7 +223,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    paddingTop: "50%"
   },
   form: {
     width: "86%",

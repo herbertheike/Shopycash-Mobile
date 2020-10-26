@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView, Button } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import Getshopping from './getShopping'
-import { render } from 'react-dom';
+import firebase from "firebase";
 const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();
@@ -45,6 +45,7 @@ const onRefresh = React.useCallback(() => {
       .finally(() => setLoading(false));
   }, []);
   
+  state = { user: {} };
 
   return (
 
@@ -58,6 +59,14 @@ const onRefresh = React.useCallback(() => {
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
       </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <Text>{this.state.user.email}</Text>
+          <Button title="Log Off" onPress={() => {
+            firebase.auth().signOut();
+          }}/>
+        </View>
+      </SafeAreaView>
 
       <View style={{ height: 120 }}>
         {isLoading ? <ActivityIndicator /> : (

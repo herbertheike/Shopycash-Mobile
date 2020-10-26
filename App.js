@@ -34,13 +34,22 @@ const MainStack = createStackNavigator();
 firebase.initializeApp(firebaseConfig);
 
 class App  extends React.Component{
+
+  state = { user: {} };
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.setState({user: user});
+      }
+    })
+  }
   
         render() {
           return (
             <NavigationContainer>
               <MainStack.Navigator initialRouteName="Loading Screenn">
                 <MainStack.Screen name="LoadingScreen" component={LoadingScreen} options ={{headerShown:false}} />
-                <MainStack.Screen name="Home" component={HomeScreen} options ={{headerShown:false}}/>
+                <MainStack.Screen name="LoginSelect" component={LoginSelect} options ={{headerShown:false}}/>
                 <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
                 <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
@@ -54,7 +63,7 @@ class App  extends React.Component{
         }
       }
 
-function HomeScreen() {
+function Select() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="LoginSelect" component={LoginSelect} options={{headerShown:false}}/>
