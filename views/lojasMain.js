@@ -59,42 +59,61 @@ const onRefresh = React.useCallback(() => {
         {searchicon}
         <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
       </View>
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <Text>{this.state.user.email}</Text>
-          <Button title="Log Off" onPress={() => {
-            firebase.auth().signOut();
-          }}/>
+      <ScrollView >
+        <View style={{height: 280, paddinga: 10}}>
+          <Text style={{fontWeight: "bold", color: "black", padding: 10}}>Ofertas</Text>
+        <FlatList
+                horizontal
+                data={data}
+                keyExtractor={({ id }, item) => id}
+                renderItem={({ item }) => (
+
+                  <TouchableOpacity style={{
+                    width: 300,
+                    borderRadius: 15,
+                    backgroundColor: "#ffffff",
+                    color: '#000000',
+                    marginHorizontal: 10,
+                    alignItems: 'center',
+                    padding: 7.5
+                  }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
+                    <Image style={{ width: '98%', height: 150,  borderRadius: 15,}} source={{ uri: 'https://i.pinimg.com/originals/d2/b1/04/d2b104da6040b88dfba0c3bc28cea8a5.jpg' }} />
+                    <Text >{item.nome}</Text>
+                  </TouchableOpacity>
+                )}
+              />
         </View>
-      </SafeAreaView>
+      <View style={{ height:  'auto' }}>
+      <Text style={{fontWeight: "bold", color: "black", padding: 10}}>Categorias</Text>
+            {isLoading ? <ActivityIndicator /> : (
+              <FlatList
+                horizontal
+                data={data}
+                keyExtractor={({ id }, item) => id}
+                renderItem={({ item }) => (
 
-      <View style={{ height: 120 }}>
-        {isLoading ? <ActivityIndicator /> : (
-          <FlatList
-            horizontal
-            data={data}
-            keyExtractor={({ id }, item) => id}
-            renderItem={({ item }) => (
-
-              <TouchableOpacity style={{
-                width: 100,
-                borderRadius: 7,
-                backgroundColor: ColorCode[item.idseg - 1],
-                color: '#FFFFFF',
-                marginHorizontal: 5,
-                alignItems: 'center',
-                padding: 10
-              }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
-                <Text style={styles.botaotext}>{item.nome}</Text>
-              </TouchableOpacity>
+                  <TouchableOpacity style={{
+                    width: 120,
+                    height: 150,
+                    borderRadius: 7,
+                    backgroundColor: ColorCode[item.idseg - 1],
+                    color: '#FFFFFF',
+                    marginHorizontal: 10,
+                    alignItems: 'center',
+                    padding: 7.5
+                  }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
+                    <Text style={styles.botaotext}>{item.nome}</Text>
+                  </TouchableOpacity>
+                )}
+              />
             )}
-          />
-        )}
       </View>
+
       <View style={{ margin: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <Lojas props={{ props }} />
       </View>
-    </SafeAreaView>
+      </ScrollView>
+      </SafeAreaView>
   );
 }
 
@@ -115,6 +134,7 @@ function Lojas() {
   }, []);
   return (
     <View>
+      <Text style={{fontWeight: "bold", color: "black", padding: 8}}>Lojas</Text>
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
           data={data}
@@ -125,8 +145,6 @@ function Lojas() {
             <TouchableOpacity style={{
               marginVertical: 5,
               borderRadius: 5,
-              borderWidth: 0.5,
-              borderColor: '#565656',
               backgroundColor: '#ffffff',
               padding: 10,
             }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>

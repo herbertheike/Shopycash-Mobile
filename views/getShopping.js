@@ -31,6 +31,7 @@ export default class UserProfile extends React.Component {
 
 
   render() {
+    console.log(this.state.photoUrl)
     const configicon = <Icon name='cog' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
 const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => this.props.navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
     return (
@@ -43,6 +44,7 @@ const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => this.props.navi
         <View style={{padding: 15}}>
           <Image style={{ width: 200, height: 200, marginRight: 5, borderRadius:600/2 }} source={{uri:this.state.photoUrl}}/>
           <Text>{this.state.name}</Text>
+          <Text>{this.state.email}</Text>
           <Text>{this.state.email}</Text>
         </View>
       </View>

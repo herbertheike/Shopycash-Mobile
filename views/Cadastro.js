@@ -122,6 +122,7 @@ class Cadastro extends React.Component {
             })
         }
         this.onLoginSuccess.bind(this);
+        
       }
     } catch ({ message }) {
       alert('login: Error:' + message);
