@@ -11,10 +11,10 @@ class LoadingScreen extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.navigation.navigate('MainPage');
-        console.log(user)
+        console.log(user.providerData.photoURL)
       } else {
         this.props.navigation.navigate('LoginSelect');
-        console.log(user)
+        console.log(user.photoURL)
         
       }
     });
@@ -28,12 +28,6 @@ class LoadingScreen extends React.Component {
           style={styles.image}
         />
 
-
-        <BarIndicator style={{ position: "relative", marginTop: '-49%', marginLeft: '1%' }}
-          count={5}
-          color='#40B29D'
-          size={60}
-          animating={true} />
         <BarIndicator style={{ position: "relative", marginTop: '-50%' }}
           count={5}
           color={'#000000'}

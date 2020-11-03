@@ -8,7 +8,7 @@ import LoginSelect from './views/loginview'
 import LoginPhone from './views/loginphone'
 import NextPhone from './views/nextphone'
 import LojasMain from './views/lojasMain'
-import GetShopping from './views/getShopping'
+import Categorias from './views/getcategorias'
 import LojaDetail from './views/lojadetail'
 import GetRegistro from './views/getregistro'
 import LoadingScreen from './views/loadingScreen'
@@ -47,12 +47,12 @@ class App  extends React.Component{
         render() {
           return (
             <NavigationContainer>
-              <MainStack.Navigator initialRouteName="Loading Screenn">
+              <MainStack.Navigator initialRouteName="Loading Screen">
                 <MainStack.Screen name="LoadingScreen" component={LoadingScreen} options ={{headerShown:false}} />
                 <MainStack.Screen name="LoginSelect" component={LoginSelect} options ={{headerShown:false}}/>
                 <MainStack.Screen name="TelefoneLogin" component={TelefoneLogin} options ={{headerShown:false}}/>
                 <MainStack.Screen name="MainPage" component={MainPage} options ={{headerShown:false}}/>
-                <MainStack.Screen name="Shopping" component={Shopping} options ={{headerShown:false}}/>
+                <MainStack.Screen name="GetCategorias" component={GetCategorias} options ={{headerShown:false}}/>
                 <MainStack.Screen name="LojaDetail" component={LojaDetail} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Cadastro" component={Cadastro} options ={{headerShown:false}}/>
@@ -78,19 +78,30 @@ function TelefoneLogin(){
     </Stack.Navigator>
   )
 }
-function Shopping(){
+function GetCategorias(){
   <Stack.Navigator>
-      <Stack.Screen name="shopping" component={GetShopping} options={{headerShown:false}}/>
+      <Stack.Screen name="Categorias" component={Categorias} options={{headerShown:false}}/>
   </Stack.Navigator>
 }
 
 function MainPage({navigation}){
   return (
     <Drawer.Navigator >
-      <Drawer.Screen name="LojasMain" component={LojasMain} initialRouteName="feed" drawerType='slide' options={{headerShown:true, headerLeft: () =>(
-      <Icon style={{ marginLeft: 20 }} onPress={() => navigation.openDrawer()} name="menu" color="#e80000" size={30}/>)}}/>
+      <Drawer.Screen name="LojasMain" 
+      component={LojasMain}
+      initialRouteName="feed"
+      drawerType='slide' 
+      options={{headerShown:true, 
+      headerLeft: () =>(
+          <Icon style={{ marginLeft: 20 }}
+          onPress={() => navigation.openDrawer()}
+          name="menu"
+          color="#e80000" size={30}/>)}}
+       />
     </Drawer.Navigator>
   )
 }
 
 export default App;
+
+

@@ -5,8 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
-import Getshopping from './getShopping'
 import firebase from "firebase";
+import {DrawerContentMenu} from './DrawerContent'
+import Categorias from './getcategorias'
 const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();
@@ -77,7 +78,7 @@ const onRefresh = React.useCallback(() => {
                     alignItems: 'center',
                     padding: 7.5
                   }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
-                    <Image style={{ width: '98%', height: 150,  borderRadius: 15,}} source={{ uri: 'https://i.pinimg.com/originals/d2/b1/04/d2b104da6040b88dfba0c3bc28cea8a5.jpg' }} />
+                    <Image style={{ width: '98%', height: 150,  borderRadius: 15,}} source={{ uri: 'https://s2.glbimg.com/AcvU3JnaX1sF2wTlwpNVJ3SYF6E=/e.glbimg.com/og/ed/f/original/2020/04/28/marcin-kempa-3slosn6dpoq-unsplash.jpg' }} />
                     <Text >{item.nome}</Text>
                   </TouchableOpacity>
                 )}
@@ -170,9 +171,9 @@ function Lojas() {
 
 export default function lojasMain() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={props => <DrawerContentMenu {... props}/>}>
       <Drawer.Screen name="home" component={HomeScreen} />
-      <Drawer.Screen name="Shopping" component={Getshopping} />
+      <Drawer.Screen name="Categorias" component={Categorias}/>
       <Drawer.Screen name="loja" component={Lojas} />
     </Drawer.Navigator>
   );
