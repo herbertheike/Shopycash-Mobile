@@ -71,6 +71,8 @@ class Login extends React.Component {
               email: facebookProfileData.user.email,
               photoURL: facebookProfileData.additionalUserInfo.profile.picture,
               displayName: facebookProfileData.user.displayName,
+              firstName: facebookProfileData.additionalUserInfo.profile.first_name,
+              lastname: facebookProfileData.additionalUserInfo.profile.last_name,
               createAt: Date.now()
             })
         } else {
@@ -107,6 +109,8 @@ class Login extends React.Component {
               email: googleProfileData.user.email,
               photoURL: googleProfileData.additionalUserInfo.profile.picture,
               displayName: googleProfileData.user.displayName,
+              firstName: googleProfileData.additionalUserInfo.profile.given_name,
+              lastName: googleProfileData.additionalUserInfo.profile.family_name,
               createAt: Date.now()
             })
         } else {

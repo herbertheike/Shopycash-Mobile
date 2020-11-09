@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView, Button } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { Header } from 'react-native-elements'
+import { Header, SearchBar } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput } from 'react-native-gesture-handler';
 import firebase from "firebase";
@@ -26,7 +26,7 @@ const wait = (timeout) => {
   });
 }
 
-const [refreshing, setRefreshing] = React.useState(false);
+const [refreshing, setRefreshing] = useState(false);
 
 const onRefresh = React.useCallback(() => {
   setRefreshing(true);
@@ -39,14 +39,18 @@ const onRefresh = React.useCallback(() => {
   const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
   const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => props.navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
   useEffect(() => {
-    fetch('http://192.168.0.107:8080/administrativo/segmento/')
+    fetch('http://192.168.15.19:8080/administrativo/segmento/')
       .then((response) => response.json())
       .then((json) => setData(json.Segmentos))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
   
-  state = { user: {} };
+  const [search, setSearch] = useState();
+
+  function updateSearch(search) {
+    setSearch(search);
+  };
 
   return (
 
@@ -56,11 +60,15 @@ const onRefresh = React.useCallback(() => {
         centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
-      <View style={styles.section}>
-        {searchicon}
-        <TextInput style={{ flex: 1 }} placeholder='Busque produtos ou Lojas' name={'search'} ></TextInput>
+      <View >
+        <SearchBar
+        lightTheme={true}
+        placeholder="Busque produtos ou Lojas"
+        onChangeText={updateSearch}
+        value={search} />
       </View>
-      <ScrollView >
+      <ScrollView 
+      refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
         <View style={{height: 280, paddinga: 10}}>
           <Text style={{fontWeight: "bold", color: "black", padding: 10}}>Ofertas</Text>
         <FlatList
@@ -127,7 +135,7 @@ function Lojas() {
   
 
   useEffect(() => {
-    fetch('http://192.168.0.107:8080/shopping/lojas')
+    fetch('http://192.168.15.19:8080/shopping/lojas')
       .then((response) => response.json())
       .then((json) => setData(json.lojas))
       .catch((error) => console.error(error))

@@ -7,7 +7,7 @@ import firebase from "firebase";
 
 
 export class DrawerContentMenu extends React.Component {
-    state = { name: 'sem nome', email: '', photoURL: 'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png' }
+    state = { name: 'Sem nome', email: '', photoURL: 'https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png' }
     constructor(props) {
         super(props);
     }
@@ -18,13 +18,13 @@ export class DrawerContentMenu extends React.Component {
                 const userId = firebase.auth().currentUser.uid;
                 firebase.database().ref('/user/' + userId).once('value', function (snapshot) {
                     if (snapshot.val().loginType === 'Google') {
-                        this.setState({ name: snapshot.val().displayName });
-                        this.setState({ photoURL: snapshot.val().photoURL })
-                        this.setState({ email: snapshot.val().email })
+                        this.setState({ name: snapshot.val().firstName});
+                        this.setState({ photoURL: snapshot.val().photoURL})
+                        this.setState({ email: snapshot.val().email})
                     } if (snapshot.val().loginType === 'Facebook') {
-                        this.setState({ name: snapshot.val().displayName });
-                        this.setState({ photoURL: snapshot.val().photoURL.data.url })
-                        this.setState({ email: snapshot.val().email })
+                        this.setState({ name: snapshot.val().firstName});
+                        this.setState({ photoURL: snapshot.val().photoURL.data.url})
+                        this.setState({ email: snapshot.val().email})
                     } else {
                         this.setState({ email: snapshot.val().email })
                     }
@@ -46,7 +46,7 @@ export class DrawerContentMenu extends React.Component {
                             <View style={{ flexDirection: 'row', marginVertical: 15, padding: 10 }}>
                                 <Avatar.Image
                                     source={{ uri: this.state.photoURL }}
-                                    size={75}
+                                    size={60}
                                 />
                                 <View style={{ flexDirection: 'column', marginLeft: 15 }}>
                                     <Title style={styles.title}>

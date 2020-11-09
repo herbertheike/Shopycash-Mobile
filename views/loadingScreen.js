@@ -11,10 +11,8 @@ class LoadingScreen extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.navigation.navigate('MainPage');
-        console.log(user.providerData.photoURL)
       } else {
         this.props.navigation.navigate('LoginSelect');
-        console.log(user.photoURL)
         
       }
     });

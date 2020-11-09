@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#40B29D",
+    backgroundColor: "black",
     borderRadius: 5,
     height:60,
     justifyContent: 'center',
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
   logintext: {
     fontWeight: 'bold',
     fontSize: 24,
+    color: '#EBAD00',
     alignItems: 'center',
     justifyContent: 'center',
   },
