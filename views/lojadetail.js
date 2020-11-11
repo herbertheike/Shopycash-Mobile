@@ -225,8 +225,20 @@ function ProdCat() {
                           title="Login"
                           color="#ffffff"
                           onPress={() =>
-                            navigation.navigate("LojaDetail", {
-                              params: { id: item.idLoja, logo: item.logo },
+                            navigation.navigate("Proddetail", {
+                              params: {
+                                idLoja: item.idLoja,
+                                idProd: item.id,
+                                produto:item.produto,
+                                descricao:item.descricao,
+                                preco: item.preco,
+                                loja: item.loja,
+                                shopping: item.shopping,
+                                categoria: item.categoria,
+                                ativo: item.ativo,
+                                imagem: item.imagem,
+                                imagem2: item.imagem2,
+                            },
                             })
                           }
                         >
