@@ -14,7 +14,7 @@ import GetRegistro from './views/getregistro'
 import LoadingScreen from './views/loadingScreen'
 import Cadastro from './views/Cadastro'
 import Login from './views/Login'
-import ProdList from './views/lojaprodcat'
+import Proddetail from './views/proddetail'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
@@ -58,7 +58,7 @@ class App  extends React.Component{
                 <MainStack.Screen name="Registro" component={GetRegistro} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Cadastro" component={Cadastro} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Login" component={Login} options ={{headerShown:false}}/>
-                <MainStack.Screen name="ProdList" component={ProdList} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Proddetail" component={Proddetail} options ={{headerShown:false}}/>
               </MainStack.Navigator>
             </NavigationContainer>
           )

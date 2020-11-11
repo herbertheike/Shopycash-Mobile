@@ -1,51 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity,SectionList, ScrollView, Button, KeyboardAvoidingView, SafeAreaView, FlatList, Animated } from 'react-native';
-
-
-
-
+import Carousel from 'react-native-snap-carousel';
 class Prod extends React.Component {
-    state = {data:[]}
-componentDidMount() {
+    state = {index:0}
+
+    constructor(props){
+        super(props);
+    }
+
+
+
     
-}
+    _renderItem({ item }) {
+        return (
+          <View style={styles.itemContainer}>
+            <Text style={styles.itemLabel}>{`Item ${item}`}</Text>
+          </View>
+        );
+      }
+      
     render() {
+
+        const [isLoading, setLoading] = useState(true);
+        const [data, setData] = useState([]);
+        const [data2, setData2] = useState([]);
+        const navigation = useNavigation();
+        const route = useRoute();
+      
+        useEffect(() => {
+          fetch("http://192.168.15.19:8080/loja/categoria/" + route.params.params.id)
+            .then((response) => response.json())
+            .then((json) => setData2(json.categorias))
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+        }, []);
+      
   
         return(
-            <View style={styles.container}>
-                <Text style={{marginTop:300, justifyContent: 'center'}}>
-                    {this.props.route.params.params.idLoja}
-                </Text>
-                <FlatList
-                                style={{ margin: 5 }}
-                                data={this.state.data}
-                                refreshing={false}
-                                keyExtractor={({ key }, idLoja) => key}
-                                renderItem={({ item }) => (<View>
-                                    <TouchableOpacity style={{
-                                        borderRadius: 5,
-                                        borderWidth: 0.3,
-                                        borderColor: '#565656',
-                                        backgroundColor: '#ffffff',
-                                        padding: 10,
-                                        marginTop: 5,
-                                        width: '100%'
-                                    }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
-                                        <View style={{ flex: 2, flexDirection: 'row-reverse' }}>
-                                            <Image style={{ width: 80, height: 80, padding: 50 }} source={{ uri: item.imagem }} />
-                                            <View style={{ flexDirection: 'column', flex: 1 }}>
-                                                <Text style={styles.prodtext}>{item.produto}</Text>
-                                                <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-                                                    <Text style={styles.proddesc}>{item.descricao}</Text>
-                                                    <Text style={styles.prodpreco}>R${item.preco}</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                )}
-                            />
-            </View>
+            <ScrollView style={styles.container}>
+                <Carousel
+                data={data}
+                renderItem={this._renderItem}
+                sliderWidth={'95%'}
+                itemWidth={'auto'}
+
+                />
+            </ScrollView>
         )
     }
 }
@@ -165,6 +165,26 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: 'bold',
         color: '#40B29D'
-    }
+    },
+    carouselContainer: {
+        marginTop: 50
+      },
+      itemContainer: {
+        width: ITEM_WIDTH,
+        height: ITEM_HEIGHT,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'dodgerblue'
+      },
+      itemLabel: {
+        color: 'white',
+        fontSize: 24
+      },
+      counter: {
+        marginTop: 25,
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center'
+      }
 });
 
