@@ -16,6 +16,7 @@ import {
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
+import MapView from 'react-native-maps';
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 export default function Getloja(props) {
@@ -259,7 +260,7 @@ function ProdCat() {
                                   justifyContent: "space-between",
                                 }}
                               >
-                                <Text style={styles.proddesc}>
+                                <Text style={styles.proddesc} numberOfLines={2}>
                                   {item.descricao}
                                 </Text>
                                 <Text style={styles.prodpreco}>
@@ -269,7 +270,7 @@ function ProdCat() {
                             </View>
                           </View>
                         </TouchableOpacity>
-                      );
+                      )
                     }
                   }}
                 />
@@ -287,6 +288,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#e8e8e8",
     justifyContent: "flex-start",
+  },
+  mapStyle: {
+    width: '100%',
+    height: 150,
   },
   image: {
     width: 250,
@@ -361,9 +366,9 @@ const styles = StyleSheet.create({
   },
   prodpreco: {
     width: "100%",
-    fontSize: 12,
+    fontSize: 18,
     position: "relative",
-    color: "#b9b9b9",
+    color: "#000000",
   },
   proddesc: {
     width: "100%",

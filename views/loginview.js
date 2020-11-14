@@ -61,7 +61,7 @@ render(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EBAD00',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'flex-end',
     flexDirection: 'column',
@@ -90,25 +90,20 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "black",
-    borderRadius: 5,
+    backgroundColor: "#FE6400",
+    borderRadius: 15,
     height:60,
+    marginBottom: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    padding: 20, 
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: -10
-    },
-    shadowOpacity: 100,
-    shadowRadius: 0,
+    width: '95%',
+    padding: 10, 
   },
   image: {
     width: '100%',
-    height: '100%',
-    resizeMode: 'contain'
+    height: 600,
+    resizeMode: 'contain',
+  
   },
   login: {
     backgroundColor: '#ffffff',
@@ -120,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   botao: {
-    backgroundColor: '#EBAD00',
+    backgroundColor: '#4c2e1f',
     width: 350,
     height:70,
     borderRadius: 20,
@@ -128,8 +123,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 10,
+    justifyContent: 'space-between',
+    paddingHorizontal: 50,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -140,7 +135,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   botaosemlogin: {
-    backgroundColor: '#8bb8f9',
+    backgroundColor: '#4D5097',
     width: 350,
     height:70,
     borderRadius: 20,
@@ -148,8 +143,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 10,
+    justifyContent: 'space-between',
+    paddingHorizontal: 50,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -162,10 +157,16 @@ const styles = StyleSheet.create({
   logintext: {
     fontWeight: 'bold',
     fontSize: 24,
-    color: '#EBAD00',
+    color: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  logintext: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    color: '#000000',
+    alignItems: 'center',
+    justifyContent: 'center',},
   logindesc: {
     width: 350,
     fontSize: 14,
@@ -173,8 +174,8 @@ const styles = StyleSheet.create({
     color: '#999999'
   },
   botaotext: {
-    fontWeight:  'bold', 
-    fontSize: 16,
+    fontWeight:  '100', 
+    fontSize: 18,
     color: '#FFFFFF'
   }
 });

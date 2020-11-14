@@ -5,18 +5,27 @@ import {
   View,
   Image,
   Animated,
-  FlatList
+  FlatList,
 } from "react-native";
-import { Header } from "react-native-elements";
+import { Header, AirbnbRating, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
-import Carousel from "react-native-snap-carousel"
+import Carousel from "react-native-snap-carousel";
+import Counter from "react-native-counters";
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 function Prod(props) {
-  const carticon = (
+  const staricon = (
     <Icon
-      name="shopping-cart"
+      name="star"
+      size={15}
+      color="#ffd700"
+      style={{ marginHorizontal: 10 }}
+    />
+  );
+  const halfstaricon = (
+    <Icon
+      name="star-halt-alt"
       size={30}
       color="#25282B"
       style={{ marginHorizontal: 10 }}
@@ -31,13 +40,15 @@ function Prod(props) {
       size={30}
     />
   );
-  const galery = [props.route.params.params.imagem, props.route.params.params.imagem2]
-  console.log(props.route.params.params.produto)
+  const galery = [
+    props.route.params.params.imagem,
+    props.route.params.params.imagem2,
+  ];
+  console.log(props.route.params.params.produto);
   return (
-      
     <ParallaxScrollView
-      backgroundColor="#E8e8e8"
-      contentBackgroundColor="#ffffff"
+      backgroundColor="rgba(232, 232, 232, 0)"
+      contentBackgroundColor="#rgba(255, 255, 255, 1)"
       backgroundScrollSpeed={7}
       parallaxHeaderHeight={600}
       renderStickyHeader={() => (
@@ -46,7 +57,7 @@ function Prod(props) {
           barStyle="light-content"
           leftComponent={backicon}
           centerComponent={{
-            text: 'DETALHES DO ITEM',
+            text: "DETALHES DO ITEM",
             style: {
               color: "#25282B",
               fontWeight: "bold",
@@ -55,111 +66,254 @@ function Prod(props) {
             },
           }}
           containerStyle={{
-            backgroundColor: "#E8E8E8",
+            backgroundColor: "rgba(232, 232, 232, 1)",
             justifyContent: "space-around",
           }}
         />
       )}
       stickyHeaderHeight={100}
-      fadeOutForeground={true}
+      fadeOutForeground={false}
       indicatorStyle={"white"}
       renderBackground={() => (
-                      <Image style={{height: 600,
-                            width:500,
-                            paddingHorizontal: 0,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            }} rezizeMode='cover' blurRadius={10} source={{uri: props.route.params.params.imagem}}/>
-
+        <Image
+          style={{
+            height: 600,
+            width: 500,
+            paddingHorizontal: 0,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          rezizeMode="cover"
+          blurRadius={10}
+          source={{ uri: props.route.params.params.imagem }}
+        />
       )}
-
       renderForeground={() => (
-          <         View style={{width:'100%', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 50, paddingTop: 50}}>
-                        <View>
-                            <Text style={{fontWeight: "bold",textAlign: "center", padding: 2, fontSize: 15,fontFamily: "Roboto"}}>
-                                DETALHES DO ITEM
-                            </Text>
-                            <View style={{flexDirection: 'row', height:60, alignItems: 'center', justifyContent: 'center',}}>
-                            <Text style={styles.shoppingtoast}>
-                                {props.route.params.params.shopping}
-                            </Text>
-                            <Text style={styles.lojatoast}>
-                                {props.route.params.params.loja}
-                            </Text>
-                            <Text style={styles.categoriatoast}>
-                                {props.route.params.params.categoria}
-                            </Text>
-                            </View>
-                            <Text style={{fontFamily: "Roboto",fontWeight: "bold",fontSize: 20,textAlign: "center"}}> 
-                                {props.route.params.params.produto}      
-                            </Text>
-                        </View>
-                    <Carousel
-                        ref={'carousel'}
-                        data={galery}
-                        layout={'default'}
-                        enableSnap={true}
-                        loop={true}
-                        loopClonesPerSide={5}
-                        renderItem={({ item }) => (
-                            <View>
-                                <Image style={{
-                                    width:350,
-                                    height:350,
-                                    borderRadius:10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    resizeMode: 'cover'}} source={{uri: item}}/>
-                                </View>
-                        )}
-                        sliderWidth={350}
-                        itemWidth={350}
-                        />
-      </View>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingHorizontal: 50,
+            paddingTop: 50,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontWeight: "bold",
+                textAlign: "center",
+                padding: 2,
+                fontSize: 15,
+                fontFamily: "Roboto",
+              }}
+            >
+              DETALHES DO ITEM
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={styles.shoppingtoast}>
+                {props.route.params.params.shopping}
+              </Text>
+              <Text style={styles.lojatoast}>
+                {props.route.params.params.loja}
+              </Text>
+              <Text style={styles.categoriatoast}>
+                {props.route.params.params.categoria}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontFamily: "Roboto",
+                fontWeight: "bold",
+                fontSize: 20,
+                paddingBottom: 15,
+                textAlign: "center",
+              }}
+            >
+              {props.route.params.params.produto}
+            </Text>
+          </View>
+          <Carousel
+            ref={"carousel"}
+            data={galery}
+            layout={"default"}
+            enableSnap={true}
+            loop={true}
+            loopClonesPerSide={5}
+            renderItem={({ item }) => (
+              <View>
+                <Image
+                  style={{
+                    width: 350,
+                    height: 350,
+                    borderRadius: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: item }}
+                />
+              </View>
+            )}
+            sliderWidth={350}
+            itemWidth={350}
+          />
+        </View>
       )}
     >
-        <View style={{padding: 10, borderTopRightRadius: 20, borderTopLeftRadius:20, opacity: 5, flex: 1, flexDirection: 'row', alignItems: 'flex-start',
-        justifyContent: 'space-between',}}>
-            <View>
-                <Text style={{
-                    fontWeight: "bold",
-                    fontFamily: "Roboto",
-                    fontSize:20,
-                    textAlign: "center"}}
-                > 
-                CÓDIGO 
-                </Text>
-                <Text style={{
-                    fontWeight: "bold",
-                    fontFamily: "Roboto",
-                    fontSize:15,
-                    textAlign: "center",
-                color:"#d3d3d3"}}
-                > 
-                {props.route.params.params.idProd}{props.route.params.params.idLoja}
-                </Text>
-                </View>
-            <View >
-                <Text style={{
-                    fontWeight: "bold",
-                    fontFamily: "Roboto",
-                    fontSize:20,
-                    textAlign: "center"}}
-                > 
-                PREÇO
-                </Text>
-                <Text style={{
-                    fontWeight: "bold",
-                    fontFamily: "Roboto",
-                    fontSize:40,
-                    textAlign: "center"}}
-                > 
-                R${props.route.params.params.preco}
-                </Text>
-            </View>
-
+      <View
+        style={{
+          padding: 15,
+          borderTopRightRadius: 20,
+          borderTopLeftRadius: 20,
+          opacity: 5,
+          flex: 1,
+          backgroundColor: "rgba(232, 232, 232, 0)",
+          flexDirection: "row",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+        }}
+      >
+        <View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 20,
+              textAlign: "justify",
+            }}
+          >
+            CÓDIGO
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 15,
+              textAlign: "justify",
+              color: "#a7a7a7",
+            }}
+          >
+            {props.route.params.params.idProd}
+            {props.route.params.params.idLoja}
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 20,
+              textAlign: "justify",
+            }}
+          >
+            AVALIAÇÃO
+          </Text>
+          <AirbnbRating showRating={false} size={20} />
         </View>
 
+        <View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 20,
+              textAlign: "right",
+            }}
+          >
+            PREÇO
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 45,
+              textAlign: "right",
+            }}
+          >
+            R${props.route.params.params.preco}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          padding: 15,
+          borderTopRightRadius: 20,
+          borderTopLeftRadius: 20,
+          opacity: 5,
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+        }}
+      >
+        <View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              fontSize: 20,
+              textAlign: "justify",
+            }}
+          >
+            DESCRIÇÃO
+          </Text>
+          <Text
+            style={{
+              fontWeight: "100",
+              fontFamily: "Roboto",
+              fontSize: 18,
+              textAlign: "justify",
+              color: "#a7a7a7",
+            }}
+          >
+            {props.route.params.params.descricao}
+          </Text>
+
+          <Text
+            style={{
+              fontWeight: "normal",
+              letterSpacing: 0.1,
+              paddingTop: 20,
+              paddingBottom: 20,
+              fontFamily: "Roboto",
+              fontSize: 12,
+              textAlign: "justify",
+              color: "#a7a7a7",
+            }}
+          >
+            {props.route.params.params.loja} -{" "}
+            {props.route.params.params.shopping} - (distancia)km
+          </Text>
+        </View>
+      </View>
+      <View style={{ alignItems: "center", justifyContent: "center", textAlign: "center",}}>
+        <Counter
+          start={1}
+          min={1}
+          max={5}
+          countTextStyle={{color: '#40b29d', fontSize: 30, fontWeight: "bold"}}
+          buttonStyle={{ width: 50, height: 50, borderColor: '#40b29d', backgroundColor: '#40b29d',borderRadius:100}}
+          buttonTextStyle={{ fontSize: 45, color: '#ffffff'}}
+        />
+        <Button
+          type={"outline"}
+
+          style={{alignItems: 'center', justifyContent:'center'}}
+          title={"Adicionar ao carrinho"}
+          titleStyle={{color: "#ffffff", fontSize:20, fontWeight: '500', padding: 20 }}
+          buttonStyle={{ borderColor: "#40B29D",
+                        borderRadius: 10,
+                        height: 60,
+                        backgroundColor: '#40b29d'}}
+                        containerStyle={{padding:10}}
+        />
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -179,9 +333,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
   },
-  ImageStyle: {
-    
-  },
+  ImageStyle: {},
   section: {
     flexDirection: "row",
     justifyContent: "center",
@@ -212,7 +364,6 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    
   },
   lojatoast: {
     backgroundColor: "#990000",
@@ -224,7 +375,6 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    
   },
   categoriatoast: {
     backgroundColor: "#000088",
@@ -236,7 +386,6 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    
   },
 
   logintext: {

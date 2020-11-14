@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView, Button } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl, ScrollView, Button, KeyboardAvoidingView } from 'react-native';
 import { createDrawerNavigator, DrawerActions, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import { Header, SearchBar } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TextInput } from 'react-native-gesture-handler';
-import firebase from "firebase";
 import {DrawerContentMenu} from './DrawerContent'
 import Categorias from './getcategorias'
+import * as Location from 'expo-location';
+
 const searchicon = <Icon name="search" size={30} color="#25282B" style={{ marginHorizontal: 10 }} />;
 
 const Drawer = createDrawerNavigator();
@@ -17,8 +17,16 @@ const ColorCode = ['#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb30
   '#E5454C', '#5653d4', '#08a791', '#faa33f'];
 
   
+  
 
 function HomeScreen(props) {
+
+const [search, setSearch] = useState();
+
+  function updateSearch(search) {
+    
+    setSearch(search);
+  };
 //refresh
 const wait = (timeout) => {
   return new Promise(resolve => { 
@@ -38,6 +46,10 @@ const onRefresh = React.useCallback(() => {
   const [data, setData] = useState([]);
   const carticon = <Icon name='shopping-cart' size={30} color="#25282B" style={{ marginHorizontal: 10 }} />
   const menuicon = <Icon style={{ marginLeft: 10 }} onPress={() => props.navigation.toggleDrawer()} name="bars" color="#25282B" size={30} />
+  const [datal, setDatal] = useState([]);
+  const navigation = useNavigation();
+  const staricon = <Icon name='star' size={12} />
+ 
   useEffect(() => {
     fetch('http://192.168.15.19:8080/administrativo/segmento/')
       .then((response) => response.json())
@@ -45,31 +57,38 @@ const onRefresh = React.useCallback(() => {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  
-  const [search, setSearch] = useState();
 
-  function updateSearch(search) {
-    setSearch(search);
-  };
+  useEffect(() => {
+    fetch('http://192.168.15.19:8080/shopping/lojas')
+      .then((response) => response.json())
+      .then((json) => setDatal(json.lojas))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+  let filtered = datal.filter((item) => {
+    return item.nomeloja.match(search) || item.shopping.match(search)
+   })
+  console.log(filtered)
+  
 
   return (
-
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
 
     <Header statusBarProps={{ barStyle: 'light-content' }} barStyle='light-content' leftComponent={menuicon}
         centerComponent={{ style: { color: '#25282B', fontWeight: 'bold', fontSize: 20, fontFamily: "Roboto" } }}
         rightComponent={carticon}
         containerStyle={{ backgroundColor: '#E8E8E8', justifyContent: 'space-around' }} />
       <View >
+      <Locale />
         <SearchBar
         lightTheme={true}
-        placeholder="Busque produtos ou Lojas"
+        placeholder="Busque por loja ou Shopping"
         onChangeText={updateSearch}
         value={search} />
       </View>
       <ScrollView 
       refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
-        <View style={{height: 280, paddinga: 10}}>
+        <View style={{height: 280, padding: 10}}>
           <Text style={{fontWeight: "bold", color: "black", padding: 10}}>Ofertas</Text>
         <FlatList
                 horizontal
@@ -93,6 +112,7 @@ const onRefresh = React.useCallback(() => {
               />
         </View>
       <View style={{ height:  'auto' }}>
+
       <Text style={{fontWeight: "bold", color: "black", padding: 10}}>Categorias</Text>
             {isLoading ? <ActivityIndicator /> : (
               <FlatList
@@ -102,13 +122,14 @@ const onRefresh = React.useCallback(() => {
                 renderItem={({ item }) => (
 
                   <TouchableOpacity style={{
-                    width: 120,
+                    width: 150,
                     height: 150,
                     borderRadius: 7,
                     backgroundColor: ColorCode[item.idseg - 1],
                     color: '#FFFFFF',
                     marginHorizontal: 10,
                     alignItems: 'center',
+                    justifyContent: 'center',
                     padding: 7.5
                   }} title="Login" color='#ffffff' onPress={() => alert(item.idseg)}>
                     <Text style={styles.botaotext}>{item.nome}</Text>
@@ -117,22 +138,96 @@ const onRefresh = React.useCallback(() => {
               />
             )}
       </View>
-
-      <View style={{ margin: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-        <Lojas props={{ props }} />
+      <View style={{ margin: 10}}>
+      <Text style={{fontWeight: "bold", color: "black", padding: 8, textAlign: "justify"}}>Lojas {search}</Text>
+      {isLoading ? <ActivityIndicator /> : (
+        <FlatList
+          data={filtered}
+          refreshing={true}
+          keyExtractor={({ id }, idLoja) => id}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={{
+              marginVertical: 5,
+              borderRadius: 5,
+              backgroundColor: '#ffffff',
+              padding: 10,
+            }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
+              <View style={{flexDirection: 'row' }}>
+                <Image style={{ width: 60, height: 60, marginRight: 5 }} source={{ uri: item.logo }} />
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
+                  <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Text style={styles.starloja}>{staricon} - 4,93 - {item.segmento} - 5.0km</Text>
+                    <Text style={styles.lojades}>{item.desc}</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+      )
+          }
+        />
+      )}
       </View>
       </ScrollView>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
+  );
+}
+
+
+
+function Locale() {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [address, setAddress] = useState(null);
+  const pinIcon = <Icon style={{ marginLeft:10}} name='map-marker' color="#25282B" size={18} />
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      let address = await Location.reverseGeocodeAsync({longitude: location.coords.longitude, latitude: location.coords.latitude})
+      setAddress(address);
+    })();
+  }, []);
+
+  let longitude = 'Waiting..';
+      let latitude = 'Waiting..';
+      let addressinfo = 'Waiting..';
+      if (errorMsg) {
+        longitude = errorMsg;
+        latitude = errorMsg;
+        addressinfo = errorMsg;
+        
+      } else if (address) {
+        longitude = JSON.stringify(location.coords.longitude);
+         
+          address.find(ad =>{ 
+            region = ad.region;
+            street = ad.street;
+            number = ad.name;
+            addressinfo = street+' - '+number+' - '+ region;
+          });
+          console.log(address)
+
+      }
+
+  return (
+    <View style={{ alignItems: 'center', padding: 10 }}>
+      <Text>{pinIcon} - {addressinfo}</Text>
+    </View>
   );
 }
 
 function Lojas() {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [datal, setDatal] = useState([]);
   const navigation = useNavigation();
   const staricon = <Icon name='star' size={12} />
-
-  
 
   useEffect(() => {
     fetch('http://192.168.15.19:8080/shopping/lojas')
@@ -141,16 +236,19 @@ function Lojas() {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+  let filtered = datal.filter((item) => {
+    return item.nomeloja.match('Artex')
+   })
+  console.log(filtered)
   return (
     <View>
       <Text style={{fontWeight: "bold", color: "black", padding: 8}}>Lojas</Text>
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
-          data={data}
+          data={filtered}
          refreshing={true}
           keyExtractor={({ id }, idLoja) => id}
           renderItem={({ item }) => (
-
             <TouchableOpacity style={{
               marginVertical: 5,
               borderRadius: 5,
@@ -168,14 +266,13 @@ function Lojas() {
                 </View>
               </View>
             </TouchableOpacity>
-          )}
+      )
+          }
         />
       )}
     </View>
   )
 };
-
-
 
 export default function lojasMain() {
   return (
@@ -282,6 +379,7 @@ const styles = StyleSheet.create({
   },
   botaotext: {
     fontWeight: 'bold',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    textAlign: 'center'
   }
 });

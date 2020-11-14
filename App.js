@@ -18,6 +18,9 @@ import Proddetail from './views/proddetail'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
+
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ",
   authDomain: "shopycash-19409.firebaseapp.com",
@@ -34,9 +37,11 @@ const MainStack = createStackNavigator();
 
 firebase.initializeApp(firebaseConfig);
 
-class App  extends React.Component{
 
-  state = { user: {} };
+
+
+class App  extends React.Component{
+state = { user: {} };
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {

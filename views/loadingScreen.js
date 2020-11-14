@@ -20,7 +20,7 @@ class LoadingScreen extends React.Component {
   render() {
 
     return (
-      <View style={{ alignItems: 'center', justifyContent: "center", flex: 1, backgroundColor: "#EBAD00" }}>
+      <View style={{ alignItems: 'center', justifyContent: "center", flex: 1, backgroundColor: "#ffffff" }}>
         <Image
           source={require('../assets/logo.png')}
           style={styles.image}
@@ -28,7 +28,7 @@ class LoadingScreen extends React.Component {
 
         <BarIndicator style={{ position: "relative", marginTop: '-50%' }}
           count={5}
-          color={'#000000'}
+          color={'#4c2e1f'}
           size={60}
           animating={true} />
 
