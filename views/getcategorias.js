@@ -18,7 +18,7 @@ function Categorias(props) {
         '#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061', '#E5454C', '#5653d4', '#08a791', '#faa33f', '#b6644f', '#fb3061',
         '#E5454C', '#5653d4', '#08a791', '#faa33f'];
     useEffect(() => {
-        fetch('http://192.168.0.107:8080/administrativo/segmento/')
+        fetch('http://192.168.15.19:8080/administrativo/segmento/')
             .then((response) => response.json())
             .then((json) => setData(json.Segmentos))
             .catch((error) => console.error(error))

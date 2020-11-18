@@ -53,9 +53,7 @@ class Cadastro extends React.Component {
             .ref("/user/" + user.uid)
             .set({
               loginType: "Email e Senha",
-              displayName: user.displayName,
               email: user.email,
-              photoUrl: user.photoURL,
               createAt: Date.now(),
             });
         },
@@ -178,7 +176,7 @@ class Cadastro extends React.Component {
             <View style={styles.form}>
               <TextInput
                 style={styles.input}
-                placeholder="Name"
+                placeholder="Nome"
                 placeholderTextColor="#B1B1B1"
                 returnKeyType="next"
                 textContentType="name"

@@ -152,7 +152,7 @@ class Login extends React.Component {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder="Senha"
                 placeholderTextColor="#B1B1B1"
                 returnKeyType="done"
                 textContentType="newPassword"

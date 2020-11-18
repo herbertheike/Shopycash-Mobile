@@ -60,6 +60,7 @@ export class DrawerContentMenu extends React.Component {
                         </View>
                         <Drawer.Section style={styles.drawerSection} >
                             <DrawerItem
+                                style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="shopping-bag"
@@ -71,6 +72,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { this.props.navigation.navigate('home')}} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="th-large"
@@ -82,6 +84,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { this.props.navigation.navigate('Categorias') }} />
 
                                 <DrawerItem
+                                style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="chart-bar"
@@ -90,9 +93,10 @@ export class DrawerContentMenu extends React.Component {
                                     />
                                 )}
                                 label='Extrato'
-                                onPress={() => { firebase.auth().signOut(); }} />
+                                onPress={() => { this.props.navigation.navigate('Extrato') }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="hand-holding-usd"
@@ -104,6 +108,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="comment-dollar"
@@ -116,6 +121,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="exchange-alt"
@@ -127,6 +133,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="star"
@@ -138,6 +145,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="users"
@@ -149,6 +157,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="shield-alt"
@@ -160,6 +169,7 @@ export class DrawerContentMenu extends React.Component {
                                 onPress={() => { firebase.auth().signOut(); }} />
 
                             <DrawerItem
+                            style={styles.draweritemStyle}
                                 icon={({ color, size }) => (
                                     <Icon
                                         name="exclamation-circle"
@@ -199,7 +209,7 @@ const styles = StyleSheet.create({
     userInfoSection: {
         marginTop: -5,
         paddingLeft: 15,
-        backgroundColor: "#EBAD00"
+        backgroundColor: "rgba(236,105,19, 0.9)"
     },
     title: {
         fontSize: 16,
@@ -227,13 +237,14 @@ const styles = StyleSheet.create({
     drawerSection: {
         marginTop: 15,
         alignItems: 'stretch',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         
+    },
+    draweritemStyle:{
     },
     bottomDrawerSection: {
         marginBottom: 15,
         borderTopColor: '#f4f4f4',
-        borderTopWidth: 1
     },
     preference: {
         flexDirection: 'row',

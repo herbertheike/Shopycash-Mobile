@@ -247,19 +247,14 @@ function ProdCat() {
                             style={{ flex: 1, flexDirection: "row-reverse" }}
                           >
                             <Image
-                              style={{ width: 80, height: 80, padding: 50 }}
+                              style={{ width: 80, height: 80, padding: 50, marginLeft: 10}}
                               source={{ uri: item.imagem }}
                             />
-                            <View style={{ flexDirection: "column", flex: 1 }}>
+                            <View style={{ flexDirection: "column", flex: 1,justifyContent:'space-around'}}>
                               <Text style={styles.prodtext}>
                                 {item.produto}
                               </Text>
-                              <View
-                                style={{
-                                  flexDirection: "column",
-                                  justifyContent: "space-between",
-                                }}
-                              >
+
                                 <Text style={styles.proddesc} numberOfLines={2}>
                                   {item.descricao}
                                 </Text>
@@ -268,7 +263,7 @@ function ProdCat() {
                                 </Text>
                               </View>
                             </View>
-                          </View>
+
                         </TouchableOpacity>
                       )
                     }

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   Animated,
-  FlatList,
 } from "react-native";
 import { Header, AirbnbRating, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -288,7 +287,7 @@ function Prod(props) {
             }}
           >
             {props.route.params.params.loja} -{" "}
-            {props.route.params.params.shopping} - (distancia)km
+            {props.route.params.params.shopping}
           </Text>
         </View>
       </View>

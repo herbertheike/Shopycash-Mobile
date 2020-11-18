@@ -15,6 +15,7 @@ import LoadingScreen from './views/loadingScreen'
 import Cadastro from './views/Cadastro'
 import Login from './views/Login'
 import Proddetail from './views/proddetail'
+import Extrato from './views/extrato'
 import { Icon } from 'react-native-elements'
 import * as firebase from "firebase";
 
@@ -64,6 +65,7 @@ state = { user: {} };
                 <MainStack.Screen name="Cadastro" component={Cadastro} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Login" component={Login} options ={{headerShown:false}}/>
                 <MainStack.Screen name="Proddetail" component={Proddetail} options ={{headerShown:false}}/>
+                <MainStack.Screen name="Extrato" component={Extrato} options ={{headerShown:false}}/>
               </MainStack.Navigator>
             </NavigationContainer>
           )
