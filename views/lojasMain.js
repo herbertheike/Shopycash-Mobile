@@ -51,7 +51,7 @@ const ColorCode = [
   "#08a791",
   "#faa33f",
 ];
-
+//função principal
 function HomeScreen(props) {
   const [search, setSearch] = useState();
 
@@ -282,7 +282,7 @@ function HomeScreen(props) {
     </KeyboardAvoidingView>
   );
 }
-
+//Função  do gps
 function Locale() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -340,59 +340,7 @@ function Locale() {
     </View>
   );
 }
-/*
-function Lojas() {
-  const [isLoading, setLoading] = useState(true);
-  const [datal, setDatal] = useState([]);
-  const navigation = useNavigation();
-  const staricon = <Icon name='star' size={12} />
-
-  useEffect(() => {
-    fetch('http://192.168.15.19:8080/shopping/lojas')
-      .then((response) => response.json())
-      .then((json) => setData(json.lojas))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
-  let filtered = datal.filter((item) => {
-    return item.nomeloja.match('')
-   })
-
-  console.log(filtered)
-  return (
-    <View>
-      <Text style={{fontWeight: "bold", color: "black", padding: 8}}>Lojas</Text>
-      {isLoading ? <ActivityIndicator /> : (
-        <FlatList
-          data={filtered}
-         refreshing={true}
-          keyExtractor={({ id }, idLoja) => id}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={{
-              marginVertical: 5,
-              borderRadius: 5,
-              backgroundColor: '#ffffff',
-              padding: 10,
-            }} title="Login" color='#ffffff' onPress={() => navigation.navigate('LojaDetail', { params: { id: item.idLoja, logo: item.logo } })}>
-              <View style={{ flex: 1, flexDirection: 'row' }}>
-                <Image style={{ width: 60, height: 60, marginRight: 5 }} source={{ uri: item.logo }} />
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={styles.lojastext}>{item.nomeloja} - {item.shopping}</Text>
-                  <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <Text style={styles.starloja}>{staricon} - 4,93 - {item.segmento} - 5.0km</Text>
-                    <Text style={styles.lojades}>{item.desc}</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-      )
-          }
-        />
-      )}
-    </View>
-  )
-};
-*/
+//Drawer 
 export default function lojasMain() {
   return (
     <Drawer.Navigator
@@ -404,7 +352,7 @@ export default function lojasMain() {
     </Drawer.Navigator>
   );
 }
-
+//Estilo
 const styles = StyleSheet.create({
   container: {
     flex: 1,

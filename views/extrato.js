@@ -11,21 +11,18 @@ import {
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 class Extrato extends React.Component {
-  componentDidMount() {
-      
-  }
+  componentDidMount() {}
 
   render() {
-      
-const menuicon = (
-    <Icon
-      style={{ marginLeft: 10 }}
-      onPress={() => this.props.navigation.toggleDrawer()}
-      name="bars"
-      color="#25282B"
-      size={30}
-    />
-  );
+    const menuicon = (
+      <Icon
+        style={{ marginLeft: 10 }}
+        onPress={() => this.props.navigation.toggleDrawer()}
+        name="bars"
+        color="#25282B"
+        size={30}
+      />
+    );
     return (
       <SafeAreaView style={styles.container}>
         <Header

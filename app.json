@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -26,9 +24,8 @@
       "package": "com.shopycash.sc",
       "googleServicesFile": "./google-services.json"
     },
-    "facebookAppId":"445672353479326",
+    "facebookAppId": "445672353479326",
     "facebookAutoInitEnabled": true,
     "facebookDisplayName": "ShopyCash"
-    
   }
 }

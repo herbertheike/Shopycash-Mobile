@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -16,7 +13,7 @@ import {
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
-import MapView from 'react-native-maps';
+import MapView from "react-native-maps";
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 export default function Getloja(props) {
@@ -230,8 +227,8 @@ function ProdCat() {
                               params: {
                                 idLoja: item.idLoja,
                                 idProd: item.id,
-                                produto:item.produto,
-                                descricao:item.descricao,
+                                produto: item.produto,
+                                descricao: item.descricao,
                                 preco: item.preco,
                                 loja: item.loja,
                                 shopping: item.shopping,
@@ -239,7 +236,7 @@ function ProdCat() {
                                 ativo: item.ativo,
                                 imagem: item.imagem,
                                 imagem2: item.imagem2,
-                            },
+                              },
                             })
                           }
                         >
@@ -247,25 +244,35 @@ function ProdCat() {
                             style={{ flex: 1, flexDirection: "row-reverse" }}
                           >
                             <Image
-                              style={{ width: 80, height: 80, padding: 50, marginLeft: 10}}
+                              style={{
+                                width: 80,
+                                height: 80,
+                                padding: 50,
+                                marginLeft: 10,
+                              }}
                               source={{ uri: item.imagem }}
                             />
-                            <View style={{ flexDirection: "column", flex: 1,justifyContent:'space-around'}}>
+                            <View
+                              style={{
+                                flexDirection: "column",
+                                flex: 1,
+                                justifyContent: "space-around",
+                              }}
+                            >
                               <Text style={styles.prodtext}>
                                 {item.produto}
                               </Text>
 
-                                <Text style={styles.proddesc} numberOfLines={2}>
-                                  {item.descricao}
-                                </Text>
-                                <Text style={styles.prodpreco}>
-                                  R${item.preco}
-                                </Text>
-                              </View>
+                              <Text style={styles.proddesc} numberOfLines={2}>
+                                {item.descricao}
+                              </Text>
+                              <Text style={styles.prodpreco}>
+                                R${item.preco}
+                              </Text>
                             </View>
-
+                          </View>
                         </TouchableOpacity>
-                      )
+                      );
                     }
                   }}
                 />
@@ -285,7 +292,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   mapStyle: {
-    width: '100%',
+    width: "100%",
     height: 150,
   },
   image: {
