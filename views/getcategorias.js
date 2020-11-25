@@ -71,7 +71,7 @@ function Categorias(props) {
     "#faa33f",
   ];
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/administrativo/segmento/")
+    fetch("http://192.168.42.143:3301/administrativo/segmento/")
       .then((response) => response.json())
       .then((json) => setData(json.Segmentos))
       .catch((error) => console.error(error))

@@ -41,7 +41,7 @@ export default function Getloja(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/shopping/loja/" + lojaparam)
+    fetch("http://192.168.42.143:3301/shopping/loja/" + lojaparam)
       .then((response) => response.json())
       .then((json) => setData(json.loja))
       .catch((error) => console.error(error))
@@ -170,7 +170,7 @@ function ProdCat() {
   const route = useRoute();
 
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/loja/categoria/" + route.params.params.id)
+    fetch("http://192.168.42.143:3301/loja/categoria/" + route.params.params.id)
       .then((response) => response.json())
       .then((json) => setData2(json.categorias))
       .catch((error) => console.error(error))
@@ -178,7 +178,7 @@ function ProdCat() {
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/loja/produto/" + route.params.params.id)
+    fetch("http://192.168.42.143:3301/loja/produto/" + route.params.params.id)
       .then((response) => response.json())
       .then((json) => setData(json.Produtos))
       .catch((error) => console.error(error))

@@ -97,7 +97,7 @@ function HomeScreen(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/administrativo/segmento/")
+    fetch("http://192.168.42.143:3301/administrativo/segmento/")
       .then((response) => response.json())
       .then((json) => setData(json.Segmentos))
       .catch((error) => console.error(error))
@@ -105,7 +105,7 @@ function HomeScreen(props) {
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.15.19:8080/shopping/lojas")
+    fetch("http://192.168.42.143:3301/shopping/lojas")
       .then((response) => response.json())
       .then((json) => setDatal(json.lojas))
       .catch((error) => console.error(error))
