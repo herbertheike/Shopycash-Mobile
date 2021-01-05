@@ -285,50 +285,7 @@ function Prod(props) {
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-        }}
-      >
-        <Counter
-          start={1}
-          min={1}
-          max={5}
-          countTextStyle={{
-            color: "#40b29d",
-            fontSize: 30,
-            fontWeight: "bold",
-          }}
-          buttonStyle={{
-            width: 50,
-            height: 50,
-            borderColor: "#40b29d",
-            backgroundColor: "#40b29d",
-            borderRadius: 100,
-          }}
-          buttonTextStyle={{ fontSize: 45, color: "#ffffff" }}
-        />
-        <Button
-          type={"outline"}
-          style={{ alignItems: "center", justifyContent: "center" }}
-          title={"Adicionar ao carrinho"}
-          titleStyle={{
-            color: "#ffffff",
-            fontSize: 20,
-            fontWeight: "500",
-            padding: 20,
-          }}
-          buttonStyle={{
-            borderColor: "#40B29D",
-            borderRadius: 10,
-            height: 60,
-            backgroundColor: "#40b29d",
-          }}
-          containerStyle={{ padding: 10 }}
-        />
-      </View>
+      
     </ParallaxScrollView>
   );
 }

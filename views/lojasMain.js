@@ -97,22 +97,23 @@ function HomeScreen(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/administrativo/segmento/")
+    fetch("http://192.168.15.148:3001/segmento")
       .then((response) => response.json())
-      .then((json) => setData(json.Segmentos))
+      .then((res) => setData(res))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
 
+  console.log(JSON.stringify(data), "segmentos");
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/shopping/lojas")
+    fetch("http://192.168.15.148:3001/lojas")
       .then((response) => response.json())
-      .then((json) => setDatal(json.lojas))
+      .then((json) => setDatal(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  let filtered = datal.filter((item) => {
-    return item.nomeloja.match(search) || item.shopping.match(search) || item.segmento.match(search);
+  const filtered = datal.filter((item) => {
+    return item.nomefantasia.match(search) || item.shopping.match(search) || item.segmento.match(search);
   });
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -169,7 +170,7 @@ function HomeScreen(props) {
                 }}
                 title="Login"
                 color="#ffffff"
-                onPress={() => alert(item.idseg)}
+                onPress={() => alert(item._id)}
               >
                 <Image
                   style={{ width: "98%", height: 150, borderRadius: 15 }}
@@ -200,7 +201,7 @@ function HomeScreen(props) {
                     width: 100,
                     height: 100,
                     borderRadius: 7,
-                    backgroundColor: ColorCode[item.idseg - 1],
+                    backgroundColor: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
                     color: "#FFFFFF",
                     marginHorizontal: 10,
                     alignItems: "center",
@@ -233,8 +234,7 @@ function HomeScreen(props) {
           ) : (
             <FlatList
               data={filtered}
-              refreshing={true}
-              keyExtractor={({ id }, idLoja) => id}
+              keyExtractor={({ id }, idloja) => id}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={{
@@ -247,18 +247,18 @@ function HomeScreen(props) {
                   color="#ffffff"
                   onPress={() =>
                     navigation.navigate("LojaDetail", {
-                      params: { id: item.idLoja, logo: item.logo },
+                      params: { id: item._id, logo: item.Logo },
                     })
                   }
                 >
                   <View style={{ flexDirection: "row" }}>
                     <Image
                       style={{ width: 60, height: 60, marginRight: 5 }}
-                      source={{ uri: item.logo }}
+                      source={{ uri: item.Logo }}
                     />
                     <View style={{ flexDirection: "column" }}>
                       <Text style={styles.lojastext}>
-                        {item.nomeloja} - {item.shopping}
+                        {item.nomefantasia} - {item.shopping}
                       </Text>
                       <View
                         style={{
@@ -267,9 +267,9 @@ function HomeScreen(props) {
                         }}
                       >
                         <Text style={styles.starloja}>
-                          {staricon} - 4,93 - {item.segmento}{" "}
+                          {staricon} - 4,93 - {item.segmento+' '}{" "}
                         </Text>
-                        <Text style={styles.lojades}>{item.desc}</Text>
+                        <Text style={styles.lojades}>{item.responsavel}</Text>
                       </View>
                     </View>
                   </View>

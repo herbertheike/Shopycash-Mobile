@@ -41,26 +41,26 @@ export default function Getloja(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/shopping/loja/" + lojaparam)
+    fetch("http://192.168.15.148:3001/lojas/"+lojaparam)
       .then((response) => response.json())
-      .then((json) => setData(json.loja))
+      .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-
+console.log(lojaparam)
   return (
     <ParallaxScrollView
       backgroundColor="#E8e8e8"
       contentBackgroundColor="#e8e8e8"
       backgroundScrollSpeed={7}
-      parallaxHeaderHeight={200}
+      parallaxHeaderHeight={300}
       renderStickyHeader={() => (
         <Header
           statusBarProps={{ barStyle: "light-content" }}
           barStyle="light-content"
           leftComponent={backicon}
           centerComponent={{
-            text: JSON.stringify(data.loja),
+            text: data.nomefantasia,
             style: {
               color: "#25282B",
               fontWeight: "bold",
@@ -90,49 +90,44 @@ export default function Getloja(props) {
         >
           <Image
             style={{ width: "100%", height: 500, resizeMode: "cover" }}
-            source={{ uri: bgimg }}
+            source={{ uri: data.capa }}
           />
         </View>
       )}
       renderForeground={() => (
         <View style={{ marginTop: 60 }}>
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <FlatList
-              data={data}
-              keyExtractor={({ id }, idLoja) => id}
-              renderItem={({ item }) => (
-                <View style={{ alignItems: "center" }}>
+                <View style={{ alignItems: "center", padding: 20,paddingVertical:30}}>
                   <TouchableOpacity
                     style={{
                       borderRadius: 10,
                       borderWidth: 0.5,
                       borderColor: "#565656",
                       backgroundColor: "#ffffff",
-                      height: 100,
+                      height: 300,
                       flex: 1,
                       flexDirection: "row",
                       justifyContent: "center",
-                      width: 300,
-                      padding: 20,
+                      width: 'auto',
+                      padding: 30,
+                      paddingVertical:50
                     }}
                     title="Login"
                     color="#ffffff"
-                    onPress={() => alert(item.loja)}
-                  >
+                    onPress={() => alert(data.nomefantasia)}
+                    >
                     <View
                       style={{
+
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "flex-start",
                       }}
-                    >
+                       >
                       <Text style={styles.lojastext}>
-                        {item.loja} - {item.shopping}
+                        {data.nomefantasia} - {data.shopping}
                       </Text>
                       <Text style={styles.lojades}>
-                        {item.segmento} - 5,0km - $$$$
+                        {data.segmentos+''}
                       </Text>
                     </View>
                     <View
@@ -149,9 +144,6 @@ export default function Getloja(props) {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )}
-            />
-          )}
         </View>
       )}
     >
@@ -206,9 +198,10 @@ function ProdCat() {
                   data={data}
                   refreshing={true}
                   extraData={datacatidd}
-                  keyExtractor={({ key }, id) => key}
+                  keyExtractor={({ key }, id) => key} 
                   renderItem={({ item }) => {
                     if (datacatidd == item.idcat) {
+                      if(item.ativo == true){
                       return (
                         <TouchableOpacity
                           style={{
@@ -225,10 +218,10 @@ function ProdCat() {
                           onPress={() =>
                             navigation.navigate("Proddetail", {
                               params: {
-                                idLoja: item.idLoja,
-                                idProd: item.id,
-                                produto: item.produto,
-                                descricao: item.descricao,
+                                idloja: item.loja_id,
+                                idprod: item._id,
+                                produto: item.nome,
+                                descricao: item.desc,
                                 preco: item.preco,
                                 loja: item.loja,
                                 shopping: item.shopping,
@@ -273,7 +266,7 @@ function ProdCat() {
                           </View>
                         </TouchableOpacity>
                       );
-                    }
+                    }}
                   }}
                 />
               </View>
@@ -357,12 +350,12 @@ const styles = StyleSheet.create({
   },
   lojades: {
     width: "100%",
-    fontSize: 9,
+    fontSize: 10,
     position: "relative",
     color: "#b9b9b9",
   },
   lojastext: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#000000",
   },

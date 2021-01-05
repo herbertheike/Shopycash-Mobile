@@ -71,9 +71,9 @@ function Categorias(props) {
     "#faa33f",
   ];
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/administrativo/segmento/")
+    fetch("http://192.168.15.147:3001/segmento")
       .then((response) => response.json())
-      .then((json) => setData(json.Segmentos))
+      .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
@@ -115,7 +115,7 @@ function Categorias(props) {
                   width: 100,
                   height: 100,
                   borderRadius: 7,
-                  backgroundColor: ColorCode[item.idseg - 1],
+                  backgroundColor: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
                   color: "#FFFFFF",
                   marginHorizontal: 10,
                   marginVertical: 10,
@@ -125,7 +125,7 @@ function Categorias(props) {
                 }}
                 title="Login"
                 color="#ffffff"
-                onPress={() => alert(item.idseg)}
+                onPress={() => alert(item.nome)}
               >
                 <Text style={styles.botaotext}>{item.nome}</Text>
               </TouchableOpacity>
