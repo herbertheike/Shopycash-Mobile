@@ -96,24 +96,24 @@ function HomeScreen(props) {
   const navigation = useNavigation();
   const staricon = <Icon name="star" size={12} />;
 
-  useEffect(() => {
-    fetch("http://192.168.15.148:3001/segmento")
+   useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/segmento")
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-
   console.log(JSON.stringify(data), "segmentos");
-  useEffect(() => {
-    fetch("http://192.168.15.148:3001/lojas")
+  useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/lojas")
       .then((response) => response.json())
       .then((json) => setDatal(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
   const filtered = datal.filter((item) => {
-    return item.nomefantasia.match(search) || item.shopping.match(search) || item.segmento.match(search);
+    console.log(item.segmento, "SEGMENTOS FILTERED")
+    return item.nomefantasia.match(search) || item.shopping.match(search);
   });
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -174,10 +174,7 @@ function HomeScreen(props) {
               >
                 <Image
                   style={{ width: "98%", height: 150, borderRadius: 15 }}
-                  source={{
-                    uri:
-                      "https://s2.glbimg.com/AcvU3JnaX1sF2wTlwpNVJ3SYF6E=/e.glbimg.com/og/ed/f/original/2020/04/28/marcin-kempa-3slosn6dpoq-unsplash.jpg",
-                  }}
+                  source={require('../assets/interiorshopping.jpg')}
                 />
                 <Text>{item.nome}</Text>
               </TouchableOpacity>
@@ -210,7 +207,7 @@ function HomeScreen(props) {
                   }}
                   title="Login"
                   color="#ffffff"
-                  onPress={() => setSearch(item.nome)}
+                  onPress={() => setSearch(item.nome[0])}
                 >
                   <Text style={styles.botaotext}>{item.nome}</Text>
                 </TouchableOpacity>

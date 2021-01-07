@@ -37,7 +37,7 @@ function Prod(props) {
     props.route.params.params.imagem,
     props.route.params.params.imagem2,
   ];
-  console.log(props.route.params.params.produto);
+  console.log(props.route.params.params.nome);
   return (
     <ParallaxScrollView
       backgroundColor="rgba(232, 232, 232, 0)"
@@ -130,7 +130,7 @@ function Prod(props) {
                 textAlign: "center",
               }}
             >
-              {props.route.params.params.produto}
+              {props.route.params.params.nome}
             </Text>
           </View>
           <Carousel
@@ -194,8 +194,8 @@ function Prod(props) {
               color: "#a7a7a7",
             }}
           >
-            {props.route.params.params.idProd}
-            {props.route.params.params.idLoja}
+            {props.route.params.params.id}
+            {props.route.params.params.idloja}
           </Text>
           <Text
             style={{
@@ -225,7 +225,7 @@ function Prod(props) {
             style={{
               fontWeight: "bold",
               fontFamily: "Roboto",
-              fontSize: 45,
+              fontSize: 30,
               textAlign: "right",
             }}
           >
@@ -265,7 +265,7 @@ function Prod(props) {
               color: "#a7a7a7",
             }}
           >
-            {props.route.params.params.descricao}
+            {props.route.params.params.desc}
           </Text>
 
           <Text
@@ -280,7 +280,7 @@ function Prod(props) {
               color: "#a7a7a7",
             }}
           >
-            {props.route.params.params.loja} -{" "}
+            {props.route.params.params.loja} - {" "}
             {props.route.params.params.shopping}
           </Text>
         </View>

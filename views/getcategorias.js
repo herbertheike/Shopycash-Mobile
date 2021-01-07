@@ -5,16 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
+  ScrollView,
+  RefreshControl,
   FlatList
 } from "react-native";
-import {
-  createDrawerNavigator,
-  DrawerActions,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -70,33 +64,52 @@ function Categorias(props) {
     "#08a791",
     "#faa33f",
   ];
-  useEffect(() => {
-    fetch("http://192.168.15.147:3001/segmento")
+  useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/segmento")
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+    //refresh
+    const wait = (timeout) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+      });
+    };
+  
+    const [refreshing, setRefreshing] = useState(false);
+  
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+  
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        statusBarProps={{ barStyle: "light-content" }}
-        barStyle="light-content"
-        leftComponent={menuicon}
-        centerComponent={{
-          style: {
-            color: "#25282B",
-            fontWeight: "bold",
-            fontSize: 20,
-            fontFamily: "Roboto",
-          },
-        }}
-        rightComponent={carticon}
-        containerStyle={{
-          backgroundColor: "#E8E8E8",
-          justifyContent: "space-around",
-        }}
-      />
+    <View style={styles.container}>
+    <Header
+    statusBarProps={{ barStyle: "light-content" }}
+    barStyle="light-content"
+    leftComponent={menuicon}
+    centerComponent={{
+      style: {
+        color: "#25282B",
+        fontWeight: "bold",
+        fontSize: 20,
+        fontFamily: "Roboto",
+      },
+    }}
+    rightComponent={carticon}
+    containerStyle={{
+      backgroundColor: "#E8E8E8",
+      justifyContent: "space-around",
+    }}
+  />
+    <ScrollView style={styles.container}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }
+    >
 
       <View style={{ width: "100%", padding: 2, alignItems: "center" }}>
         <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}>
@@ -133,7 +146,8 @@ function Categorias(props) {
           />
         )}
       </View>
-    </SafeAreaView>
+    </ScrollView>
+    </View>
   );
 }
 export default Categorias;

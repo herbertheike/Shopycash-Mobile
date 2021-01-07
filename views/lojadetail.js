@@ -41,7 +41,7 @@ export default function Getloja(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("http://192.168.15.148:3001/lojas/"+lojaparam)
+    fetch("https://api-shopycash1.herokuapp.com/lojas/"+lojaparam)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
@@ -162,21 +162,21 @@ function ProdCat() {
   const route = useRoute();
 
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/loja/categoria/" + route.params.params.id)
+    fetch("https://api-shopycash1.herokuapp.com/lojas/categorias/" + route.params.params.id)
       .then((response) => response.json())
-      .then((json) => setData2(json.categorias))
+      .then((json) => setData2(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.42.143:3301/loja/produto/" + route.params.params.id)
+    fetch("https://api-shopycash1.herokuapp.com/lojas/produtos/" + route.params.params.id)
       .then((response) => response.json())
-      .then((json) => setData(json.Produtos))
+      .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-
+console.log(JSON.stringify(data)+"   produto")
   return (
     <View>
       <FlatList
@@ -185,23 +185,23 @@ function ProdCat() {
         refreshing={false}
         keyExtractor={({ key }, id) => key}
         renderItem={({ item }) => {
-          const datacatidd = item.id;
-          console.log(datacatidd);
+          const datacadnome = item.nome;
+          console.log(datacadnome);
           return (
             <View style={styles.container}>
-              <Text style={{ fontWeight: "bold" }} key={item.id}>
-                {item.categoria}
+              <Text style={{ fontWeight: "bold" }} key={item._id}>
+                {item.nome}
               </Text>
               <View>
                 <FlatList
                   style={{ margin: 5 }}
                   data={data}
                   refreshing={true}
-                  extraData={datacatidd}
+                  extraData={datacadnome}
                   keyExtractor={({ key }, id) => key} 
                   renderItem={({ item }) => {
-                    if (datacatidd == item.idcat) {
-                      if(item.ativo == true){
+                    if (datacadnome == item.categoria) {
+                      
                       return (
                         <TouchableOpacity
                           style={{
@@ -220,8 +220,8 @@ function ProdCat() {
                               params: {
                                 idloja: item.loja_id,
                                 idprod: item._id,
-                                produto: item.nome,
-                                descricao: item.desc,
+                                nome: item.nome,
+                                desc: item.desc,
                                 preco: item.preco,
                                 loja: item.loja,
                                 shopping: item.shopping,
@@ -253,11 +253,11 @@ function ProdCat() {
                               }}
                             >
                               <Text style={styles.prodtext}>
-                                {item.produto}
+                                {item.nome}
                               </Text>
 
                               <Text style={styles.proddesc} numberOfLines={2}>
-                                {item.descricao}
+                                {item.desc}
                               </Text>
                               <Text style={styles.prodpreco}>
                                 R${item.preco}
@@ -266,7 +266,7 @@ function ProdCat() {
                           </View>
                         </TouchableOpacity>
                       );
-                    }}
+                    }
                   }}
                 />
               </View>
