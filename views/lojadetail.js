@@ -170,7 +170,7 @@ function ProdCat() {
   }, []);
 
   useEffect(() => {
-    fetch("https://api-shopycash1.herokuapp.com/lojas/produtos/" + route.params.params.id)
+    fetch("https://api-shopycash1.herokuapp.com/produtos/" + route.params.params.id)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))

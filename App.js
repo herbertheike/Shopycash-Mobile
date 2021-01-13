@@ -24,6 +24,7 @@ import Cadastro from "./views/Cadastro";
 import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
 import Extrato from "./views/extrato";
+import GetShoppings from "./views/getshopping"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -74,6 +75,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="MainPage"
             component={MainPage}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="GetShoppings"
+            component={GetShoppings}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

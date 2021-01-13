@@ -88,6 +88,17 @@ export class DrawerContentMenu extends React.Component {
                 }}
               />
 
+            <DrawerItem
+                style={styles.draweritemStyle}
+                icon={({ color, size }) => (
+                  <Icon name="store" color={color} size={size} />
+                )}
+                label="Shoppings"
+                onPress={() => {
+                  this.props.navigation.navigate("Shoppings");
+                }}
+              />
+
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
