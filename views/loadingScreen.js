@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { BarIndicator } from "react-native-indicators";
 import * as firebase from "firebase";
+import {Permissions, Notifications} from 'expo'
 
 class LoadingScreen extends React.Component {
   componentDidMount() {
@@ -13,7 +14,7 @@ class LoadingScreen extends React.Component {
       }
     });
   }
-
+  
   
   render() {
     return (

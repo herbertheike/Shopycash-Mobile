@@ -22,7 +22,8 @@
     },
     "android": {
       "package": "com.shopycash.sc",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
     "facebookAppId": "445672353479326",
     "facebookAutoInitEnabled": true,

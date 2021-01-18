@@ -4,14 +4,10 @@ import {
   Avatar,
   Title,
   Caption,
-  Paragraph,
   Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import Icon from "react-native-vector-icons/FontAwesome5"
 import firebase from "firebase";
 
 export class DrawerContentMenu extends React.Component {
@@ -80,7 +76,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="shopping-bag" color={color} size={size} />
+                  <Icon name="shopping-bag" color={"#5eaaa8"} size={25} />
                 )}
                 label="Inicio"
                 onPress={() => {
@@ -91,7 +87,7 @@ export class DrawerContentMenu extends React.Component {
             <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="store" color={color} size={size} />
+                  <Icon name="store" color={"#5eaaa8"} size={25} />
                 )}
                 label="Shoppings"
                 onPress={() => {
@@ -102,7 +98,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="th-large" color={color} size={size} />
+                  <Icon name="th-large" color={"#5eaaa8"} size={25}  />
                 )}
                 label="Categorias"
                 onPress={() => {
@@ -113,7 +109,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="chart-bar" color={color} size={size} />
+                  <Icon name="chart-bar"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Extrato"
                 onPress={() => {
@@ -124,7 +120,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="hand-holding-usd" color={color} size={size} />
+                  <Icon name="hand-holding-usd"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Pagar com ShopyCash"
                 onPress={() => {
@@ -135,7 +131,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="comment-dollar" color={color} size={size} />
+                  <Icon name="comment-dollar"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Saldo
                                 "
@@ -147,7 +143,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="exchange-alt" color={color} size={size} />
+                  <Icon name="exchange-alt"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Transferir Saldo"
                 onPress={() => {
@@ -158,7 +154,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="star" color={color} size={size} />
+                  <Icon name="star"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Exclusivo pra você"
                 onPress={() => {
@@ -169,7 +165,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="users" color={color} size={size} />
+                  <Icon name="users"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Convidar amigos"
                 onPress={() => {
@@ -180,7 +176,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="shield-alt" color={color} size={size} />
+                  <Icon name="shield-alt"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Termos de uso"
                 onPress={() => {
@@ -191,7 +187,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="exclamation-circle" color={color} size={size} />
+                  <Icon name="exclamation-circle"  color={"#5eaaa8"} size={25}  />
                 )}
                 label="Ajuda"
                 onPress={() => {
@@ -203,7 +199,7 @@ export class DrawerContentMenu extends React.Component {
           <Drawer.Section style={styles.bottomDrawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
-                <Icon name="sign-out-alt" color={color} size={size} />
+                <Icon name="sign-out-alt"  color={"#5eaaa8"} size={25}  />
               )}
               label="Sair"
               onPress={() => {
@@ -224,7 +220,7 @@ const styles = StyleSheet.create({
   userInfoSection: {
     marginTop: -5,
     paddingLeft: 15,
-    backgroundColor: "rgba(236,105,19, 0.9)",
+    backgroundColor: "#5eaaa8",
   },
   title: {
     fontSize: 16,
@@ -254,7 +250,10 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     justifyContent: "space-between",
   },
-  draweritemStyle: {},
+  draweritemStyle: {
+    width:'auto',
+    paddingHorizontal: 0,
+  },
   bottomDrawerSection: {
     marginBottom: 15,
     borderTopColor: "#f4f4f4",

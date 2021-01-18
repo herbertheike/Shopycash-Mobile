@@ -16,8 +16,9 @@ export default class Login extends React.Component {
 
   render() {
     const { modalVisible } = this.state;
-    const telefoneicon = <Icon name="mobile" size={30} color="#ffffff" />;
-    const nologinicon = <Icon name="eye" size={30} color="#ffffff" />;
+    const loginicon = <Icon name="sign-in" size={25} color="#ffffff" />;
+    const cadastroicon = <Icon name="user-plus" size={25} color="#ffffff" />;
+    const nologinicon = <Icon name="eye-slash" size={25} color="#ffffff" />;
     return (
       <View style={styles.container}>
         <Image source={require("../assets/logo.png")} style={styles.image} />
@@ -34,7 +35,7 @@ export default class Login extends React.Component {
         <Modal animationType="fade" transparent={true} visible={modalVisible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.logintext}>Olá, é bom conhecê-lo!</Text>
+              <Text style={styles.frasetext}>Olá, é bom conhecê-lo!</Text>
               <Text style={styles.logindesc}>
                 Tentamos encontar uma maneira de adicionar mais opções e deixar
                 o processo mais dinâmico
@@ -51,7 +52,7 @@ export default class Login extends React.Component {
                   )
                 }
               >
-                {telefoneicon}
+                {loginicon}
                 <Text style={styles.botaotext}>Logar</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -66,7 +67,7 @@ export default class Login extends React.Component {
                   )
                 }
               >
-                {telefoneicon}
+                {cadastroicon}
                 <Text style={styles.botaotext}>Cadastrar</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -103,12 +104,14 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
+    textAlign: "center",
     alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
+    textAlign: "center",
     borderRadius: 20,
     padding: 35,
     width: "95%",
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   openButton: {
-    backgroundColor: "#FE6400",
+    backgroundColor: "#5eaaa8",
     borderRadius: 15,
     height: 60,
     marginBottom: 100,
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   botao: {
-    backgroundColor: "#4c2e1f",
+    backgroundColor: "#3a8640",
     width: 350,
     height: 70,
     borderRadius: 20,
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     paddingHorizontal: 50,
     shadowColor: "#000",
     shadowOffset: {
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     paddingHorizontal: 50,
     shadowColor: "#000",
     shadowOffset: {
@@ -193,12 +196,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logintext: {
+  frasetext: {
     fontWeight: "bold",
+    position: "relative",
     fontSize: 24,
+    padding:1,
+    textAlign:"left",
     color: "#000000",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   logindesc: {
     width: 350,

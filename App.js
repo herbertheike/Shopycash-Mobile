@@ -1,17 +1,8 @@
 import React, { Component } from "react";
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  Button,
-  TouchableHighlight,
-} from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import Constants from 'expo-constants';
 import LoginSelect from "./views/loginview";
 import LoginPhone from "./views/loginphone";
 import NextPhone from "./views/nextphone";
@@ -25,6 +16,7 @@ import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
 import Extrato from "./views/extrato";
 import GetShoppings from "./views/getshopping"
+import GetStoreByMall from "./views/getlojabyshop"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -36,6 +28,7 @@ const firebaseConfig = {
   storageBucket: "shopycash-19409.appspot.com",
   appId: "1:98141338607:android:d26ae530b6bf906cb9d41a",
 };
+
 
 //Navigators
 const Stack = createStackNavigator();
@@ -52,7 +45,6 @@ class App extends React.Component {
       }
     });
   }
-
   render() {
     return (
       <NavigationContainer>
@@ -80,6 +72,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="GetShoppings"
             component={GetShoppings}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="GetStoreByMall"
+            component={GetStoreByMall}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

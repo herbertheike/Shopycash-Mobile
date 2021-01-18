@@ -1,10 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Animated } from "react-native";
+import { StyleSheet, Text, Share, View, Image, Animated } from "react-native";
 import { Header, AirbnbRating, Button } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
 import Carousel from "react-native-snap-carousel";
-import Counter from "react-native-counters";
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 function Prod(props) {
@@ -16,11 +15,30 @@ function Prod(props) {
       style={{ marginHorizontal: 10 }}
     />
   );
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'Instale a Shopycash e receba uma parte do seu dinheiro de volta em suas compras.\n(aqui vai ter um link)\n'+props.route.params.params.nome+'\nDisponivel em: '+props.route.params.params.loja+'\nPor apenas: R$'+ props.route.params.params.preco,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const halfstaricon = (
     <Icon
       name="star-halt-alt"
-      size={30}
-      color="#25282B"
+      size={25}
+      color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
@@ -29,8 +47,8 @@ function Prod(props) {
       name="arrow-left"
       style={{ marginLeft: 10 }}
       onPress={() => props.navigation.goBack()}
-      color="#25282B"
-      size={30}
+      color="#5eaaa8"
+      size={25}
     />
   );
   const galery = [
@@ -52,12 +70,19 @@ function Prod(props) {
           centerComponent={{
             text: "DETALHES DO ITEM",
             style: {
-              color: "#25282B",
+              color: "#5eaaa8",
               fontWeight: "bold",
               fontSize: 20,
               fontFamily: "Roboto",
             },
           }}
+          rightComponent={ <Icon
+            name="share-alt"
+            size={25}
+            color="#5eaaa8"
+            style={{ marginHorizontal: 10 }}
+            onPress={onShare}
+          />}
           containerStyle={{
             backgroundColor: "rgba(232, 232, 232, 1)",
             justifyContent: "space-around",

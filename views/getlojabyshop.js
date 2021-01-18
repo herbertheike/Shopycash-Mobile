@@ -8,15 +8,19 @@ import {
   ScrollView,
   RefreshControl,
   FlatList,
+  Image,
 } from "react-native";
-//import {MapView, Marker} from 'react-native-maps';
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import MapView, { Marker } from "react-native-maps";
+import Icon from "react-native-vector-icons/FontAwesome";
 import * as Location from "expo-location";
 
 function GetShoppings(props) {
-  const navigation = useNavigation();
+  const shopid = props.route.params.params.id;
+  const shopname = props.route.params.params.nome;
+  const latitude = props.route.params.params.latitude;
+  const longitude = props.route.params.params.longitude;
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const url = "http://localhost:8080/administrativo/shopping";
@@ -24,19 +28,20 @@ function GetShoppings(props) {
     <Icon
       name="shopping-cart"
       size={25}
-      color="#53aaa8"
+      color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
-  const menuicon = (
+  const backicon = (
     <Icon
+      name="arrow-left"
       style={{ marginLeft: 10 }}
-      onPress={() => props.navigation.toggleDrawer()}
-      name="bars"
-      color="#53aaa8"
+      onPress={() => props.navigation.goBack()}
+      color="#5eaaa8"
       size={25}
     />
   );
+  const staricon = <Icon name="star" size={12} />;
   const ColorCode = [
     "#E5454C",
     "#5653d4",
@@ -68,7 +73,9 @@ function GetShoppings(props) {
     "#faa33f",
   ];
   useEffect(async () => {
-    await fetch("https://api-shopycash1.herokuapp.com/indexsh")
+    await fetch(
+      "https://api-shopycash1.herokuapp.com/indexby/shopping/" + shopid
+    )
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
@@ -88,97 +95,129 @@ function GetShoppings(props) {
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  console.log(latitude);
   return (
     <View style={styles.container}>
       <Header
         statusBarProps={{ barStyle: "light-content" }}
         barStyle="light-content"
-        leftComponent={menuicon}
+        leftComponent={backicon}
         centerComponent={
           ({
             style: {
-              color: "#25282B",
+              color: "#5eaaa8",
               fontWeight: "bold",
-              fontSize: 20,
+              fontSize: 15,
               fontFamily: "Roboto",
             },
           },
           (
             <Text
-              style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 15 }}
+              style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 13 }}
             >
-              Shoppings
+              Lojas - {shopname}
             </Text>
           ))
         }
         rightComponent={carticon}
         containerStyle={{
-          backgroundColor: "#E8E8E8",
+          backgroundColor: "#ffffff",
           justifyContent: "space-around",
         }}
       />
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.005,
+          }}
+        >
+          <MapView.Marker
+            coordinate={{ latitude: latitude, longitude: longitude }}
+            title={shopname}
+            description={props.route.params.params.end}
+          />
+        </MapView>
+      </View>
       <ScrollView
         style={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={{ width: "100%", padding: 2, alignItems: "center" }}>
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <FlatList
-              data={data}
-              keyExtractor={({ _id }, item) => _id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={{
-                    width: "95%",
-                    borderRadius: 5,
-                    backgroundColor:
-                      "#" +
-                      (0x1000000 + Math.random() * 0xffffff)
-                        .toString(16)
-                        .substr(1, 6),
-                    color: "#FFFFFF",
-                    marginVertical: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 10,
-                  }}
-                  title="shopping"
-                  color="#ffffff"
-                  onPress={() =>
-                    navigation.navigate("GetStoreByMall", {
-                      params: {
-                        id: item._id,
-                        nome: item.nome,
-                        latitude: item.latitude,
-                        longitude: item.longitude,
-                        end: item.endereco,
-                      },
-                    })
-                  }
-                >
-                  <View>
-                    <Text style={styles.lojastext}>{item.nome}</Text>
-                    <Text styles={styles.lojades}>{item.endereco}</Text>
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={data}
+            keyExtractor={({ id }, idloja) => id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={{
+                  marginVertical: 5,
+                  borderRadius: 5,
+                  padding: 10,
+                }}
+                title="Login"
+                color="#ffffff"
+                onPress={() =>
+                  navigation.navigate("LojaDetail", {
+                    params: { id: item._id, logo: item.Logo },
+                  })
+                }
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Image
+                    style={{
+                      width: 70,
+                      height: 70,
+                      marginRight: 5,
+                      borderRadius: 50,
+                      borderWidth: 0.1,
+                      borderColor: "#263646",
+                    }}
+                    source={{ uri: item.Logo }}
+                  />
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={styles.lojastext}>
+                      {item.nomefantasia} - {item.shopping}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={styles.starloja}>
+                        {staricon} - 4,93 - {item.segmento[0] + " "}
+                      </Text>
+                      <Text style={styles.lojades}>{item.responsavel}</Text>
+                    </View>
                   </View>
-                </TouchableOpacity>
-              )}
-            />
-          )}
-        </View>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </ScrollView>
     </View>
   );
 }
 export default GetShoppings;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#ffffff",
+  },
+  map: {
+    width: "95%",
+    height: 150,
   },
   cashbackdesk: {
     fontSize: 60,
@@ -195,6 +234,7 @@ const styles = StyleSheet.create({
   },
   ImageStyle: {
     padding: 25,
+
     margin: 10,
     height: 25,
     width: 25,
@@ -218,6 +258,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+
     elevation: 5,
   },
   login: {
@@ -231,6 +272,7 @@ const styles = StyleSheet.create({
     marginBottom: -350,
     marginTop: 100,
   },
+
   logintext: {
     fontWeight: "bold",
     fontSize: 18,
@@ -264,11 +306,5 @@ const styles = StyleSheet.create({
   botaotext: {
     fontWeight: "bold",
     color: "#FFFFFF",
-  },
-  map: {
-    width: "100%",
-    height: 120,
-    zIndex: 5,
-    borderRadius: 5,
   },
 });

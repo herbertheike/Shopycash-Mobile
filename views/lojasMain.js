@@ -20,8 +20,9 @@ import { DrawerContentMenu } from "./DrawerContent";
 import Categorias from "./getcategorias";
 import Extrato from "./extrato";
 import GetShoppings from "./getshopping";
+import GetStoreByMall from "./getlojabyshop"
 import * as Location from "expo-location";
-import * as geolib from 'geolib';
+
 
 const Drawer = createDrawerNavigator();
 const ColorCode = [
@@ -83,8 +84,8 @@ function HomeScreen(props) {
   const carticon = (
     <Icon
       name="shopping-cart"
-      size={30}
-      color="#25282B"
+      size={25}
+      color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
@@ -93,8 +94,8 @@ function HomeScreen(props) {
       style={{ marginLeft: 10 }}
       onPress={() => props.navigation.toggleDrawer()}
       name="bars"
-      color="#25282B"
-      size={30}
+      color="#5eaaa8"
+      size={25}
     />
   );
   const [datal, setDatal] = useState([]);
@@ -110,14 +111,14 @@ function HomeScreen(props) {
       .finally(() => setLoading(false),[]);
   }, []);
    useEffect(async () => {
-    await fetch("https://api-shopycash1.herokuapp.com/produtos")
+    await fetch("https://api-shopycash1.herokuapp.com/indexproduct/enable")
       .then((response) => response.json())
       .then((res) => setData(res))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false),[]);
   }, []);
   useEffect(async () => {
-    await fetch("https://api-shopycash1.herokuapp.com/lojas")
+    await fetch("https://api-shopycash1.herokuapp.com/indexstore")
       .then((response) => response.json())
       .then((json) => setDatal(json))
       .catch((error) => console.error(error))
@@ -134,20 +135,21 @@ function HomeScreen(props) {
         leftComponent={menuicon}
         centerComponent={{
           style: {
-            color: "#25282B",
+            color: "#ffffff",
             fontWeight: "bold",
             fontSize: 20,
             fontFamily: "Roboto",
           },
-        }}
+        }
+      }
         rightComponent={carticon}
         containerStyle={{
-          backgroundColor: "#f1f8f1",
+          backgroundColor: "#ffffff",
           justifyContent: "space-around",
         }}
       />
+      <Locale />
       <View>
-        <Locale />
         <SearchBar
           lightTheme={true}
           containerStyle={{backgroundColor: "#ffffff", paddingVertical: 10, borderBottomWidth: 0, borderTopWidth: 0}}
@@ -162,10 +164,10 @@ function HomeScreen(props) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      >
+      > 
         <View style={{ height: 'auto', padding: 10 }}>
           <Text style={{ fontWeight: "bold", color: "#5eaaa8", padding: 10 }}>
-            Produtos
+            Principais Ofertas!
           </Text>
           <FlatList
             horizontal
@@ -323,7 +325,7 @@ function Locale() {
     <Icon
       style={{ marginLeft: 10 }}
       name="map-marker"
-      color="#25282B"
+      color="#5eaaa8"
       size={18}
     />
   );
@@ -364,11 +366,9 @@ function Locale() {
   }
 
   return (
-    <View style={{ alignItems: "center", padding: 10 }}>
-      <Text style={{ color: "#a3d2ca", fontSize: 15, textAlign: "center" }}>
-        {pinIcon} {addressinfo}
+      <Text style={{ color: "#a3d2ca", fontSize: 12, textAlign: "center" }}>
+        {pinIcon} - {addressinfo}
       </Text>
-    </View>
   );
 }
 
@@ -382,6 +382,7 @@ export default function lojasMain() {
       <Drawer.Screen name="Categorias" component={Categorias} />
       <Drawer.Screen name="Extrato" component={Extrato} />
       <Drawer.Screen name="Shoppings" component={GetShoppings} />
+      <Drawer.Screen name="StorebyMall" component={GetStoreByMall}/>
     </Drawer.Navigator>
   );
 }

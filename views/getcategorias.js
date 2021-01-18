@@ -20,8 +20,8 @@ function Categorias(props) {
   const carticon = (
     <Icon
       name="shopping-cart"
-      size={30}
-      color="#25282B"
+      size={25}
+      color="#53aaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
@@ -30,8 +30,8 @@ function Categorias(props) {
       style={{ marginLeft: 10 }}
       onPress={() => props.navigation.toggleDrawer()}
       name="bars"
-      color="#25282B"
-      size={30}
+      color="#53aaa8"
+      size={25}
     />
   );
   const ColorCode = [
@@ -98,7 +98,9 @@ function Categorias(props) {
         fontSize: 20,
         fontFamily: "Roboto",
       },
-    }}
+    },<Text style={{ fontWeight: "bold", color: "#53aaa8", fontSize:15}}>
+    Categorias
+  </Text>}
     rightComponent={carticon}
     containerStyle={{
       backgroundColor: "#E8E8E8",
@@ -112,9 +114,6 @@ function Categorias(props) {
     >
 
       <View style={{ width: "100%", padding: 2, alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}>
-          Categorias
-        </Text>
         {isLoading ? (
           <ActivityIndicator />
         ) : (

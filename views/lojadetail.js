@@ -22,8 +22,8 @@ export default function Getloja(props) {
   const carticon = (
     <Icon
       name="shopping-cart"
-      size={30}
-      color="#25282B"
+      size={25}
+      color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
@@ -32,8 +32,8 @@ export default function Getloja(props) {
       name="arrow-left"
       style={{ marginLeft: 10 }}
       onPress={() => props.navigation.goBack()}
-      color="#25282B"
-      size={30}
+      color="#5eaaa8"
+      size={25}
     />
   );
   const [isLoading, setLoading] = useState(true);
@@ -41,36 +41,35 @@ export default function Getloja(props) {
   const staricon = <Icon name="star" size={12} />;
 
   useEffect(() => {
-    fetch("https://api-shopycash1.herokuapp.com/lojas/"+lojaparam)
+    fetch("https://api-shopycash1.herokuapp.com/indexstoreby/" + lojaparam)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-console.log(lojaparam)
+  console.log(lojaparam);
   return (
     <ParallaxScrollView
-      backgroundColor="#E8e8e8"
-      contentBackgroundColor="#e8e8e8"
+      backgroundColor="#FFFFFF"
+      contentBackgroundColor="#FFFFFF"
       backgroundScrollSpeed={7}
-      parallaxHeaderHeight={300}
+      parallaxHeaderHeight={250}
       renderStickyHeader={() => (
         <Header
           statusBarProps={{ barStyle: "light-content" }}
           barStyle="light-content"
           leftComponent={backicon}
           centerComponent={{
-            text: data.nomefantasia,
+            text: data.nomefantasia + " - " + data.shopping,
             style: {
-              color: "#25282B",
-              fontWeight: "bold",
-              fontSize: 20,
-              fontFamily: "Roboto",
+              color: "#5eaaa8",
+              fontWeight: "300",
+              fontSize: 15,
             },
           }}
           rightComponent={carticon}
           containerStyle={{
-            backgroundColor: "#E8E8E8",
+            backgroundColor: "#FFFFFF",
             justifyContent: "space-around",
           }}
         />
@@ -89,61 +88,61 @@ console.log(lojaparam)
           }}
         >
           <Image
-            style={{ width: "100%", height: 500, resizeMode: "cover" }}
+            style={{ width: "100%", height: 500, resizeMode: "cover",opacity:15 }}
+            blurRadius={1}
             source={{ uri: data.capa }}
           />
         </View>
       )}
       renderForeground={() => (
         <View style={{ marginTop: 60 }}>
-                <View style={{ alignItems: "center", padding: 20,paddingVertical:30}}>
-                  <TouchableOpacity
-                    style={{
-                      borderRadius: 10,
-                      borderWidth: 0.5,
-                      borderColor: "#565656",
-                      backgroundColor: "#ffffff",
-                      height: 300,
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      width: 'auto',
-                      padding: 30,
-                      paddingVertical:50
-                    }}
-                    title="Login"
-                    color="#ffffff"
-                    onPress={() => alert(data.nomefantasia)}
-                    >
-                    <View
-                      style={{
-
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "flex-start",
-                      }}
-                       >
-                      <Text style={styles.lojastext}>
-                        {data.nomefantasia} - {data.shopping}
-                      </Text>
-                      <Text style={styles.lojades}>
-                        {data.segmentos+''}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "space-around",
-                        alignContent: "center",
-                        flex: 2,
-                      }}
-                    >
-                      <Text style={styles.cashbacknumber}>1%</Text>
-                      <Text style={styles.cashbackdesk}>de Volta</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+          <View
+            style={{ alignItems: "center", padding: 20, paddingVertical: 30 }}
+          >
+            <TouchableOpacity
+              style={{
+                borderRadius: 10,
+                borderWidth: 0.1,
+                borderColor: "#565656",
+                backgroundColor: "#ffffff",
+                height: 300,
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "center",
+                width: "auto",
+                padding: 30,
+                paddingVertical: 50,
+              }}
+              title="Login"
+              color="#ffffff"
+              onPress={() => alert(data.nomefantasia)}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Text style={styles.lojastext}>
+                  {data.nomefantasia} - {data.shopping}
+                </Text>
+                <Text style={styles.lojades}>{data.segmentos + ""}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "space-around",
+                  alignContent: "center",
+                  flex: 2,
+                }}
+              >
+                <Text style={styles.cashbacknumber}>1%</Text>
+                <Text style={styles.cashbackdesk}>de Volta</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     >
@@ -162,7 +161,10 @@ function ProdCat() {
   const route = useRoute();
 
   useEffect(() => {
-    fetch("https://api-shopycash1.herokuapp.com/lojas/categorias/" + route.params.params.id)
+    fetch(
+      "https://api-shopycash1.herokuapp.com/indexcategory/" +
+        route.params.params.id
+    )
       .then((response) => response.json())
       .then((json) => setData2(json))
       .catch((error) => console.error(error))
@@ -170,15 +172,77 @@ function ProdCat() {
   }, []);
 
   useEffect(() => {
-    fetch("https://api-shopycash1.herokuapp.com/produtos/" + route.params.params.id)
+    fetch(
+      "https://api-shopycash1.herokuapp.com/indexproductby/" +
+        route.params.params.id
+    )
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-console.log(JSON.stringify(data)+"   produto")
+  console.log(JSON.stringify(data) + "   produto");
   return (
     <View>
+      <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#53aaa8",
+                  padding: 10,
+                  fontSize: 15,
+                }}
+              >
+               Mais vendidos!
+              </Text>
+      <FlatList
+            horizontal
+            data={data}
+            keyExtractor={({ id }, item) => id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={{
+                  width: 300,
+                  borderRadius: 15,
+                  borderWidth: 0.1,
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  marginHorizontal: 10,
+                  alignItems: "center",
+                  padding: 7.5,
+                }}
+                title="Login"
+                color="#ffffff"
+                onPress={() =>
+                  navigation.navigate("Proddetail", {
+                    params: {
+                      idloja: item.loja_id,
+                      idprod: item._id,
+                      nome: item.nome,
+                      desc: item.desc,
+                      preco: item.preco,
+                      loja: item.loja,
+                      shopping: item.shopping,
+                      categoria: item.categoria,
+                      ativo: item.ativo,
+                      imagem: item.imagem,
+                      imagem2: item.imagem2,
+                    },
+                  })
+                }
+              >
+                <Image
+                  style={{ width: "98%", height: 150, borderRadius: 15, resizeMode: "cover"}}
+                  source={{uri:item.imagem}}
+                />
+                <Text style={styles.ofertastext} numberOfLines={1}>{item.nome}</Text>
+                <Text style={styles.lojades}>R${item.preco}</Text>
+                <Text style={styles.lojades}> Disponivel em: {item.loja} - {item.shopping}</Text>
+                <Text style={{color: "#ffffff", fontWeight: "100", fontSize: 10, backgroundColor: "#34CC95", borderRadius: 15, padding: 2}}>
+                  Cashback disponivel: 1%
+                  </Text>
+              </TouchableOpacity>
+            )}
+          />
       <FlatList
         style={{ margin: 5 }}
         data={data2}
@@ -189,7 +253,15 @@ console.log(JSON.stringify(data)+"   produto")
           console.log(datacadnome);
           return (
             <View style={styles.container}>
-              <Text style={{ fontWeight: "bold" }} key={item._id}>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#53aaa8",
+                  padding: 10,
+                  fontSize: 15,
+                }}
+                key={item._id}
+              >
                 {item.nome}
               </Text>
               <View>
@@ -198,15 +270,14 @@ console.log(JSON.stringify(data)+"   produto")
                   data={data}
                   refreshing={true}
                   extraData={datacadnome}
-                  keyExtractor={({ key }, id) => key} 
+                  keyExtractor={({ key }, id) => key}
                   renderItem={({ item }) => {
                     if (datacadnome == item.categoria) {
-                      
                       return (
                         <TouchableOpacity
                           style={{
                             borderRadius: 5,
-                            borderWidth: 0.3,
+                            borderWidth: 0.1,
                             borderColor: "#565656",
                             backgroundColor: "#ffffff",
                             padding: 10,
@@ -242,6 +313,10 @@ console.log(JSON.stringify(data)+"   produto")
                                 height: 80,
                                 padding: 50,
                                 marginLeft: 10,
+                                borderRadius: 500,
+                                borderWidth: 0.3,
+                                Width: 0.1,
+                                borderColor: "#a3d2ca",
                               }}
                               source={{ uri: item.imagem }}
                             />
@@ -252,15 +327,27 @@ console.log(JSON.stringify(data)+"   produto")
                                 justifyContent: "space-around",
                               }}
                             >
-                              <Text style={styles.prodtext}>
-                                {item.nome}
-                              </Text>
+                              <Text style={styles.prodtext}>{item.nome}</Text>
 
                               <Text style={styles.proddesc} numberOfLines={2}>
                                 {item.desc}
                               </Text>
                               <Text style={styles.prodpreco}>
                                 R${item.preco}
+                              </Text>
+                              <Text
+                                style={{
+                                  color: "#ffffff",
+                                  fontWeight: "100",
+                                  fontSize: 10,
+                                  textAlign:"center",
+                                  backgroundColor: "#34CC95",
+                                  borderRadius: 15,
+                                  padding: 2,
+                                }}
+                                
+                              >
+                                Cashback aproximado disponivel: R${(item.preco*0.01).toFixed(2)}
                               </Text>
                             </View>
                           </View>
@@ -281,7 +368,7 @@ console.log(JSON.stringify(data)+"   produto")
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#FFFFFF",
     justifyContent: "flex-start",
   },
   mapStyle: {
@@ -373,7 +460,7 @@ const styles = StyleSheet.create({
   },
   prodtext: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "800",
     color: "#000000",
   },
   starloja: {
