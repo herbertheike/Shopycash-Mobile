@@ -12,7 +12,6 @@ import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Tabnavigator from './TabContent'
 
 class Extrato extends React.Component {
   componentDidMount() {}

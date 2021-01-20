@@ -17,6 +17,7 @@ import Proddetail from "./views/proddetail";
 import Extrato from "./views/extrato";
 import GetShoppings from "./views/getshopping"
 import GetStoreByMall from "./views/getlojabyshop"
+import PaymentScan from "./views/PaymentScan"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -112,6 +113,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="Extrato"
             component={Extrato}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="PaymentScan"
+            component={PaymentScan}
             options={{ headerShown: false }}
           />
         </MainStack.Navigator>

@@ -21,6 +21,7 @@ import Categorias from "./getcategorias";
 import Extrato from "./extrato";
 import GetShoppings from "./getshopping";
 import GetStoreByMall from "./getlojabyshop"
+import PaymentScan from "./PaymentScan"
 import * as Location from "expo-location";
 
 
@@ -383,6 +384,7 @@ export default function lojasMain() {
       <Drawer.Screen name="Extrato" component={Extrato} />
       <Drawer.Screen name="Shoppings" component={GetShoppings} />
       <Drawer.Screen name="StorebyMall" component={GetStoreByMall}/>
+      <Drawer.Screen name="PaymentScan" component={PaymentScan}/>
     </Drawer.Navigator>
   );
 }

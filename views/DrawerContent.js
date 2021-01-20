@@ -124,7 +124,7 @@ export class DrawerContentMenu extends React.Component {
                 )}
                 label="Pagar com ShopyCash"
                 onPress={() => {
-                  firebase.auth().signOut();
+                  this.props.navigation.navigate("PaymentScan");
                 }}
               />
               <DrawerItem
