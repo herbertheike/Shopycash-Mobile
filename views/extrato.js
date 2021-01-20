@@ -216,7 +216,7 @@ class Extrato extends React.Component {
                 </View>
               </View>
           </TouchableOpacity>
-</View>
+          </View>
         </ScrollView>
         
       </SafeAreaView>
