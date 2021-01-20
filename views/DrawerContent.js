@@ -127,41 +127,6 @@ export class DrawerContentMenu extends React.Component {
                   firebase.auth().signOut();
                 }}
               />
-
-              <DrawerItem
-                style={styles.draweritemStyle}
-                icon={({ color, size }) => (
-                  <Icon name="comment-dollar"  color={"#5eaaa8"} size={25}  />
-                )}
-                label="Saldo
-                                "
-                onPress={() => {
-                  firebase.auth().signOut();
-                }}
-              />
-
-              <DrawerItem
-                style={styles.draweritemStyle}
-                icon={({ color, size }) => (
-                  <Icon name="exchange-alt"  color={"#5eaaa8"} size={25}  />
-                )}
-                label="Transferir Saldo"
-                onPress={() => {
-                  firebase.auth().signOut();
-                }}
-              />
-
-              <DrawerItem
-                style={styles.draweritemStyle}
-                icon={({ color, size }) => (
-                  <Icon name="star"  color={"#5eaaa8"} size={25}  />
-                )}
-                label="Exclusivo pra você"
-                onPress={() => {
-                  firebase.auth().signOut();
-                }}
-              />
-
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
