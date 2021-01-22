@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 function Categorias(props) {
   const [isLoading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ function Categorias(props) {
   const url = "http://localhost:8080/administrativo/shopping";
   const carticon = (
     <Icon
-      name="shopping-cart"
+      name="shopping-bag"
       size={25}
       color="#53aaa8"
       style={{ marginHorizontal: 10 }}

@@ -15,6 +15,7 @@ import "firebase/firestore";
 import firebase from "firebase";
 import * as Facebook from "expo-facebook";
 import * as GoogleSignIn from "expo-google-sign-in";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 class Cadastro extends React.Component {
   state = {
@@ -195,7 +196,7 @@ class Cadastro extends React.Component {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder="Senha"
                 placeholderTextColor="#B1B1B1"
                 returnKeyType="done"
                 textContentType="newPassword"
@@ -217,24 +218,28 @@ class Cadastro extends React.Component {
             </Text>
             <TouchableOpacity
               style={{
-                width: "86%",
+                width: "50%",
                 margin: 10,
                 alignItems: "center",
                 justifyContent: "center",
+                backgroundColor:'#5eaaa8',
+                padding: 10,
+                borderRadius:50
               }}
               onPress={() => this.signInWithEmail()}
             >
-              <Text>Cadastrar</Text>
+              <Text style={{color:'#ffffff'}}>Cadastrar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: "86%", marginTop: 10 }}
               onPress={() => this.signInWithFacebook()}
             >
               <View style={styles.button}>
+              <Icon name="facebook-f" size={18} color="#ffffff" /> 
                 <Text
                   style={{
                     letterSpacing: 0.5,
-                    fontSize: 16,
+                    fontSize: 18,
                     color: "#FFFFFF",
                   }}
                 >
@@ -247,14 +252,15 @@ class Cadastro extends React.Component {
               onPress={() => this.signInWithGoogle()}
             >
               <View style={styles.googleButton}>
+              <Icon name="google" size={18} color="#000000" />
                 <Text
                   style={{
                     letterSpacing: 0.5,
-                    fontSize: 16,
+                    fontSize: 18,
                     color: "#707070",
                   }}
                 >
-                  Continuar com Google
+                 Continuar com Google
                 </Text>
               </View>
             </TouchableOpacity>
@@ -299,15 +305,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#3A559F",
     height: 44,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: 'space-around',
     alignItems: "center",
+    padding: 10,
     borderRadius: 22,
   },
   googleButton: {
     backgroundColor: "#FFFFFF",
     height: 44,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: 'space-around',
     alignItems: "center",
     borderRadius: 22,
     borderWidth: 1,

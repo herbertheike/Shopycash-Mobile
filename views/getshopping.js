@@ -22,7 +22,7 @@ function GetShoppings(props) {
   const url = "http://localhost:8080/administrativo/shopping";
   const carticon = (
     <Icon
-      name="shopping-cart"
+      name="shopping-bag"
       size={25}
       color="#53aaa8"
       style={{ marginHorizontal: 10 }}
@@ -133,14 +133,13 @@ function GetShoppings(props) {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={{
-                    width: "95%",
+                    width: "100%",
                     borderRadius: 5,
                     backgroundColor:
                       "#" +
                       (0x1000000 + Math.random() * 0xffffff)
                         .toString(16)
                         .substr(1, 6),
-                    color: "#FFFFFF",
                     marginVertical: 10,
                     alignItems: "center",
                     justifyContent: "center",
@@ -162,7 +161,7 @@ function GetShoppings(props) {
                 >
                   <View>
                     <Text style={styles.lojastext}>{item.nome}</Text>
-                    <Text styles={styles.lojades}>{item.endereco}</Text>
+                    <Text style={styles.lojades}>{item.endereco}</Text>
                   </View>
                 </TouchableOpacity>
               )}
@@ -244,10 +243,9 @@ const styles = StyleSheet.create({
     color: "#999999",
   },
   lojades: {
-    width: "100%",
-    fontSize: 14,
+    fontSize: 12,
     position: "relative",
-    color: "#b9b9b9",
+    color: "#ffffff",
   },
   lojastext: {
     fontWeight: "bold",

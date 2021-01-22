@@ -18,6 +18,8 @@ import Extrato from "./views/extrato";
 import GetShoppings from "./views/getshopping"
 import GetStoreByMall from "./views/getlojabyshop"
 import PaymentScan from "./views/PaymentScan"
+import InviteView from "./views/inviteview"
+import TermsAndConditions from "./views/userterms"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -118,6 +120,16 @@ class App extends React.Component {
           <MainStack.Screen
             name="PaymentScan"
             component={PaymentScan}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="InviteView"
+            component={InviteView}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="TermsAndConditions"
+            component={TermsAndConditions}
             options={{ headerShown: false }}
           />
         </MainStack.Navigator>

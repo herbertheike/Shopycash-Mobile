@@ -1,13 +1,8 @@
 import React from "react";
 import {
-  Alert,
   StyleSheet,
   Text,
-  View,
-  Image,
   TouchableOpacity,
-  ScrollView,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";

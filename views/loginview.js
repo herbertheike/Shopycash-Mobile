@@ -5,20 +5,19 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
   Modal,
+  ImageBackground
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import * as firebase from "firebase";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default class Login extends React.Component {
   state = { modalVisible: false };
 
   render() {
     const { modalVisible } = this.state;
-    const loginicon = <Icon name="sign-in" size={25} color="#ffffff" />;
-    const cadastroicon = <Icon name="user-plus" size={25} color="#ffffff" />;
-    const nologinicon = <Icon name="eye-slash" size={25} color="#ffffff" />;
+    const loginicon = <Icon name="sign-in-alt" size={30} color="#ffffff" />;
+    const cadastroicon = <Icon name="user-plus" size={30} color="#ffffff" />;
+    const nologinicon = <Icon name="eye-slash" size={30} color="#ffffff" />;
     return (
       <View style={styles.container}>
         <Image source={require("../assets/logo.png")} style={styles.image} />
@@ -53,7 +52,7 @@ export default class Login extends React.Component {
                 }
               >
                 {loginicon}
-                <Text style={styles.botaotext}>Logar</Text>
+                <Text style={styles.botaotext}>LOGAR</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.botao}
@@ -68,7 +67,7 @@ export default class Login extends React.Component {
                 }
               >
                 {cadastroicon}
-                <Text style={styles.botaotext}>Cadastrar</Text>
+                <Text style={styles.botaotext}>CADASTRAR</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.botaosemlogin}
@@ -81,12 +80,12 @@ export default class Login extends React.Component {
                     1
                   )
                 }
-              >
+                >
                 {nologinicon}
-                <Text style={styles.botaotext}>Entrar sem cadastro</Text>
+                <Text style={styles.botaotext}>ENTRAR SEM CADASTRO</Text>
               </TouchableOpacity>
-            </View>
-          </View>
+            </View>           
+          </View>         
         </Modal>
       </View>
     );
@@ -140,6 +139,11 @@ const styles = StyleSheet.create({
     height: 600,
     resizeMode: "contain",
   },
+  imgbg: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
   login: {
     backgroundColor: "#ffffff",
     width: "100%",
@@ -158,8 +162,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 50,
+    justifyContent: "space-between",
+    paddingHorizontal: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -178,8 +182,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 50,
+    justifyContent: 'space-between',
+    paddingHorizontal: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -213,8 +217,10 @@ const styles = StyleSheet.create({
     color: "#999999",
   },
   botaotext: {
-    fontWeight: "100",
-    fontSize: 18,
+    fontWeight: "bold",
+    justifyContent:'space-around',
+    alignItems: "center",
+    fontSize: 15,
     color: "#FFFFFF",
   },
 });

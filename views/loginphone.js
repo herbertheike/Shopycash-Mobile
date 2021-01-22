@@ -1,11 +1,8 @@
 import * as React from "react";
 import {
-  Alert,
   ActivityIndicator,
   Text,
-  View,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
   Platform,

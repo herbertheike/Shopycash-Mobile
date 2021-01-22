@@ -76,7 +76,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="shopping-bag" color={"#5eaaa8"} size={25} />
+                  <Icon name="search-dollar" color={"#5eaaa8"} size={25} />
                 )}
                 label="Inicio"
                 onPress={() => {
@@ -87,7 +87,7 @@ export class DrawerContentMenu extends React.Component {
             <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="store" color={"#5eaaa8"} size={25} />
+                  <Icon name="store" color={"#5eaaa8"} size={21} />
                 )}
                 label="Shoppings"
                 onPress={() => {
@@ -109,7 +109,7 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="chart-bar"  color={"#5eaaa8"} size={25}  />
+                  <Icon name="chart-bar"  color={"#5eaaa8"} size={26}  />
                 )}
                 label="Extrato"
                 onPress={() => {
@@ -130,11 +130,11 @@ export class DrawerContentMenu extends React.Component {
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
-                  <Icon name="users"  color={"#5eaaa8"} size={25}  />
+                  <Icon name="users"  color={"#5eaaa8"} size={21}  />
                 )}
                 label="Convidar amigos"
                 onPress={() => {
-                  firebase.auth().signOut();
+                  this.props.navigation.navigate("InviteView");
                 }}
               />
 
@@ -145,7 +145,7 @@ export class DrawerContentMenu extends React.Component {
                 )}
                 label="Termos de uso"
                 onPress={() => {
-                  firebase.auth().signOut();
+                  this.props.navigation.navigate("TermsAndConditions");
                 }}
               />
 

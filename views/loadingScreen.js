@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ImageBackground } from "react-native";
 import { BarIndicator } from "react-native-indicators";
 import * as firebase from "firebase";
 import {Permissions, Notifications} from 'expo'
-
 class LoadingScreen extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -14,8 +13,7 @@ class LoadingScreen extends React.Component {
       }
     });
   }
-  
-  
+
   render() {
     return (
       <View
@@ -27,7 +25,6 @@ class LoadingScreen extends React.Component {
         }}
       >
         <Image source={require("../assets/logo.png")} style={styles.image} />
-
         <BarIndicator
           style={{ position: "relative", marginTop: "-50%" }}
           count={5}
@@ -46,6 +43,12 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "contain",
   },
+  imgbg: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+  
 });
 
 export default LoadingScreen;

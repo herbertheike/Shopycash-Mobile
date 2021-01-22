@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   View,
@@ -11,9 +10,8 @@ import {
   Animated,
 } from "react-native";
 import { Header } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
-import MapView from "react-native-maps";
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 export default function Getloja(props) {
@@ -21,7 +19,7 @@ export default function Getloja(props) {
   const bgimg = props.route.params.params.logo;
   const carticon = (
     <Icon
-      name="shopping-cart"
+      name="shopping-bag"
       size={25}
       color="#5eaaa8"
       style={{ marginHorizontal: 10 }}

@@ -8,19 +8,15 @@ import {
   ScrollView,
   RefreshControl,
   FlatList,
-  Image,
 } from "react-native";
+//import {MapView, Marker} from 'react-native-maps';
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "react-native-elements";
-import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import * as Location from "expo-location";
 
 function GetShoppings(props) {
-  const shopid = props.route.params.params.id;
-  const shopname = props.route.params.params.nome;
-  const latitude = props.route.params.params.latitude;
-  const longitude = props.route.params.params.longitude;
+  const navigation = useNavigation();
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const url = "http://localhost:8080/administrativo/shopping";
@@ -28,20 +24,19 @@ function GetShoppings(props) {
     <Icon
       name="shopping-bag"
       size={25}
-      color="#5eaaa8"
+      color="#53aaa8"
       style={{ marginHorizontal: 10 }}
     />
   );
-  const backicon = (
+  const menuicon = (
     <Icon
-      name="arrow-left"
       style={{ marginLeft: 10 }}
-      onPress={() => props.navigation.goBack()}
-      color="#5eaaa8"
+      onPress={() => props.navigation.toggleDrawer()}
+      name="bars"
+      color="#53aaa8"
       size={25}
     />
   );
-  const staricon = <Icon name="star" size={12} />;
   const ColorCode = [
     "#E5454C",
     "#5653d4",
@@ -73,9 +68,7 @@ function GetShoppings(props) {
     "#faa33f",
   ];
   useEffect(async () => {
-    await fetch(
-      "https://api-shopycash1.herokuapp.com/indexby/shopping/" + shopid
-    )
+    await fetch("https://api-shopycash1.herokuapp.com/indexsh")
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
@@ -95,129 +88,63 @@ function GetShoppings(props) {
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
-
-  console.log(latitude);
   return (
     <View style={styles.container}>
       <Header
         statusBarProps={{ barStyle: "light-content" }}
         barStyle="light-content"
-        leftComponent={backicon}
+        leftComponent={menuicon}
         centerComponent={
           ({
             style: {
-              color: "#5eaaa8",
+              color: "#25282B",
               fontWeight: "bold",
-              fontSize: 15,
+              fontSize: 20,
               fontFamily: "Roboto",
             },
           },
           (
             <Text
-              style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 13 }}
+              style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 15 }}
             >
-              Lojas - {shopname}
+              Shoppings
             </Text>
           ))
         }
         rightComponent={carticon}
         containerStyle={{
-          backgroundColor: "#ffffff",
+          backgroundColor: "#E8E8E8",
           justifyContent: "space-around",
         }}
       />
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.005,
-          }}
-        >
-          <MapView.Marker
-            coordinate={{ latitude: latitude, longitude: longitude }}
-            title={shopname}
-            description={props.route.params.params.end}
-          />
-        </MapView>
-      </View>
       <ScrollView
         style={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <FlatList
-            data={data}
-            keyExtractor={({ id }, idloja) => id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={{
-                  marginVertical: 5,
-                  borderRadius: 5,
-                  padding: 10,
-                }}
-                title="Login"
-                color="#ffffff"
-                onPress={() =>
-                  navigation.navigate("LojaDetail", {
-                    params: { id: item._id, logo: item.Logo },
-                  })
-                }
-              >
-                <View style={{ flexDirection: "row" }}>
-                  <Image
-                    style={{
-                      width: 70,
-                      height: 70,
-                      marginRight: 5,
-                      borderRadius: 50,
-                      borderWidth: 0.1,
-                      borderColor: "#263646",
-                    }}
-                    source={{ uri: item.Logo }}
-                  />
-                  <View style={{ flexDirection: "column" }}>
-                    <Text style={styles.lojastext}>
-                      {item.nomefantasia} - {item.shopping}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text style={styles.starloja}>
-                        {staricon} - 4,93 - {item.segmento[0] + " "}
-                      </Text>
-                      <Text style={styles.lojades}>{item.responsavel}</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        )}
+        <View style={{ width: "100%", padding: 2, alignItems: "center" }}>
+          <Text style={{textAlign:'center', padding: 10, fontSize:25}}>
+              Termos e condições de uso
+          </Text>
+          <ScrollView style={{padding: 10}}>
+          <Text style={{textAlign:'justify'}}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vestibulum sagittis mi, in bibendum nunc posuere non. Nunc pellentesque augue vel dui fringilla luctus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae mi nibh. Vestibulum sed quam ultricies, auctor felis id, hendrerit orci. Maecenas eu nibh eu felis convallis congue in ut mauris. Nunc efficitur justo lorem, id semper tellus dignissim pellentesque. Duis tincidunt sollicitudin lectus ut convallis. Nunc sodales pulvinar ante id sodales. Nulla laoreet vulputate odio, eleifend blandit mauris vulputate in. Aenean commodo massa neque, ut tincidunt quam maximus ut. Aliquam nec libero et tortor finibus luctus et ac lorem. Morbi sit amet leo nec mauris commodo condimentum sed quis mauris.
+            
+            Aliquam sapien justo, lacinia eu bibendum et, placerat eget mi. Integer vel quam eu lorem consequat mollis. Morbi eget nunc efficitur, luctus nisi a, ullamcorper felis. Aenean in erat nisl. Nulla quis vehicula tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc tincidunt arcu lorem, sit amet cursus massa commodo ac. Fusce a tellus sit amet nisl tristique sagittis ac nec metus. Vestibulum dapibus, turpis et molestie pretium, ante enim consectetur neque, in tincidunt diam velit et nibh. Donec pretium, lacus eu porttitor fermentum, enim massa dapibus ipsum, a vulputate ex eros eget turpis. Nulla quis imperdiet lorem, in tristique nisl. Morbi vehicula, elit vel dapibus venenatis, eros felis ullamcorper velit, ut gravida dolor ante vitae nulla. Ut sagittis metus semper feugiat feugiat. Fusce sodales sem ipsum, a placerat odio viverra quis. Ut nisi ante, dictum sed elit in, placerat consectetur lacus.
+          </Text>
+          </ScrollView>
+        </View>
       </ScrollView>
     </View>
   );
 }
 export default GetShoppings;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#ffffff",
-  },
-  map: {
-    width: "95%",
-    height: 150,
+    backgroundColor: "#e8e8e8",
   },
   cashbackdesk: {
     fontSize: 60,
@@ -234,7 +161,6 @@ const styles = StyleSheet.create({
   },
   ImageStyle: {
     padding: 25,
-
     margin: 10,
     height: 25,
     width: 25,
@@ -258,7 +184,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   login: {
@@ -272,7 +197,6 @@ const styles = StyleSheet.create({
     marginBottom: -350,
     marginTop: 100,
   },
-
   logintext: {
     fontWeight: "bold",
     fontSize: 18,
@@ -286,10 +210,9 @@ const styles = StyleSheet.create({
     color: "#999999",
   },
   lojades: {
-    width: "100%",
-    fontSize: 14,
+    fontSize: 12,
     position: "relative",
-    color: "#b9b9b9",
+    color: "#ffffff",
   },
   lojastext: {
     fontWeight: "bold",
@@ -306,5 +229,11 @@ const styles = StyleSheet.create({
   botaotext: {
     fontWeight: "bold",
     color: "#FFFFFF",
+  },
+  map: {
+    width: "100%",
+    height: 120,
+    zIndex: 5,
+    borderRadius: 5,
   },
 });

@@ -9,19 +9,20 @@ import {
   FlatList,
   RefreshControl,
   ScrollView,
-  Modal,
   KeyboardAvoidingView,
 } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import { Header, SearchBar } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import { DrawerContentMenu } from "./DrawerContent";
 import Categorias from "./getcategorias";
 import Extrato from "./extrato";
 import GetShoppings from "./getshopping";
 import GetStoreByMall from "./getlojabyshop"
 import PaymentScan from "./PaymentScan"
+import InviteView from "./inviteview"
+import TermsAndConditions from "./userterms"
 import * as Location from "expo-location";
 
 
@@ -80,11 +81,10 @@ function HomeScreen(props) {
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [food, setFood] = useState([]);
   const [seg, setSeg] = useState([]);
   const carticon = (
     <Icon
-      name="shopping-cart"
+      name="shopping-bag"
       size={25}
       color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
@@ -102,7 +102,6 @@ function HomeScreen(props) {
   const [datal, setDatal] = useState([]);
   const navigation = useNavigation();
   const staricon = <Icon name="star" size={12} />;
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(async () => {
     await fetch("https://api-shopycash1.herokuapp.com/segmento")
@@ -325,7 +324,7 @@ function Locale() {
   const pinIcon = (
     <Icon
       style={{ marginLeft: 10 }}
-      name="map-marker"
+      name="map-marker-alt"
       color="#5eaaa8"
       size={18}
     />
@@ -385,6 +384,8 @@ export default function lojasMain() {
       <Drawer.Screen name="Shoppings" component={GetShoppings} />
       <Drawer.Screen name="StorebyMall" component={GetStoreByMall}/>
       <Drawer.Screen name="PaymentScan" component={PaymentScan}/>
+      <Drawer.Screen name="InviteView" component={InviteView}/>
+      <Drawer.Screen name="TermsAndConditions" component={TermsAndConditions} />
     </Drawer.Navigator>
   );
 }

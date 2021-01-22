@@ -1,9 +1,18 @@
-import React from "react";
-import { StyleSheet, Text, Share, View, Image, Animated } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  Share,
+  View,
+  Image,
+  Animated,
+  TouchableOpacity,
+} from "react-native";
 import { Header, AirbnbRating, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
 import Carousel from "react-native-snap-carousel";
+
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
 function Prod(props) {
@@ -15,11 +24,17 @@ function Prod(props) {
       style={{ marginHorizontal: 10 }}
     />
   );
+  const onChange = (number, type) => {};
   const onShare = async () => {
     try {
       const result = await Share.share({
         message:
-          'Instale a Shopycash e receba uma parte do seu dinheiro de volta em suas compras.\n(aqui vai ter um link)\n'+props.route.params.params.nome+'\nDisponivel em: '+props.route.params.params.loja+'\nPor apenas: R$'+ props.route.params.params.preco,
+          "Instale a Shopycash e receba uma parte do seu dinheiro de volta em suas compras.\n(aqui vai ter um link)\n" +
+          props.route.params.params.nome +
+          "\nDisponivel em: " +
+          props.route.params.params.loja +
+          "\nPor apenas: R$" +
+          props.route.params.params.preco,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -42,6 +57,7 @@ function Prod(props) {
       style={{ marginHorizontal: 10 }}
     />
   );
+  const [count, setCount] = useState(0);
   const backicon = (
     <Icon
       name="arrow-left"
@@ -76,13 +92,15 @@ function Prod(props) {
               fontFamily: "Roboto",
             },
           }}
-          rightComponent={ <Icon
-            name="share-alt"
-            size={25}
-            color="#5eaaa8"
-            style={{ marginHorizontal: 10 }}
-            onPress={onShare}
-          />}
+          rightComponent={
+            <Icon
+              name="share-alt"
+              size={25}
+              color="#5eaaa8"
+              style={{ marginHorizontal: 10 }}
+              onPress={onShare}
+            />
+          }
           containerStyle={{
             backgroundColor: "rgba(232, 232, 232, 1)",
             justifyContent: "space-around",
@@ -150,7 +168,7 @@ function Prod(props) {
               style={{
                 fontFamily: "Roboto",
                 fontWeight: "bold",
-                fontSize: 20,
+                fontSize: 18,
                 paddingBottom: 15,
                 textAlign: "center",
               }}
@@ -169,7 +187,7 @@ function Prod(props) {
               <View>
                 <Image
                   style={{
-                    width: 350,
+                    width: "100%",
                     height: 350,
                     borderRadius: 10,
                     alignItems: "center",
@@ -305,12 +323,90 @@ function Prod(props) {
               color: "#a7a7a7",
             }}
           >
-            {props.route.params.params.loja} - {" "}
+            {props.route.params.params.loja} -{" "}
             {props.route.params.params.shopping}
           </Text>
         </View>
       </View>
-      
+      <View style={{ flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 10
+          }}
+        >
+         
+          
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#5eaaa8",
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 50,
+            }}
+            onPress={() => setCount(count - 1)}
+          >
+            <Text
+              style={{ fontWeight: "bold", fontSize: 30, color: "#ffffff" }}
+            >
+              <Icon
+                style={{ marginLeft: 10 }}
+                name="minus"
+                color="#ffffff"
+                size={25}
+              />
+            </Text>
+          </TouchableOpacity>
+          <Text style={{ fontWeight: "bold", fontSize: 35, padding: 10 }}>
+            {count}
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#5eaaa8",
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 50,
+            }}
+            onPress={() => setCount(count + 1)}
+          >
+            <Text
+              style={{ fontWeight: "bold", fontSize: 30, color: "#ffffff" }}
+            >
+              <Icon
+                style={{ marginLeft: 10 }}
+                name="plus"
+                color="#ffffff"
+                size={25}
+              />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+        style={{
+          backgroundColor: "#5eaaa8",
+          width:'95%',
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 5,
+          padding:20
+        }}
+          onPress={() =>
+            console.log(
+              "A quantidade de " + count + "\nfoi adicionado a sua sacola"
+            )
+          }
+        >
+          <Text style={{fontWeight: "bold", fontSize: 20, color: "#ffffff"}}>
+            Adicionar ao carrinho
+            </Text>
+          </TouchableOpacity>
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -358,7 +454,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 10,
-    padding: 4,
+    padding: 5,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -369,7 +465,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 10,
-    padding: 4,
+    padding: 5,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -380,7 +476,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 10,
-    padding: 4,
+    padding: 5,
     alignItems: "center",
     justifyContent: "center",
   },
