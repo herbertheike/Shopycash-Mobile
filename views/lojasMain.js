@@ -23,6 +23,7 @@ import GetStoreByMall from "./getlojabyshop"
 import PaymentScan from "./PaymentScan"
 import InviteView from "./inviteview"
 import TermsAndConditions from "./userterms"
+import Cart from "./cart"
 import * as Location from "expo-location";
 
 
@@ -88,6 +89,7 @@ function HomeScreen(props) {
       size={25}
       color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
+      onPress={() => props.navigation.navigate('Cart')}
     />
   );
   const menuicon = (
@@ -386,6 +388,7 @@ export default function lojasMain() {
       <Drawer.Screen name="PaymentScan" component={PaymentScan}/>
       <Drawer.Screen name="InviteView" component={InviteView}/>
       <Drawer.Screen name="TermsAndConditions" component={TermsAndConditions} />
+      <Drawer.Screen name="Cart" component={Cart}/>
     </Drawer.Navigator>
   );
 }

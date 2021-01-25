@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Share,
   TouchableOpacity,
   ScrollView,
   RefreshControl,
@@ -37,6 +38,25 @@ function GetShoppings(props) {
       size={25}
     />
   );
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          "Instale a Shopycash e receba uma parte do seu dinheiro de volta em suas compras.\n(aqui vai ter um link)\n" 
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const ColorCode = [
     "#E5454C",
     "#5653d4",
@@ -123,7 +143,14 @@ function GetShoppings(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={{ width: "100%", padding: 2, alignItems: "center" }}>
+        <View style={{ width: "100%", padding: 10, alignItems: "center", justifyContent:'space-between', flexDirection:'row' }}>
+        <Icon
+              name="share-alt"
+              size={25}
+              color="#5eaaa8"
+              style={{ marginHorizontal: 10 }}
+              onPress={onShare}
+            />
           <Text>
               Convide seus amigos, para ser um ShopyCasher!
           </Text>

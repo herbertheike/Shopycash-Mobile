@@ -22,7 +22,12 @@
     },
     "android": {
       "package": "com.shopycash.sc",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ"
+        }
+      }
     },
     "facebookAppId": "445672353479326",
     "facebookAutoInitEnabled": true,

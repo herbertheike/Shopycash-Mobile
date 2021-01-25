@@ -20,6 +20,7 @@ import GetStoreByMall from "./views/getlojabyshop"
 import PaymentScan from "./views/PaymentScan"
 import InviteView from "./views/inviteview"
 import TermsAndConditions from "./views/userterms"
+import Cart from "./views/cart"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -127,9 +128,10 @@ class App extends React.Component {
             component={InviteView}
             options={{ headerShown: false }}
           />
+          
           <MainStack.Screen
-            name="TermsAndConditions"
-            component={TermsAndConditions}
+            name="Cart"
+            component={Cart}
             options={{ headerShown: false }}
           />
         </MainStack.Navigator>

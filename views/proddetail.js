@@ -329,6 +329,7 @@ function Prod(props) {
         </View>
       </View>
       <View style={{ flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
+      <Text>Quantidade: </Text>
         <View
           style={{
             flexDirection: "row",

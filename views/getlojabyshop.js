@@ -10,11 +10,9 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Header } from "react-native-elements";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import * as Location from "expo-location";
 
 function GetShoppings(props) {
   const shopid = props.route.params.params.id;
@@ -95,8 +93,6 @@ function GetShoppings(props) {
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
-
-  console.log(latitude);
   return (
     <View style={styles.container}>
       <Header
