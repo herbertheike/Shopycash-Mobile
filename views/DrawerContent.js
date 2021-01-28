@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {
   Avatar,
   Title,
@@ -57,6 +57,9 @@ export class DrawerContentMenu extends React.Component {
       <View style={{ flex: 1 }}>
         <DrawerContentScrollView {...this.props}>
           <View style={styles.drawerContent}>
+            <TouchableOpacity onPress={() => {
+              this.props.navigation.navigate("Profile");
+              }}>
             <View style={styles.userInfoSection}>
               <View
                 style={{
@@ -72,6 +75,7 @@ export class DrawerContentMenu extends React.Component {
                 </View>
               </View>
             </View>
+            </TouchableOpacity>
             <Drawer.Section style={styles.drawerSection}>
               <DrawerItem
                 style={styles.draweritemStyle}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import { Header, AirbnbRating, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import ParallaxScrollView from "react-native-parallax-scroll-view";
 import Carousel from "react-native-snap-carousel";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AnimatedCustomScrollView = Animated.createAnimatedComponent();
 
@@ -25,6 +26,21 @@ function Prod(props) {
     />
   );
   const onChange = (number, type) => {};
+  const [proddat, setProdData] = useState();
+
+  useEffect(()=> {
+    (async() => {
+    await fetch("https://api-shopycash1.herokuapp.com/indexonlyprodct/"
+    +props.route.params.params.idloja+
+    "/"+props.route.params.params.idprod)
+      .then((response) => response.json())
+      .then((res) => setProdData(res))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false),[]);
+    })();
+  }, []);
+
+  console.log( "data prod:" +JSON.stringify(proddat))
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -57,6 +73,47 @@ function Prod(props) {
       style={{ marginHorizontal: 10 }}
     />
   );
+  const storeData = async (value) => {
+    const itemcart = {
+      id: value._id,
+      name: value.nome,
+      categoria: value.categoria,
+      qty:  count,
+      price: value.preco,
+      imagem:value.imagem,
+      checked: 1
+    }
+console.log(itemcart)
+    AsyncStorage.getItem('cart')
+    .then((datacart)=>{
+      if (datacart !== null) {
+        // We have data!!
+        const cart = JSON.parse(datacart)
+        cart.push(itemcart)
+        AsyncStorage.setItem('cart',JSON.stringify(cart));
+      }
+      else{
+        const cart  = []
+        cart.push(itemcart)
+        AsyncStorage.setItem('cart',JSON.stringify(cart));
+      }
+      alert("Add Cart")
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+
+   /* try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('@product', jsonValue)
+      const jsonValueparse = await AsyncStorage.getItem("@product")
+      console.log("Sem parse: "+jsonValueparse);
+      //console.log(value)
+    } catch (e) {
+      // saving error
+    }*/
+  }
+  
   const [count, setCount] = useState(0);
   const backicon = (
     <Icon
@@ -237,8 +294,7 @@ function Prod(props) {
               color: "#a7a7a7",
             }}
           >
-            {props.route.params.params.id}
-            {props.route.params.params.idloja}
+            {props.route.params.params.idprod}
           </Text>
           <Text
             style={{
@@ -398,11 +454,10 @@ function Prod(props) {
           padding:20
         }}
           onPress={() =>
-            console.log(
-              "A quantidade de " + count + "\nfoi adicionado a sua sacola"
-            )
+            storeData(proddat)
           }
         >
+          
           <Text style={{fontWeight: "bold", fontSize: 20, color: "#ffffff"}}>
             Adicionar ao carrinho
             </Text>

@@ -23,6 +23,7 @@ import GetStoreByMall from "./getlojabyshop"
 import PaymentScan from "./PaymentScan"
 import InviteView from "./inviteview"
 import TermsAndConditions from "./userterms"
+import Profile from "./userProfile"
 import Cart from "./cart"
 import * as Location from "expo-location";
 
@@ -389,6 +390,7 @@ export default function lojasMain() {
       <Drawer.Screen name="InviteView" component={InviteView}/>
       <Drawer.Screen name="TermsAndConditions" component={TermsAndConditions} />
       <Drawer.Screen name="Cart" component={Cart}/>
+      <Drawer.Screen name="Profile" component={Profile}/>
     </Drawer.Navigator>
   );
 }
