@@ -25,29 +25,40 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nome: "Sem nome",
+      name: "Sem nome",
       email: "",
       endereco: "",
       modalVisible: false,
+      isLogedin: false,
       photoURL:
         "https://cdn2.iconfinder.com/data/icons/colored-simple-circle-volume-01/128/circle-flat-general-51851bd79-512.png",
     };
   }
 
   profileDetails = async () => {
+    const userId = firebase.auth().currentUser.uid;
+  try {
     await firebase
-      .database()
-      .ref("/user/" + facebookProfileData.user.uid)
-      .set({
-        endereco: this.endereco,
-        edit: Date.now(),
-      });
+    .database()
+    .ref("/user/" + userId)
+    .update({
+      nickName: this.state.name,
+      endereco: this.state.endereco,
+      createAt: Date.now(),
+    });
+    this.setState({modalVisible:false});
+  } catch (error) {
+    console.log(error)
+  }
+           
+            
   };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const userId = firebase.auth().currentUser.uid;
+        this.setState({isLogedin: true})
         firebase
           .database()
           .ref("/user/" + userId)
@@ -55,15 +66,16 @@ export default class Profile extends React.Component {
             "value",
             function (snapshot) {
               if (snapshot.val().loginType === "Google") {
-                this.setState({ name: snapshot.val().firstName });
+                this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL });
                 this.setState({ email: snapshot.val().email });
               }
               if (snapshot.val().loginType === "Facebook") {
-                this.setState({ name: snapshot.val().firstName });
+                this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL.data.url });
                 this.setState({ email: snapshot.val().email });
               } else {
+                this.setState({name: snapshot.val().nickName})
                 this.setState({ email: snapshot.val().email });
               }
             }.bind(this)
@@ -83,8 +95,9 @@ export default class Profile extends React.Component {
     return (
       <ParallaxScrollView
         backgroundColor="#ffffff"
-        contentBackgroundColor="#f6f6f6"
+        contentBackgroundColor="#ffffff"
         parallaxHeaderHeight={300}
+        backgroundScrollSpeed={1}
         renderBackground={() => (
           <Image
             style={{
@@ -126,7 +139,7 @@ export default class Profile extends React.Component {
           </View>
         )}
       >
-        <View style={{ height: 500 }}>
+        <View style={{ height: 500, backgroundColor:"#ffffff" }}>
           <View>
             <Text
               style={{
@@ -145,9 +158,10 @@ export default class Profile extends React.Component {
                 fontSize: 12,
                 padding: 5,
                 borderBottomWidth: 1,
+                borderColor: "#e2e2e2"
               }}
             >
-              {this.state.nome}
+              {this.state.name}
             </Text>
             <Text
               style={{
@@ -166,6 +180,7 @@ export default class Profile extends React.Component {
                 fontSize: 12,
                 padding: 5,
                 borderBottomWidth: 1,
+                borderColor: "#e2e2e2"
               }}
             >
               {this.state.email}
@@ -187,20 +202,25 @@ export default class Profile extends React.Component {
                 fontSize: 12,
                 padding: 5,
                 borderBottomWidth: 1,
+                borderColor: "#e2e2e2"
               }}
             >
               {this.state.endereco}
             </Text>
           </View>
-          <View>
-            <Icon
-              name="edit"
-              size={30}
-              color="#000000"
-              onPress={() => {
-                this.setState({ modalVisible: true });
-              }}
-            />
+          <View style={{alignItems: "center", padding: 20}}>
+                  <Button
+                    icon="pencil"
+                    color="#4630EB"
+                    mode="contained"
+                    onPress={() => {
+                      this.setState({ modalVisible: true });
+                    }}
+                    
+                    style={{padding:10, margin: 10, width:'80%', borderRadius: 10}}
+                  >
+                    Editar
+                  </Button>
           </View>
           <View style={{ alignItems: "center" }}>
             <Modal
@@ -212,27 +232,27 @@ export default class Profile extends React.Component {
                 <View style={styles.modalView}>
                   <TextInput
                     label="Nome"
-                    value={this.state.nome}
                     mode={"outlined"}
-                    underlineColor={"#53aaa8"}
-                    selectionColor={"#53aaa8"}
-                    style={{backgroundColor:'#fff', borderColor: "#53aaa8"}}
+                    value={this.state.name}
+                    onChangeText={text=>this.setState({name:text})}
                   />
                   <TextInput
                     label="Email"
                     value={this.state.email}
                     mode={"outlined"}
+                    onChangeText={text=>this.setState({email:text})}
                   />
                   <TextInput
                     label="Endereço"
                     value={this.state.endereco}
                     mode={"outlined"}
+                    onChangeText={text=>this.setState({endereco:text})}
                   />
                   <Button
                     icon="pencil"
                     color="#5eaaa8"
                     mode="contained"
-                    onPress={() => console.log("Pressed")}
+                    onPress={() => {this.profileDetails()}}
                     style={{padding:10, margin: 10}}
                   >
                     Salvar

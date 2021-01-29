@@ -16,6 +16,7 @@ import firebase from "firebase";
 import * as Facebook from "expo-facebook";
 import * as GoogleSignIn from "expo-google-sign-in";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import PasswordInputText from 'react-native-hide-show-password-input';
 
 class Cadastro extends React.Component {
   state = {
@@ -43,22 +44,30 @@ class Cadastro extends React.Component {
 
   //Login Email e senha
   async signInWithEmail() {
+ 
     await firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(
-        await function emailPassProfile() {
-          const user = firebase.auth().currentUser;
+      .then((user)=> {
+          user = firebase.auth().currentUser;
+          if(!user){
+            this.onLoginFailure.bind(this)(errorMessage);
+          }else{
+            console.log(JSON.stringify(user))
           firebase
             .database()
             .ref("/user/" + user.uid)
             .set({
-              loginType: "Email e Senha",
+              loginType: "Email/Senha",
+              nickName:this.state.displayName,
+              displayName:this.state.displayName,
               email: user.email,
               createAt: Date.now(),
             });
-        },
-        this.onLoginSuccess.bind(this)
+            this.onLoginSuccess.bind(this)
+        }
+      }
+        
       )
       .catch((error) => {
         let errorCode = error.code;
@@ -94,6 +103,7 @@ class Cadastro extends React.Component {
               loginType: "Facebook",
               email: facebookProfileData.user.email,
               photoURL: facebookProfileData.additionalUserInfo.profile.picture,
+              nickName: facebookProfileData.additionalUserInfo.profile.first_name,
               displayName: facebookProfileData.user.displayName,
               firstName:
                 facebookProfileData.additionalUserInfo.profile.first_name,
@@ -140,6 +150,7 @@ class Cadastro extends React.Component {
               loginType: "Google",
               email: googleProfileData.user.email,
               photoURL: googleProfileData.additionalUserInfo.profile.picture,
+              nickName: googleProfileData.additionalUserInfo.profile.given_name,
               displayName: googleProfileData.user.displayName,
               firstName:
                 googleProfileData.additionalUserInfo.profile.given_name,
@@ -182,7 +193,7 @@ class Cadastro extends React.Component {
                 returnKeyType="next"
                 textContentType="name"
                 value={this.state.displayName}
-                onChangeText={(displayName) => this.setState({ displayName })}
+                onChangeText={displayName => this.setState({ displayName:displayName})}
               />
               <TextInput
                 style={styles.input}
@@ -192,7 +203,7 @@ class Cadastro extends React.Component {
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 value={this.state.email}
-                onChangeText={(email) => this.setState({ email })}
+                onChangeText={email => this.setState({ email:email })}
               />
               <TextInput
                 style={styles.input}
@@ -202,7 +213,7 @@ class Cadastro extends React.Component {
                 textContentType="newPassword"
                 secureTextEntry={true}
                 value={this.state.password}
-                onChangeText={(password) => this.setState({ password })}
+                onChangeText={password => this.setState({ password:password })}
               />
             </View>
             {this.renderLoading()}

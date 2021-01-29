@@ -40,17 +40,21 @@ class Login extends React.Component {
     await firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(
-        await function emailPassProfile() {
-          const user = firebase.auth().currentUser;
+      .then((user) => {
+          user = firebase.auth().currentUser;
+          if(!user){
+            this.onLoginFailure.bind(this)("Usuario inexistente");
+          }else{
           firebase
             .database()
             .ref("/user/" + user.uid)
             .update({
               lastLogIn: Date.now(),
             });
-        },
-        this.onLoginSuccess.bind(this)
+            this.onLoginSuccess.bind(this)
+        }
+        
+      }
       )
       .catch((error) => {
         let errorCode = error.code;
@@ -86,6 +90,7 @@ class Login extends React.Component {
               loginType: "Facebook",
               email: facebookProfileData.user.email,
               photoURL: facebookProfileData.additionalUserInfo.profile.picture,
+              nickName: facebookProfileData.additionalUserInfo.profile.first_name,
               displayName: facebookProfileData.user.displayName,
               firstName:
                 facebookProfileData.additionalUserInfo.profile.first_name,
@@ -133,6 +138,7 @@ class Login extends React.Component {
               loginType: "Google",
               email: googleProfileData.user.email,
               photoURL: googleProfileData.additionalUserInfo.profile.picture,
+              nickName: googleProfileData.additionalUserInfo.profile.given_name,
               displayName: googleProfileData.user.displayName,
               firstName:
                 googleProfileData.additionalUserInfo.profile.given_name,

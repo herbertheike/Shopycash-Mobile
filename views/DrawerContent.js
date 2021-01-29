@@ -32,15 +32,16 @@ export class DrawerContentMenu extends React.Component {
             "value",
             function (snapshot) {
               if (snapshot.val().loginType === "Google") {
-                this.setState({ name: snapshot.val().firstName });
+                this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL });
                 this.setState({ email: snapshot.val().email });
               }
               if (snapshot.val().loginType === "Facebook") {
-                this.setState({ name: snapshot.val().firstName });
+                this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL.data.url });
                 this.setState({ email: snapshot.val().email });
               } else {
+                this.setState({name: snapshot.val().nickName})
                 this.setState({ email: snapshot.val().email });
               }
             }.bind(this)
