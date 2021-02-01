@@ -5,6 +5,7 @@ import { Header } from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { TouchableNativeFeedbackBase } from 'react-native';
+import firebase from "firebase";
 
 
 
@@ -15,6 +16,7 @@ export default class Cart extends React.Component {
 			selectAll: false,
 			cartItemsIsLoading: false,
 			cartItems: [],
+			totalPrice:0,
 			refreshing: false
 		}
 	}
@@ -112,6 +114,26 @@ export default class Cart extends React.Component {
     })
 		this.wait(2000).then(() => this.setState({refreshing: false}));
 	  };
+
+	checkOut = async ()=>{
+		const newItems = [...this.state.cartItems];
+		const newPrice = this.subtotalPrice();
+		const nome = await AsyncStorage.getItem('nome');
+		const endereco = await AsyncStorage.getItem('endereco');
+		const email = await AsyncStorage.getItem('email');
+		const user = firebase.auth().currentUser;
+		await firebase
+		.database()
+		.ref("/cart/"+user.uid+"/"+Date.now())
+		.set({
+		  nickName: JSON.parse(nome),
+		  endereco: JSON.parse(endereco),
+		  email:JSON.parse(email),
+		  cartItems:[newItems],
+		  price:newPrice,
+		  createAt: Date.now(),
+		});
+	}
 	
 	
 	
@@ -227,7 +249,7 @@ export default class Cart extends React.Component {
 							</View>
 						</View>
 						<View style={{flexDirection: 'row', justifyContent: 'flex-end', height: 32, paddingRight: 20, alignItems: 'center'}}>
-							<TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]} onPress={() => console.log('test')}>
+							<TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]} onPress={() => this.checkOut()}>
 								<Text style={{color: '#ffffff'}}>Checkout</Text>
 							</TouchableOpacity>
 						</View>

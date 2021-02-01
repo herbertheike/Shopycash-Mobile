@@ -36,16 +36,17 @@ export default class Profile extends React.Component {
   }
 
   profileDetails = async () => {
-    const userId = firebase.auth().currentUser.uid;
-  try {
-    await firebase
+    const user = firebase.auth().currentUser;
+  try {await firebase
     .database()
-    .ref("/user/" + userId)
+    .ref("/user/" + user.uid)
     .update({
       nickName: this.state.name,
       endereco: this.state.endereco,
+      email:this.state.email,
       createAt: Date.now(),
     });
+    user.updateEmail(this.state.email                                                                               )
     this.setState({modalVisible:false});
   } catch (error) {
     console.log(error)
@@ -69,14 +70,17 @@ export default class Profile extends React.Component {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL });
                 this.setState({ email: snapshot.val().email });
+                this.setState({ endereco: snapshot.val().endereco});
               }
               if (snapshot.val().loginType === "Facebook") {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL.data.url });
                 this.setState({ email: snapshot.val().email });
+                this.setState({ endereco: snapshot.val().endereco});
               } else {
                 this.setState({name: snapshot.val().nickName})
                 this.setState({ email: snapshot.val().email });
+                this.setState({ endereco: snapshot.val().endereco});
               }
             }.bind(this)
           );

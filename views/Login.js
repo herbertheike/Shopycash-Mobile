@@ -16,6 +16,7 @@ import firebase from "firebase";
 import * as Facebook from "expo-facebook";
 import * as GoogleSignIn from "expo-google-sign-in";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Login extends React.Component {
   state = { email: "", password: "", errorMessage: "", loading: false };
@@ -51,6 +52,7 @@ class Login extends React.Component {
             .update({
               lastLogIn: Date.now(),
             });
+
             this.onLoginSuccess.bind(this)
         }
         

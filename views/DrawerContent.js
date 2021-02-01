@@ -9,6 +9,7 @@ import {
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/FontAwesome5"
 import firebase from "firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class DrawerContentMenu extends React.Component {
   state = {
@@ -35,14 +36,23 @@ export class DrawerContentMenu extends React.Component {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL });
                 this.setState({ email: snapshot.val().email });
+                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName))
+                AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email))
+                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco))
               }
               if (snapshot.val().loginType === "Facebook") {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL.data.url });
                 this.setState({ email: snapshot.val().email });
+                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName));
+                AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email));
+                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco));
               } else {
-                this.setState({name: snapshot.val().nickName})
+                this.setState({name: snapshot.val().nickName});
                 this.setState({ email: snapshot.val().email });
+                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName));
+                AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email));
+                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco));
               }
             }.bind(this)
           );
