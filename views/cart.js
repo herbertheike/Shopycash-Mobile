@@ -180,20 +180,15 @@ export default class Cart extends React.Component {
 						<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
 					  }>	
 						{cartItems && cartItems.map((item, i) => (
-							<View key={i} style={{flexDirection: 'row', backgroundColor: '#fff', marginBottom: 2, height: 120}}>
-								<View style={[styles.centerElement, {width: 60}]}>
-									<TouchableOpacity style={[styles.centerElement, {width: 32, height: 32}]} onPress={() => this.selectHandler(i, item.checked)}>
-										<Icon name={item.checked == 1 ? "check-square" : "square"} size={25} color={item.checked == 1 ? "#0faf9a" : "#aaaaaa"} />
-									</TouchableOpacity>
-								</View>
+							<View key={i} style={{flexDirection: 'row', backgroundColor: '#fff', marginBottom: 2, height: 120}}>	
 								<View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, alignSelf: 'center'}}>
-									<TouchableOpacity onPress={() => {/*this.props.navigation.navigate('ProductDetails', {productDetails: item})*/}} style={{paddingRight: 10}}>
-										<Image source={{uri: item.imagem}} style={[styles.centerElement, {height: 60, width: 60, backgroundColor: '#eeeeee'}]} />
+									<TouchableOpacity onPress={() => {/*this.props.navigation.navigate('ProductDetails', {productDetails: item})*/}} style={{padding: 10}}>
+										<Image source={{uri: item.imagem}} style={[styles.centerElement, {height: 80, width: 80, backgroundColor: '#eeeeee'}]} />
 									</TouchableOpacity>
 									<View style={{flexGrow: 1, flexShrink: 1, alignSelf: 'center'}}>
 										<Text numberOfLines={1} style={{fontSize: 15}}>{item.name}</Text>
 										<Text numberOfLines={1} style={{color: '#8f8f8f'}}>{item.categoria ? 'Categoria: ' + item.categoria : ''}</Text>
-                    <Text numberOfLines={1} style={{color: '#333333', marginBottom: 10}}>R${item.qty * item.price}</Text>
+                    					<Text numberOfLines={1} style={{color: '#333333', marginBottom: 10}}>R${item.qty * item.price.toFixed(2)}</Text>
 										<View style={{flexDirection: 'row'}}>
 											
 											<Text style={{ borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#cccccc', paddingHorizontal: 7, paddingTop: 3, color: '#bbbbbb', fontSize: 13 }}>Quantidade: {item.qty}</Text>
@@ -221,10 +216,10 @@ export default class Cart extends React.Component {
 								</View>
 							</View>
 							<View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, justifyContent: 'space-between', alignItems: 'center'}}>
-								<Text>Cupom</Text>
-								<View style={{paddingRight: 20}}>
+								<Text style={{fontSize: 18,fontWeight: "bold"}}>Cupom</Text>
+								<View style={{paddingRight: 18}}>
 									<TextInput 
-										style={{paddingHorizontal: 10, backgroundColor: '#f0f0f0', height: 25, borderRadius: 4}} 
+										style={{paddingHorizontal: 10, backgroundColor: '#f0f0f0', height: 30, borderRadius: 4}} 
 										placeholder="Digite codigo do cupom" 
 										value={''}
 										onChangeText={(searchKeyword) => {
@@ -235,22 +230,16 @@ export default class Cart extends React.Component {
 							</View>
 						</View>
 						<View style={{flexDirection: 'row'}}>
-							<View style={[styles.centerElement, {width: 60}]}>
-								<TouchableOpacity style={[styles.centerElement, {width: 32, height: 32}]} onPress={() => this.selectHandlerAll(selectAll)}>
-									<Icon name={selectAll == true ? "check-square" : "square"} size={25} color={selectAll == true ? "#0faf9a" : "#aaaaaa"} />
-								</TouchableOpacity>
-							</View>
-							<View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, justifyContent: 'space-between', alignItems: 'center'}}>
-								<Text>Selecionar tudo</Text>
-								<View style={{flexDirection: 'row', paddingRight: 20, alignItems: 'center'}}>
-									<Text style={{color: '#8f8f8f'}}>SubTotal: </Text>
-									<Text>R${this.subtotalPrice().toFixed(2)}</Text>
+							<View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, justifyContent: 'flex-end', alignItems: 'center', paddingTop:10}}>
+								<View style={{flexDirection: 'row', paddingRight: 20, alignItems: 'flex-end'}}>
+									<Text style={{color: '#8f8f8f',fontSize: 15,fontWeight: "bold"}}>SubTotal: </Text>
+									<Text style={{fontSize: 15,fontWeight: "bold"}}>R${this.subtotalPrice().toFixed(2)}</Text>
 								</View>
 							</View>
 						</View>
-						<View style={{flexDirection: 'row', justifyContent: 'flex-end', height: 32, paddingRight: 20, alignItems: 'center'}}>
-							<TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]} onPress={() => this.checkOut()}>
-								<Text style={{color: '#ffffff'}}>Checkout</Text>
+						<View style={{flexDirection: 'row', justifyContent: 'flex-end', height: 42, paddingRight: 20, alignItems: 'center', justifyContent:'flex-end'}}>
+							<TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height:25, borderRadius: 5}]} onPress={() => this.checkOut()}>
+								<Text style={{color: '#ffffff',fontSize: 12,fontWeight: "bold"}}>Checkout</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -259,3 +248,12 @@ export default class Cart extends React.Component {
 		);
 	}
 }
+/*
+//checked event
+<View style={[styles.centerElement, {width: 60}]}>
+									<TouchableOpacity style={[styles.centerElement, {width: 32, height: 32}]} onPress={() => this.selectHandler(i, item.checked)}>
+										<Icon name={item.checked == 1 ? "check-square" : "square"} size={25} color={item.checked == 1 ? "#0faf9a" : "#aaaaaa"} />
+									</TouchableOpacity>
+								</View>
+								
+								*/

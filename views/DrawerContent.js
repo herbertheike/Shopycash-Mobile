@@ -22,6 +22,11 @@ export class DrawerContentMenu extends React.Component {
     super(props);
   }
 
+
+  clearAsyncStorage = async() => {
+    AsyncStorage.clear();
+}
+
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -183,7 +188,7 @@ export class DrawerContentMenu extends React.Component {
               )}
               label="Sair"
               onPress={() => {
-                firebase.auth().signOut();
+                firebase.auth().signOut(), this.clearAsyncStorage()
               }}
             />
           </Drawer.Section>

@@ -29,36 +29,6 @@ import * as Location from "expo-location";
 
 
 const Drawer = createDrawerNavigator();
-const ColorCode = [
-  "#E5454C",
-  "#5653d4",
-  "#08a791",
-  "#faa33f",
-  "#b6644f",
-  "#fb3061",
-  "#E5454C",
-  "#5653d4",
-  "#08a791",
-  "#faa33f",
-  "#b6644f",
-  "#fb3061",
-  "#E5454C",
-  "#5653d4",
-  "#08a791",
-  "#faa33f",
-  "#b6644f",
-  "#fb3061",
-  "#E5454C",
-  "#5653d4",
-  "#08a791",
-  "#faa33f",
-  "#b6644f",
-  "#fb3061",
-  "#E5454C",
-  "#5653d4",
-  "#08a791",
-  "#faa33f",
-];
 //função principal
 function HomeScreen(props) {
   const [search, setSearch] = useState();
@@ -239,7 +209,7 @@ function HomeScreen(props) {
                     width: 100,
                     height: 100,
                     borderRadius: 7,
-                    backgroundColor: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    backgroundColor: item.color,
                     color: "#FFFFFF",
                     marginHorizontal: 10,
                     alignItems: "center",

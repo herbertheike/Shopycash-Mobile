@@ -33,37 +33,7 @@ function Categorias(props) {
       color="#53aaa8"
       size={25}
     />
-  );
-  const ColorCode = [
-    "#E5454C",
-    "#5653d4",
-    "#08a791",
-    "#faa33f",
-    "#b6644f",
-    "#fb3061",
-    "#E5454C",
-    "#5653d4",
-    "#08a791",
-    "#faa33f",
-    "#b6644f",
-    "#fb3061",
-    "#E5454C",
-    "#5653d4",
-    "#08a791",
-    "#faa33f",
-    "#b6644f",
-    "#fb3061",
-    "#E5454C",
-    "#5653d4",
-    "#08a791",
-    "#faa33f",
-    "#b6644f",
-    "#fb3061",
-    "#E5454C",
-    "#5653d4",
-    "#08a791",
-    "#faa33f",
-  ];
+  ); 
   useEffect(async () => {
     await fetch("https://api-shopycash1.herokuapp.com/segmento")
       .then((response) => response.json())
@@ -127,7 +97,7 @@ function Categorias(props) {
                   width: 100,
                   height: 100,
                   borderRadius: 7,
-                  backgroundColor: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                  backgroundColor: item.color,
                   color: "#FFFFFF",
                   marginHorizontal: 10,
                   marginVertical: 10,

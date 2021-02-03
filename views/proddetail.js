@@ -83,7 +83,6 @@ function Prod(props) {
       imagem:value.imagem,
       checked: 1
     }
-console.log(itemcart)
     AsyncStorage.getItem('cart')
     .then((datacart)=>{
       if (datacart !== null) {
@@ -114,7 +113,7 @@ console.log(itemcart)
     }*/
   }
   
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const backicon = (
     <Icon
       name="arrow-left"
