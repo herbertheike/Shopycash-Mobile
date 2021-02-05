@@ -100,6 +100,7 @@ function HomeScreen(props) {
   const filtered = datal.filter((item) => {
     return item.nomefantasia.match(search) || item.shopping.match(search) || item.segmento[0].match(search);
   });
+  console.log(datal)
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header
@@ -254,7 +255,7 @@ function HomeScreen(props) {
                   color="#ffffff"
                   onPress={() =>
                     navigation.navigate("LojaDetail", {
-                      params: { id: item._id, logo: item.Logo },
+                      params: { id: item._id, logo: item.Logo, shoppingid: item.shopping_id },
                     })
                   }
                 >

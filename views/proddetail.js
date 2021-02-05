@@ -40,7 +40,6 @@ function Prod(props) {
     })();
   }, []);
 
-  console.log( "data prod:" +JSON.stringify(proddat))
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -75,12 +74,16 @@ function Prod(props) {
   );
   const storeData = async (value) => {
     const itemcart = {
-      id: value._id,
-      name: value.nome,
+      produtoid: value._id,
+      produto: value.nome,
       categoria: value.categoria,
+      unitPrice: value.preco,
       qty:  count,
-      price: value.preco,
       imagem:value.imagem,
+      loja: value.loja,
+      lojaid: value.loja_id,
+      shopping:value.shopping,
+      shoppingid:props.route.params.params.shoppingid,
       checked: 1
     }
     AsyncStorage.getItem('cart')
@@ -127,7 +130,7 @@ function Prod(props) {
     props.route.params.params.imagem,
     props.route.params.params.imagem2,
   ];
-  console.log(props.route.params.params.nome);
+  console.log(props.route.params.params);
   return (
     <ParallaxScrollView
       backgroundColor="rgba(232, 232, 232, 0)"

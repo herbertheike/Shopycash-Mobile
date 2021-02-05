@@ -28,6 +28,8 @@ export default class Cart extends React.Component {
       cartItems: [],
       totalPrice: 0,
       refreshing: false,
+      checkout:[],
+      jsonarray:[]
     };
   }
 
@@ -111,7 +113,7 @@ export default class Cart extends React.Component {
     const { cartItems } = this.state;
     if (cartItems) {
       return cartItems.reduce(
-        (sum, item) => sum + (item.checked == 1 ? item.qty * item.price : 0),
+        (sum, item) => sum + (item.checked == 1 ? item.qty * item.unitPrice : 0),
         0
       );
     }
@@ -140,58 +142,72 @@ export default class Cart extends React.Component {
     this.wait(2000).then(() => this.setState({ refreshing: false }));
   };
 
-  checkOut = async (item) => {
+  repopulate = async () => {
     const newItems = [...this.state.cartItems];
-    const newPrice = this.subtotalPrice();
+    const jsonarray = this.state.jsonarray;
+    for(var i=0; i<= newItems.length;i++){
+      try {
+        const obj = JSON.parse(JSON.stringify({
+          produtoid: newItems[i].produtoid,
+          produto:newItems[i].produto,
+          categoria:newItems[i].categoria,
+          unitPrice:newItems[i].unitPrice,
+          qty: newItems[i].qty,
+          image: newItems[i].imagem,
+          loja:newItems[i].loja,
+          lojaid: newItems[i].lojaid,
+          shopping: newItems[i].shopping,
+          shoppingid: newItems[i].shoppingid,
+          modifiedAt: Date.now()       
+    }))
+    if(i<= newItems.length){
+      jsonarray.push(obj);
+    }
+    //console.log(jsonarray)
+      } catch (error) {
+        console.log("THIS ERROR"+error)
+      }
+      
+  }
+  }
+  checkOut = async (item) => {
     const nome = await AsyncStorage.getItem("nome");
     const endereco = await AsyncStorage.getItem("endereco");
-    const email = await AsyncStorage.getItem("email");
     const user = firebase.auth().currentUser;
-    /*await firebase
-		.database()
-		.ref("/cart/"+user.uid+"/"+Date.now())
-		.set({
-		  nickName: JSON.parse(nome),
-		  endereco: JSON.parse(endereco),
-		  email:JSON.parse(email),
-		  cartItems:[newItems],
-		  price:newPrice,
-		  createAt: Date.now(),
-		});*/
-    console.log(item);
-    await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid, {
+   try {
+     this.repopulate()
+    console.log(this.state.jsonarray)
+     await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid, {
 				method: "POST",
 				headers: {
 				  Accept: "application/json",
 				  "Content-Type": "application/json",
 				},
 					body: JSON.stringify({
-						produto:item.nome,
-						categoria:item.categoria,
-						unitPrice: newPrice,
-						userId:user.uid,
-						nome:nome,
-						image: item.imagem,
-						loja:item.loja,
-						loja_id: item.lojaid,
-						shopping: item.shopping,
-						shopping_id: item.shoppingid,
-						isExpired: false,
-						modifiedAt: 456456,
+            cartitens:
+            [...this.state.jsonarray],
+              adress:endereco,
 							shipping:[{
 								type: "Delivery Center",
-								price:5.90
 							},
 								{
 								type: "Retirar na Loja",
 								price:0
-								}]			
+                }],
+            userId:user.uid,
+            nome:nome,
+            isExpired: false,
+            subTotal: this.subtotalPrice()			
 				}),
 				  })
 			  .then((response) => response.json())
-			  .then((res) => this.setState({cartItems: res}))
+			  .then((res) => this.setState({checkout: res}))
 			  .catch((error) => console.error(error))
-			  .finally(() => setLoading(false),[]);
+        .finally(() => setLoading(false),[])       
+   } catch (error) {
+     console.log(error)
+   }
+   this.state.jsonarray.length = 0;
   };
 
   render() {
@@ -292,7 +308,8 @@ export default class Cart extends React.Component {
                         numberOfLines={1}
                         style={{ color: "#333333", marginBottom: 10 }}
                       >
-                        R${item.qty * item.price.toFixed(2)}
+                        Preço unitario: R${item.unitPrice.toFixed(2)}
+                        Preço somado: R${item.qty * item.unitPrice.toFixed(2)}
                       </Text>
                       <View style={{ flexDirection: "row" }}>
                         <Text

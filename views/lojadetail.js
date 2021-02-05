@@ -45,7 +45,7 @@ export default function Getloja(props) {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  console.log(lojaparam);
+  console.log(props.route.params.params);
   return (
     <ParallaxScrollView
       backgroundColor="#FFFFFF"
@@ -179,7 +179,6 @@ function ProdCat() {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  console.log(JSON.stringify(data) + "   produto");
   return (
     <View>
       <Text
@@ -248,7 +247,6 @@ function ProdCat() {
         keyExtractor={({ key }, id) => key}
         renderItem={({ item }) => {
           const datacadnome = item.nome;
-          console.log(datacadnome);
           return (
             <View style={styles.container}>
               <Text
@@ -298,6 +296,7 @@ function ProdCat() {
                                 ativo: item.ativo,
                                 imagem: item.imagem,
                                 imagem2: item.imagem2,
+                                shoppingid: route.params.params.shoppingid,
                               },
                             })
                           }

@@ -113,7 +113,7 @@ function GetShoppings(props) {
         }
         rightComponent={carticon}
         containerStyle={{
-          backgroundColor: "#E8E8E8",
+          backgroundColor: "#FFFFFF",
           justifyContent: "space-around",
         }}
       />
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#ffffff",
   },
   cashbackdesk: {
     fontSize: 60,
