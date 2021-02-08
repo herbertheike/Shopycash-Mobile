@@ -287,7 +287,7 @@ export default class Cart extends React.Component {
                         source={{ uri: item.imagem }}
                         style={[
                           styles.centerElement,
-                          { height: 80, width: 80, backgroundColor: "#eeeeee" },
+                          { height: 90, width: 90, backgroundColor: "#eeeeee" },
                         ]}
                       />
                     </TouchableOpacity>
@@ -298,27 +298,24 @@ export default class Cart extends React.Component {
                         alignSelf: "center",
                       }}
                     >
-                      <Text numberOfLines={1} style={{ fontSize: 15 }}>
-                        {item.name}
+                      <Text numberOfLines={1} style={{ fontSize: 16 }}>
+                        {item.produto}
                       </Text>
-                      <Text numberOfLines={1} style={{ color: "#8f8f8f" }}>
+                      <Text numberOfLines={1} style={{ color: "#8f8f8f",fontSize: 12 }}>
                         {item.categoria ? "Categoria: " + item.categoria : ""}
                       </Text>
                       <Text
                         numberOfLines={1}
-                        style={{ color: "#333333", marginBottom: 10 }}
+                        style={{ color: "#333333", marginBottom: 10,fontSize: 15 }}
                       >
-                        Preço unitario: R${item.unitPrice.toFixed(2)}
-                        Preço somado: R${item.qty * item.unitPrice.toFixed(2)}
+                        Preço: R${item.qty * item.unitPrice.toFixed()}
                       </Text>
                       <View style={{ flexDirection: "row" }}>
                         <Text
                           style={{
-                            borderTopWidth: 1,
-                            borderBottomWidth: 1,
                             borderColor: "#cccccc",
-                            paddingHorizontal: 7,
-                            paddingTop: 3,
+                            paddingHorizontal: 1,
+                            paddingTop: 2,
                             color: "#bbbbbb",
                             fontSize: 13,
                           }}
@@ -333,7 +330,7 @@ export default class Cart extends React.Component {
                       style={[styles.centerElement, { width: 32, height: 32 }]}
                       onPress={() => this.deleteHandler(i)}
                     >
-                      <Icon name="trash-alt" size={25} color="#ee4d2d" />
+                      <Icon name="trash-alt" size={30} color="#ee4d2d" />
                     </TouchableOpacity>
                   </View>
                 </View>
