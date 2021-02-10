@@ -144,8 +144,9 @@ export default class Cart extends React.Component {
 
   repopulate = async () => {
     const newItems = [...this.state.cartItems];
+    //console.log(newItems)
     const jsonarray = this.state.jsonarray;
-    for(var i=0; i<= newItems.length;i++){
+    for(var i=0; i< newItems.length;i++){
       try {
         const obj = JSON.parse(JSON.stringify({
           produtoid: newItems[i].produtoid,
@@ -158,7 +159,7 @@ export default class Cart extends React.Component {
           lojaid: newItems[i].lojaid,
           shopping: newItems[i].shopping,
           shoppingid: newItems[i].shoppingid,
-          modifiedAt: Date.now()       
+          modifiedAt: Date.now()      
     }))
     if(i<= newItems.length){
       jsonarray.push(obj);
@@ -176,7 +177,7 @@ export default class Cart extends React.Component {
     const user = firebase.auth().currentUser;
    try {
      this.repopulate()
-    console.log(this.state.jsonarray)
+    //console.log(this.state.jsonarray)
      await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid, {
 				method: "POST",
 				headers: {
@@ -431,9 +432,11 @@ export default class Cart extends React.Component {
               <Text
                 style={{ color: "#ffffff", fontSize: 12, fontWeight: "bold" }}
               >
+                {console.log(this.state.checkout)}
                 Checkout
               </Text>
             </TouchableOpacity>
+            
 		  </View>
         </View>
       </View>

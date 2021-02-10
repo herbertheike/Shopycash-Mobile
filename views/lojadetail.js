@@ -23,6 +23,7 @@ export default function Getloja(props) {
       size={25}
       color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
+      onPress={() => props.navigation.navigate('Cart')}
     />
   );
   const backicon = (
@@ -45,7 +46,7 @@ export default function Getloja(props) {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  console.log(props.route.params.params);
+  //console.log(props.route.params.params);
   return (
     <ParallaxScrollView
       backgroundColor="#FFFFFF"
@@ -157,6 +158,7 @@ function ProdCat() {
   const [data2, setData2] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();
+  const shid = route.params.params.shoppingid;
 
   useEffect(() => {
     fetch(
@@ -179,6 +181,7 @@ function ProdCat() {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+  console.log(shid)
   return (
     <View>
       <Text
@@ -223,6 +226,7 @@ function ProdCat() {
                       ativo: item.ativo,
                       imagem: item.imagem,
                       imagem2: item.imagem2,
+                      shoppingid: route.params.params.shoppingid,
                     },
                   })
                 }
