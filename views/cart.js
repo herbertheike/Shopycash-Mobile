@@ -29,7 +29,17 @@ export default class Cart extends React.Component {
       totalPrice: 0,
       refreshing: false,
       checkout:[],
-      jsonarray:[]
+      jsonarray:[],
+      shipping:[{
+        type: "Delivery Center",
+        price:5.99,
+        checked: 0
+      },
+        {
+        type: "Retirar na Loja",
+        price:0,
+        checked: 0
+        }]
     };
   }
 
@@ -188,13 +198,7 @@ export default class Cart extends React.Component {
             cartitens:
             [...this.state.jsonarray],
               adress:endereco,
-							shipping:[{
-								type: "Delivery Center",
-							},
-								{
-								type: "Retirar na Loja",
-								price:0
-                }],
+							shipping:[...this.state.shipping],
             userId:user.uid,
             nome:nome,
             isExpired: false,
@@ -204,11 +208,13 @@ export default class Cart extends React.Component {
 			  .then((response) => response.json())
 			  .then((res) => this.setState({checkout: res}))
 			  .catch((error) => console.error(error))
-        .finally(() => setLoading(false),[])       
+        .finally(() => setLoading(false),[]);
+              
    } catch (error) {
      console.log(error)
    }
    this.state.jsonarray.length = 0;
+   this.props.navigation.navigate("Checkout", {params:{nome:nome, end:endereco, shippingoptions: this.state.shipping}})
   };
 
   render() {

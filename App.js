@@ -22,6 +22,7 @@ import InviteView from "./views/inviteview"
 import TermsAndConditions from "./views/userterms"
 import Profile from "./views/userProfile"
 import Cart from "./views/cart"
+import Checkout from "./views/checkout"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
 
@@ -133,6 +134,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="Cart"
             component={Cart}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="Checkout"
+            component={Checkout}
             options={{ headerShown: false }}
           />
           <MainStack.Screen
