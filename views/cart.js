@@ -30,6 +30,7 @@ export default class Cart extends React.Component {
       refreshing: false,
       checkout:[],
       jsonarray:[],
+      jsonarray2:[],
       shipping:[{
         type: "Delivery Center",
         price:5.99,
@@ -214,7 +215,20 @@ export default class Cart extends React.Component {
      console.log(error)
    }
    this.state.jsonarray.length = 0;
-   this.props.navigation.navigate("Checkout", {params:{nome:nome, end:endereco, shippingoptions: this.state.shipping}})
+   console.log("checkout: \n"+ JSON.stringify(this.state.checkout.status))
+   if(this.state.checkout.status== 'OK'){
+    this.props.navigation.navigate("Checkout", {
+      params:{
+       nome:nome,
+       end:endereco,
+       subtotal:this.subtotalPrice(),
+       userId:user.uid,
+       cartid:this.state.checkout.InsertID,
+       produtos:this.state.jsonarray}})
+   }else{
+      Alert.alert("Shopycash Payment", "Infelizmente houve um problema com seu carrinho.\nVerique os produtos e tente novamente.")
+   }
+   
   };
 
   render() {
@@ -438,7 +452,7 @@ export default class Cart extends React.Component {
               <Text
                 style={{ color: "#ffffff", fontSize: 12, fontWeight: "bold" }}
               >
-                {console.log(this.state.checkout)}
+                
                 Checkout
               </Text>
             </TouchableOpacity>

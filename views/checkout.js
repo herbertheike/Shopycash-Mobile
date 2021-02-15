@@ -1,41 +1,41 @@
 import React from "react";
 import {
   StyleSheet,
-  Button,
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-  TextInput,
-  Alert,
-  FlatList
+  KeyboardAvoidingView,
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
-import { TouchableNativeFeedbackBase } from "react-native";
 import firebase from "firebase";
 import { Title } from "react-native-paper";
-
+import DropDownPicker from 'react-native-dropdown-picker';
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cartItems: [],
-      subtotalPrice: 0,
+      cartid: this.props.route.params.params.cartid,
+      subtotalPrice: this.props.route.params.params.subtotal,
+      end: this.props.route.params.params.endereco,
       fretePrice: 0,  
       totalPrice: 0,
-      deliveryopt:[...this.props.route.params.params.shippingoptions],
-      jsonarray:[]
+      deliveryopt:[{
+          "label": "Delivery Center",
+          "value": 5.99,
+        },{
+          "label": "Retirar na Loja",
+          "value": 0,
+        }],
     };
   }
 
   componentDidMount() {
     
   }
+    
 
   selectHandler = (index, value) => {
     const newDelivery = [...this.state.deliveryopt]; // clone the array
@@ -83,34 +83,35 @@ export default class Checkout extends React.Component {
       
   }
   }
+
+
+
   checkOut = async (item) => {
     const nome = await AsyncStorage.getItem("nome");
     const endereco = await AsyncStorage.getItem("endereco");
     const user = firebase.auth().currentUser;
+    const cartid = this.state.cartid;
    try {
      this.repopulate()
     //console.log(this.state.jsonarray)
-     await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid, {
-				method: "POST",
+     await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid+"/"+cartid, {
+				method: "GET",
 				headers: {
 				  Accept: "application/json",
 				  "Content-Type": "application/json",
 				},
 					body: JSON.stringify({
-            cartitens:
-            [...this.state.jsonarray],
-              adress:endereco,
-							shipping:[{
-								type: "Delivery Center",
-							},
-								{
-								type: "Retirar na Loja",
-								price:0
-                }],
+            /*cartid:cartid,
+            adress:endereco,
+            tipodeenvio:shippignmethod,
+            frete: shippingtax,
             userId:user.uid,
             nome:nome,
-            isExpired: false,
-            subTotal: this.subtotalPrice()			
+            subtotal:,
+            impostos:,
+            total:,
+            datadacompra:,
+            vencimento:,*/		
 				}),
 				  })
 			  .then((response) => response.json())
@@ -127,11 +128,11 @@ export default class Checkout extends React.Component {
     const styles = StyleSheet.create({
       centerElement: { justifyContent: "center", alignItems: "center" },
     });
-
-    const { cartItems, cartItemsIsLoading, selectAll } = this.state;
-    console.log(this.state.deliveryopt)
+    const newDelivery = this.state.newDelivery;
+    console.log(this.props.route.params.params)
     return (
-      <View style={{ flex: 1, backgroundColor: "#f6f6f6" }}>
+      
+      <ScrollView style={{ flex: 1, backgroundColor: "#f6f6f6", flexDirection:'column'}}>
         <Header
           statusBarProps={{ barStyle: "light-content" }}
           barStyle="light-content"
@@ -156,11 +157,8 @@ export default class Checkout extends React.Component {
             backgroundColor: "#ffffff",
             justifyContent: "space-around",
           }}
-        />
-
-        <View style={{flex: 1}}>
-
-          <View>
+        /><View>
+          <View style={{justifyContent:'space-around'}}>
             <Title>
               Comprador: 
             </Title>
@@ -177,27 +175,34 @@ export default class Checkout extends React.Component {
               {this.props.route.params.params.end}
             </Text>
           </View>
-
           <View>
+            <Title>
+              Compra Nº: 
+            </Title>
+            <Text>
+            {this.state.cartid}
+            </Text>
+          </View>
+
             <Title>
               Forma de entrega: 
             </Title>
-            <FlatList
-              data={this.state.deliveryopt}
-              keyExtractor={({ id }, item) => id}
-              renderItem={({item, i}) =>
-              <View style={{flexDirection: "row", paddingLeft: 10}}>
-							<TouchableOpacity style={{width: 40, height: 40, alignItems:'center'}} onPress={() => this.selectHandler(i, item.checked)}>
-								<Icon name={item.checked == 1 ? "check-square" : "square"} size={25} color={item.checked == 1 ? "#0faf9a" : "#aaaaaa"} />
-							</TouchableOpacity>
-              <Text style={{alignItems:'center', fontSize: 15}}> {item.type} - {item.price == 0 ? "Gratis!": item.price}</Text>
-						</View>
-            }
+            <DropDownPicker
+              items={[{ "label": "Delivery Center","value": 5.99},
+              {"label": "Retirar na Loja","value": 0}]}
+              defaultValue={0}
+              placeholder="Selecione um item"
+              containerStyle={{height: 40}}
+              style={{backgroundColor: '#fafafa'}}
+              itemStyle={{
+                  justifyContent: 'flex-start'
+              }}
+              dropDownStyle={{backgroundColor: '#fafafa'}}
+              onChangeItem={item => this.setState({
+                  fretePrice: item.value
+                })}
             />
-          </View>
-
-        </View>
-
+        
       <View
           style={{
             backgroundColor: "#fff",
@@ -231,7 +236,7 @@ export default class Checkout extends React.Component {
                   Produtos:{" "}
                 </Title>
                 <Text style={{ fontSize: 15, fontWeight: "bold", paddingLeft:20 }}>
-                  R${this.subtotalPrice().toFixed(2)}
+                  R${this.state.subtotalPrice.toFixed(2)}
                 </Text>
 
                 <Title
@@ -240,7 +245,7 @@ export default class Checkout extends React.Component {
                   Frete:{" "}
                 </Title>
                 <Text style={{ fontSize: 15, fontWeight: "bold", paddingLeft:20 }}>
-                  R${this.subtotalPrice().toFixed(2)}
+                  R${this.state.fretePrice.toFixed(2)}
                 </Text>
 
                 <Title
@@ -249,7 +254,7 @@ export default class Checkout extends React.Component {
                   Total:{" "}
                 </Title>
                 <Text style={{ fontSize: 15, fontWeight: "bold", paddingLeft:20 }}>
-                  R${this.subtotalPrice().toFixed(2)}
+                  R${(this.state.subtotalPrice+this.state.fretePrice).toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -278,14 +283,14 @@ export default class Checkout extends React.Component {
               <Text
                 style={{ color: "#ffffff", fontSize: 12, fontWeight: "bold" }}
               >
-                {console.log(this.state.checkout)}
                 Pagamento
               </Text>
             </TouchableOpacity>
             
-		  </View>
+                </View>
+            </View>
         </View>
-      </View>
+      </ScrollView>   
     );
   }
 }
