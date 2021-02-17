@@ -11,8 +11,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase from "firebase";
-import { Avatar, Title, Caption, TextInput, Button } from "react-native-paper";
+import { Avatar, Title, Caption, TextInput, Button, RadioButton } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
+import * as Location from "expo-location";
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +23,13 @@ export default class Checkout extends React.Component {
       end: this.props.route.params.params.endereco,
       nome: this.props.route.params.params.nome,
       shippingtax: 0,
+      logradouro: "",
+      referencia:"",
+      numero: "",
+      bairro: "",
+      cidade: "",
+      estado: "",
+      cep: "",
       shippingmethod: "",
       totalPrice: 0,
       deliveryopt: [
@@ -37,7 +45,9 @@ export default class Checkout extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.locale();
+  }
 
   selectHandler = (index, value) => {
     const newDelivery = [...this.state.deliveryopt]; // clone the array
@@ -109,7 +119,6 @@ export default class Checkout extends React.Component {
           },
           body: JSON.stringify({
             cartid: cartid,
-            adress: endereco,
             tipodeenvio: shippingmethod,
             frete: shippingtax,
             userId: user.uid,
@@ -132,14 +141,68 @@ export default class Checkout extends React.Component {
     this.state.jsonarray.length = 0;
   };
 
+
+  //Função  do gps
+  locale = async () => {
+    var location = null;
+    var errorMsg = null;
+    let address = [];
+    var pinIcon = (
+      <Icon
+        style={{ marginLeft: 10 }}
+        name="map-marker-alt"
+        color="#5eaaa8"
+        size={18}
+      />
+    );
+
+    try {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        errorMsg = "Permission to access location was denied";
+      }
+      let nlocation = await Location.getCurrentPositionAsync({});
+      location = nlocation;
+      let naddress = await Location.reverseGeocodeAsync({
+        longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+      });
+      address = naddress;
+    } catch (error) {
+      console.log(error);
+    }
+
+    let longitude = "Waiting..";
+    let latitude = "Waiting..";
+    let addressinfo = "Waiting..";
+    if (errorMsg) {
+      longitude = errorMsg;
+      latitude = errorMsg;
+      addressinfo = errorMsg;
+    } else if (address) {
+      longitude = JSON.stringify(location.coords.longitude);
+
+        this.setState({
+          logradouro: address[0].street,
+          numero: address[0].name,
+          bairro: "",
+          cidade: address[0].city == null ? "" : address[0].city,
+          estado: address[0].region,
+          cep: address[0].postalCode,
+        });
+    }
+    return console.log(address);
+  };
+
   render() {
     const styles = StyleSheet.create({
       centerElement: { justifyContent: "center", alignItems: "center" },
     });
     const newDelivery = this.state.newDelivery;
     console.log(this.props.route.params.params);
+    const temaInput = { colors: { text: 'black', placeholder:"#5eaaa8", primary:"#5eaaa8"}}
     return (
-      <KeyboardAvoidingView
+      <ScrollView
         style={{
           flex: 1,
           backgroundColor: "#ffffff",
@@ -172,57 +235,140 @@ export default class Checkout extends React.Component {
             justifyContent: "space-around",
           }}
         />
-        <View style={{ justifyContent:"space-around"}}>
-        <View>
+        <View style={{ justifyContent: "space-around" }}>
+          <View>
             <Title>Compra Nº:</Title>
-          <Text >{this.state.cartid}</Text>
+            <Text>{this.state.cartid}</Text>
           </View>
           <View style={{ justifyContent: "space-around" }}>
             <Title>Comprador:</Title>
-            <TextInput underlineColor={"#5eaaa8"} selectionColor={"#5eaaa8"}
-            style={{fontSize: 12, height:40, backgroundColor:"#fafafa"}}
-            value={this.state.nome}
-            onChangeText={text=> this.setState({ nome:text })}
+            <TextInput
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5}}
+              value={this.state.nome}
+              theme={temaInput}
+              onChangeText={(text) => this.setState({ nome: text })}
             />
           </View>
 
           <View>
-            <Title>Endereço:</Title>
-            <TextInput underlineColor={"#5eaaa8"} selectionColor={"#5eaaa8"}
-            style={{fontSize: 12, height:40, backgroundColor:"#fafafa"}}>{this.props.route.params.params.end}</TextInput>
+            <Title>Endereço de entrega</Title>
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={"Logradouro"}
+              value={this.state.logradouro}
+              theme={temaInput}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:'100%'}}
+              onChangeText={text => this.setState({logradouro:text })}
+            />
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={"Ponto de referencia"}
+              value={this.state.referencia}
+              theme={temaInput}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'100%'}}
+            />
+            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={'Numero'}
+              theme={temaInput}
+              value={this.state.numero}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'30%'}}
+            />
+
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={'Bairro'}
+              theme={temaInput}
+              value={this.state.bairro}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'70%'}}
+            />
+            </View>
+            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={'CEP'}
+              theme={temaInput}
+              value={this.state.cep}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"40%"}}
+            />
+
+            <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={'Cidade'}
+              theme={temaInput}
+              value={this.state.cidade}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"60%"}}
+            />
+            </View>
+            <TextInput
+              mode={"outlined"}
+              
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              label={'Estado'}
+              theme={temaInput}
+              value={this.state.estado}
+              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"50%"}}
+            />
           </View>
-          <Title>Forma de entrega: {this.state.shippingmethod}</Title>
-              <DropDownPicker
-                items={[
-                  { label: "Delivery Center", value: 5.99 },
-                  { label: "Retirar na Loja", value: 0 },
-                ]}
-                defaultValue={0}
-                placeholder="Selecione um item"
-                containerStyle={{ height: 40}}
-                dropDownStyle={{ backgroundColor: "#ffffff" }}
-                style={{ backgroundColor: "#ffffff"}}
-                itemStyle={{
-                  justifyContent: "flex-start",
-                }}
-                dropDownStyle={{ backgroundColor: "#fafafa" }}
-                onChangeItem={(item) =>
-                  this.setState({
-                    shippingtax: item.value,
-                    shippingmethod: item.label,
-                  })
-                }
-              />
+          <Title>Forma de entrega:</Title>
+          <RadioButton
+            value="first"
+            label={"teste"}
+            status={ this.state.shippingmethod === 'first' ? 'checked' : 'unchecked' }
+            onPress={value => this.setState({shippingmethod:value})}
+          />
+          <RadioButton
+            value="second"
+            status={ this.state.shippingmethod === 'second' ? 'checked' : 'unchecked' }
+            onPress={value => this.setState({shippingmethod:value})}
+          />
+          <DropDownPicker
+            items={[
+              { label: "Delivery Center", value: 5.99 },
+              { label: "Retirar na Loja", value: 0 },
+            ]}
+            defaultValue={0}
+            placeholder="Selecione um item"
+            containerStyle={{ height: 50,}}
+            dropDownStyle={{ backgroundColor: "#ffffff" }}
+            style={{ backgroundColor: "#ffffff" }}
+            itemStyle={{
+              justifyContent: "flex-start",
+            }}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            onChangeItem={(item) =>
+              this.setState({
+                shippingtax: item.value,
+                shippingmethod: item.label,
+              })
+            }
+          />
           <View
             style={{
               backgroundColor: "#fff",
               borderColor: "#5eaaa8",
               borderRadius: 5,
               marginTop: 10,
-              borderWidth:0.5
+              borderWidth: 0.5,
             }}
           >
-            <View style={{ flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -231,7 +377,7 @@ export default class Checkout extends React.Component {
                   justifyContent: "flex-start",
                   alignItems: "center",
                   paddingTop: 10,
-                  paddingLeft: 20
+                  paddingLeft: 20,
                 }}
               >
                 <View
@@ -256,6 +402,8 @@ export default class Checkout extends React.Component {
                       paddingLeft: 20,
                     }}
                   >
+                    {this.state.shippingmethod}
+
                     R${this.state.subtotalPrice.toFixed(2)}
                   </Text>
 
@@ -317,7 +465,7 @@ export default class Checkout extends React.Component {
                   {
                     backgroundColor: "#0faf9a",
                     width: 100,
-                    height: 25,
+                    height: 30,
                     borderRadius: 5,
                   },
                 ]}
@@ -332,10 +480,11 @@ export default class Checkout extends React.Component {
             </View>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
+
 /*
 //checked event
 <View style={[styles.centerElement, {width: 60}]}>
