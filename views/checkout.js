@@ -200,6 +200,7 @@ export default class Checkout extends React.Component {
     });
     const newDelivery = this.state.newDelivery;
     console.log(this.props.route.params.params);
+    const zero = 0.001;
     const temaInput = { colors: { text: 'black', placeholder:"#5eaaa8", primary:"#5eaaa8"}}
     return (
       <ScrollView
@@ -317,7 +318,6 @@ export default class Checkout extends React.Component {
             </View>
             <TextInput
               mode={"outlined"}
-              
               underlineColor={"#5eaaa8"}
               selectionColor={"#5eaaa8"}
               label={'Estado'}
@@ -325,25 +325,37 @@ export default class Checkout extends React.Component {
               value={this.state.estado}
               style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"50%"}}
             />
-          </View>
-          <Title>Forma de entrega:</Title>
-          <RadioButton
-            value="first"
-            label={"teste"}
-            status={ this.state.shippingmethod === 'first' ? 'checked' : 'unchecked' }
-            onPress={value => this.setState({shippingmethod:value})}
-          />
-          <RadioButton
-            value="second"
-            status={ this.state.shippingmethod === 'second' ? 'checked' : 'unchecked' }
-            onPress={value => this.setState({shippingmethod:value})}
-          />
-          <DropDownPicker
+            <DropDownPicker
             items={[
-              { label: "Delivery Center", value: 5.99 },
-              { label: "Retirar na Loja", value: 0 },
+              {label:"AC", value:"AC"},
+              {label:"AL", value:"AL"},
+              {label:"AP", value:"AP"},
+              {label:"AM", value:"AM"},
+              {label:"BA", value:"BA"},
+              {label:"CE", value:"CE"},
+              {label:"DF", value:"DF"},
+              {label:"ES", value:"ES"},
+              {label:"GO", value:"GO"},
+              {label:"MA", value:"MA"},
+              {label:"MT", value:"MT"},
+              {label:"MS", value:"MS"},
+              {label:"MG", value:"MG"},
+              {label:"PA", value:"PA"},
+              {label:"PB", value:"PB"},
+              {label:"PR", value:"PR"},
+              {label:"PE", value:"PE"},
+              {label:"PI", value:"PI"},
+              {label:"RJ", value:"RJ"},
+              {label:"RN", value:"RN"},
+              {label:"RS", value:"RS"},
+              {label:"RO", value:"RO"},
+              {label:"RR", value:"RR"},
+              {label:"SC", value:"SC"},
+              {label:"SP", value:"SP"},
+              {label:"SE", value:"SE"},
+              {label:"TO", value:"TO"}
             ]}
-            defaultValue={0}
+            defaultValue={"AC"}
             placeholder="Selecione um item"
             containerStyle={{ height: 50,}}
             dropDownStyle={{ backgroundColor: "#ffffff" }}
@@ -354,11 +366,17 @@ export default class Checkout extends React.Component {
             dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) =>
               this.setState({
-                shippingtax: item.value,
-                shippingmethod: item.label,
+                estado: item.value
               })
             }
           />
+          </View>
+          <Title>Forma de entrega:</Title>
+          <RadioButton.Group onValueChange={(value) => this.setState({shippingtax:value})} value={this.state.shippingtax} theme={temaInput}>
+            <RadioButton.Item color={"#5eaaa8"}label="Delivery Center" value={5.90} />
+            <RadioButton.Item label="Retirar na Loja" value={zero} />
+          </RadioButton.Group>
+          
           <View
             style={{
               backgroundColor: "#fff",
@@ -402,7 +420,6 @@ export default class Checkout extends React.Component {
                       paddingLeft: 20,
                     }}
                   >
-                    {this.state.shippingmethod}
 
                     R${this.state.subtotalPrice.toFixed(2)}
                   </Text>
