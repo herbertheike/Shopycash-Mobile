@@ -265,6 +265,7 @@ export default class Checkout extends React.Component {
               style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:'100%'}}
               onChangeText={text => this.setState({logradouro:text })}
             />
+            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
             <TextInput
               mode={"outlined"}
               underlineColor={"#5eaaa8"}
@@ -272,9 +273,9 @@ export default class Checkout extends React.Component {
               label={"Ponto de referencia"}
               value={this.state.referencia}
               theme={temaInput}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'100%'}}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:'70%'}}
+              onChangeText={text => this.setState({referencia:text })}
             />
-            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
             <TextInput
               mode={"outlined"}
               underlineColor={"#5eaaa8"}
@@ -282,9 +283,11 @@ export default class Checkout extends React.Component {
               label={'Numero'}
               theme={temaInput}
               value={this.state.numero}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'30%'}}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:'30%'}}
+              onChangeText={text => this.setState({numero:text })}
             />
-
+          </View>
+            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
             <TextInput
               mode={"outlined"}
               underlineColor={"#5eaaa8"}
@@ -292,10 +295,9 @@ export default class Checkout extends React.Component {
               label={'Bairro'}
               theme={temaInput}
               value={this.state.bairro}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:'70%'}}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:'60%'}}
+              onChangeText={text => this.setState({bairro:text })}
             />
-            </View>
-            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
             <TextInput
               mode={"outlined"}
               underlineColor={"#5eaaa8"}
@@ -303,8 +305,12 @@ export default class Checkout extends React.Component {
               label={'CEP'}
               theme={temaInput}
               value={this.state.cep}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"40%"}}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:"40%"}}
+              onChangeText={text => this.setState({cep:text })}
             />
+            </View>
+            <View style={{ justifyContent: 'space-around', flexDirection:'row'}}>
+            
 
             <TextInput
               mode={"outlined"}
@@ -313,63 +319,56 @@ export default class Checkout extends React.Component {
               label={'Cidade'}
               theme={temaInput}
               value={this.state.cidade}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"60%"}}
+              style={{ fontSize: 16, backgroundColor: "#fafafa", paddingHorizontal:5, width:"70%"}}
+              onChangeText={text => this.setState({cidade:text })}
             />
-            </View>
-            <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              label={'Estado'}
-              theme={temaInput}
-              value={this.state.estado}
-              style={{ fontSize: 18, backgroundColor: "#fafafa", paddingHorizontal:5, width:"50%"}}
-            />
+            
+
             <DropDownPicker
             items={[
-              {label:"AC", value:"AC"},
-              {label:"AL", value:"AL"},
-              {label:"AP", value:"AP"},
-              {label:"AM", value:"AM"},
-              {label:"BA", value:"BA"},
-              {label:"CE", value:"CE"},
-              {label:"DF", value:"DF"},
-              {label:"ES", value:"ES"},
-              {label:"GO", value:"GO"},
-              {label:"MA", value:"MA"},
-              {label:"MT", value:"MT"},
-              {label:"MS", value:"MS"},
-              {label:"MG", value:"MG"},
-              {label:"PA", value:"PA"},
-              {label:"PB", value:"PB"},
-              {label:"PR", value:"PR"},
-              {label:"PE", value:"PE"},
-              {label:"PI", value:"PI"},
-              {label:"RJ", value:"RJ"},
-              {label:"RN", value:"RN"},
-              {label:"RS", value:"RS"},
-              {label:"RO", value:"RO"},
-              {label:"RR", value:"RR"},
-              {label:"SC", value:"SC"},
-              {label:"SP", value:"SP"},
-              {label:"SE", value:"SE"},
-              {label:"TO", value:"TO"}
+              {label:"AC", value:"Acre"},
+              {label:"AL", value:"Alagoas"},
+              {label:"AP", value:"Amapá"},
+              {label:"AM", value:"Amazonas"},
+              {label:"BA", value:"Bahia"},
+              {label:"CE", value:"Ceará"},
+              {label:"DF", value:"Distrito Federal"},
+              {label:"ES", value:"Espírito Santo"},
+              {label:"GO", value:"Goiás"},
+              {label:"MA", value:"Maranhão"},
+              {label:"MT", value:"Mato Grosso"},
+              {label:"MS", value:"Mato Grosso do Sul"},
+              {label:"MG", value:"Minas Gerais"},
+              {label:"PA", value:"Pará"},
+              {label:"PB", value:"Paraíba"},
+              {label:"PR", value:"Paraná"},
+              {label:"PE", value:"Pernambuco"},
+              {label:"PI", value:"Piauí"},
+              {label:"RJ", value:"Rio de Janeiro"},
+              {label:"RN", value:"Rio Grande do Norte"},
+              {label:"RS", value:"Rio Grande do Sul"},
+              {label:"RO", value:"Rondônia"},
+              {label:"RR", value:"Roraima"},
+              {label:"SC", value:"Santa Catarina"},
+              {label:"SP", value:"São Paulo"},
+              {label:"SE", value:"Sergipe"},
+              {label:"TO", value:"Tocantins"}
             ]}
-            defaultValue={"AC"}
+            defaultValue={this.state.estado === "" ? "Acre" : this.state.estado}
             placeholder="Selecione um item"
-            containerStyle={{ height: 50,}}
-            dropDownStyle={{ backgroundColor: "#ffffff" }}
-            style={{ backgroundColor: "#ffffff" }}
+            containerStyle={{width:'30%', paddingTop:6, paddingRight:5}}
+            dropDownStyle={{ backgroundColor: "#fafafa" }}
+            style={{ fontSize: 16, backgroundColor: "#fafafa", borderColor:"#5eaaa8"}}
             itemStyle={{
               justifyContent: "flex-start",
             }}
-            dropDownStyle={{ backgroundColor: "#fafafa" }}
             onChangeItem={(item) =>
               this.setState({
                 estado: item.value
               })
             }
           />
+          </View>
           </View>
           <Title>Forma de entrega:</Title>
           <RadioButton.Group onValueChange={(value) => this.setState({shippingtax:value})} value={this.state.shippingtax} theme={temaInput}>
