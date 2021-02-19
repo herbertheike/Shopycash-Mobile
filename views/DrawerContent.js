@@ -41,7 +41,7 @@ export class DrawerContentMenu extends React.Component {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL });
                 this.setState({ email: snapshot.val().email });
-                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName))
+                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().displayName))
                 AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email))
                 AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco))
               }
@@ -49,7 +49,7 @@ export class DrawerContentMenu extends React.Component {
                 this.setState({ name: snapshot.val().nickName });
                 this.setState({ photoURL: snapshot.val().photoURL.data.url });
                 this.setState({ email: snapshot.val().email });
-                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName));
+                AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().displayName));
                 AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email));
                 AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco));
               } else {
