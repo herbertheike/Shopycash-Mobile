@@ -25,6 +25,7 @@ export default class Checkout extends React.Component {
     super(props);
     this.state = {
       resultcheckout:[],
+      produtos:[...this.props.route.params.params.produtos],
       cartid: this.props.route.params.params.cartid,
       subtotalPrice: this.props.route.params.params.subtotal,
       nome: this.props.route.params.params.nome,
@@ -114,6 +115,7 @@ export default class Checkout extends React.Component {
     const cep = this.state.cep
     const date = Date.now()
     const newDate = new Date();
+    const prod = [...this.state.produtos]
     const vencimento= newDate.setDate(date+30)
     try {
       await fetch(
@@ -140,14 +142,14 @@ export default class Checkout extends React.Component {
                 cep: cep,
               },
             ],
-            produtos: [{}],
+            produtos: [...prod],
             shippingmethod: shippingmethod,
             userId: user.uid,
             nome: nome,
             subTotal: subtotal,
             impostos: 0,
             shippingprice: shippingtax,
-            total: subtotal + shippingtax,
+            total: (subtotal + shippingtax).toFixed(2),
             datadacompra: date,
             vencimento: vencimento,
           }),
@@ -157,6 +159,9 @@ export default class Checkout extends React.Component {
         .then((res) => this.setState({ checkout: res }))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false), []);
+
+        this.state.produtos.length = 0;
+        prod.length = 0;
     } catch (error) {
       console.log(error);
     }
@@ -216,7 +221,6 @@ export default class Checkout extends React.Component {
   };
 
   render() {
-    console.log(this.state.shippingtax); 
     const newDelivery = this.state.newDelivery;
     const zero = 0.001;
     const temaInput = {
@@ -412,19 +416,19 @@ export default class Checkout extends React.Component {
                 />
                 <DropDownPicker
                   items={[
-                    { label: "AC", value: "Acre" },
-                    { label: "AL", value: "Alagoas" },
-                    { label: "AP", value: "Amapá" },
-                    { label: "AM", value: "Amazonas" },
-                    { label: "BA", value: "Bahia" },
-                    { label: "CE", value: "Ceará" },
-                    { label: "DF", value: "Distrito Federal" },
-                    { label: "ES", value: "Espírito Santo" },
-                    { label: "GO", value: "Goiás" },
-                    { label: "MA", value: "Maranhão" },
-                    { label: "MT", value: "Mato Grosso" },
-                    { label: "MS", value: "Mato Grosso do Sul" },
-                    { label: "MG", value: "Minas Gerais" },
+                    { label: "AC", value: "Acre"},
+                    { label: "AL", value: "Alagoas"},
+                    { label: "AP", value: "Amapá"},
+                    { label: "AM", value: "Amazonas"},
+                    { label: "BA", value: "Bahia"},
+                    { label: "CE", value: "Ceará"},
+                    { label: "DF", value: "Distrito Federal"},
+                    { label: "ES", value: "Espírito Santo"},
+                    { label: "GO", value: "Goiás"},
+                    { label: "MA", value: "Maranhão"},
+                    { label: "MT", value: "Mato Grosso"},
+                    { label: "MS", value: "Mato Grosso do Sul"},
+                    { label: "MG", value: "Minas Gerais"},
                     { label: "PA", value: "Pará" },
                     { label: "PB", value: "Paraíba" },
                     { label: "PR", value: "Paraná" },
@@ -502,8 +506,8 @@ export default class Checkout extends React.Component {
                   }}
                   onChangeItem={(item) =>
                     this.setState({
-                      shippingprice: item.value,
-                      shippingmethod:item.label
+                      shippingtax: item.value,
+                      //shippingmethod:item.label
                     })
                   }
                 />

@@ -157,6 +157,7 @@ export default class Cart extends React.Component {
     const newItems = [...this.state.cartItems];
     //console.log(newItems)
     const jsonarray = this.state.jsonarray;
+    const jsonarray2 = this.state.jsonarray2
     for(var i=0; i< newItems.length;i++){
       try {
         const obj = JSON.parse(JSON.stringify({
@@ -170,16 +171,19 @@ export default class Cart extends React.Component {
           lojaid: newItems[i].lojaid,
           shopping: newItems[i].shopping,
           shoppingid: newItems[i].shoppingid,
-          modifiedAt: Date.now()      
+          modifiedAt: Date.now()     
+        }))
+    const obj2 = JSON.parse(JSON.stringify({
+      produtoid: newItems[i].produtoid
     }))
     if(i<= newItems.length){
       jsonarray.push(obj);
+      jsonarray2.push(obj2);
     }
     //console.log(jsonarray)
       } catch (error) {
         console.log("THIS ERROR"+error)
-      }
-      
+      }   
   }
   }
   checkOut = async (item) => {
@@ -224,7 +228,7 @@ export default class Cart extends React.Component {
        subtotal:this.subtotalPrice(),
        userId:user.uid,
        cartid:this.state.checkout.InsertID,
-       produtos:this.state.jsonarray}})
+       produtos:this.state.jsonarray2}});       
    }else{
       Alert.alert("Shopycash Payment", "Infelizmente houve um problema com seu carrinho.\nVerique os produtos e tente novamente.")
    }
@@ -232,6 +236,7 @@ export default class Cart extends React.Component {
   };
 
   render() {
+    console.log(this.state.jsonarray2)
     const styles = StyleSheet.create({
       centerElement: { justifyContent: "center", alignItems: "center" },
     });
