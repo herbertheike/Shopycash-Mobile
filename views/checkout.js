@@ -29,7 +29,7 @@ export default class Checkout extends React.Component {
       cartid: this.props.route.params.params.cartid,
       subtotalPrice: this.props.route.params.params.subtotal,
       nome: this.props.route.params.params.nome,
-      shippingtax: 0,
+      shippingtax: [{label:'', value:0}],
       logradouro: "",
       referencia: "",
       numero: "",
@@ -114,9 +114,9 @@ export default class Checkout extends React.Component {
     const estado = this.state.estado
     const cep = this.state.cep
     const date = Date.now()
-    const newDate = new Date();
+    const newDate = new Date(date);
     const prod = [...this.state.produtos]
-    const vencimento= newDate.setDate(date+30)
+    const vencimento = newDate.setDate(30).toLocaleString('pt-BR', { timeZone: 'GMT+3' , timeStyle: "short"})
     try {
       await fetch(
         "https://api-shopycash1.herokuapp.com/checkout/" +
@@ -149,8 +149,8 @@ export default class Checkout extends React.Component {
             subTotal: subtotal,
             impostos: 0,
             shippingprice: shippingtax,
-            total: (subtotal + shippingtax).toFixed(2),
-            datadacompra: date,
+            total: (subtotal + shippingtax.value).toFixed(2),
+            datacompra: Date.now(),
             vencimento: vencimento,
           }),
         }
@@ -221,6 +221,7 @@ export default class Checkout extends React.Component {
   };
 
   render() {
+    console.log(this.state.shippingtax)
     const newDelivery = this.state.newDelivery;
     const zero = 0.001;
     const temaInput = {
@@ -483,7 +484,7 @@ export default class Checkout extends React.Component {
             
             <DropDownPicker
                   items={[
-                    { label: "Delivery Center", value: 5.90 },
+                    { label: "Delivery Center", value: 5.90},
                     { label: "Retirar na Loja", value: 0.001}
                   ]}
                   defaultValue={
@@ -491,9 +492,10 @@ export default class Checkout extends React.Component {
                   }
                   placeholder="Selecione um item"
                   containerStyle={{
-                    width: "30%",
+                    width: "100%",
+                    height:60,
                     paddingTop: 6,
-                    paddingRight: 5,
+                    paddingHorizontal: 5,
                   }}
                   dropDownStyle={{ backgroundColor: "#fafafa" }}
                   style={{
@@ -504,11 +506,8 @@ export default class Checkout extends React.Component {
                   itemStyle={{
                     justifyContent: "flex-start",
                   }}
-                  onChangeItem={(item) =>
-                    this.setState({
-                      shippingtax: item.value,
-                      //shippingmethod:item.label
-                    })
+                  onChangeItem={item =>
+                    this.setState({shippingtax:item})
                   }
                 />
 
@@ -571,7 +570,7 @@ export default class Checkout extends React.Component {
                         paddingLeft: 20,
                       }}
                     >
-                      R${this.state.shippingtax.toFixed(2)}
+                      R${this.state.shippingtax.value.toFixed(2)}
                     </Text>
 
                     <Text
@@ -592,8 +591,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice + this.state.shippingtax
-                      ).toFixed(2)}
+                        this.state.subtotalPrice + this.state.shippingtax.value.toFixed(2))}
                     </Text>
                   </View>
                 </View>
@@ -604,6 +602,7 @@ export default class Checkout extends React.Component {
                   justifyContent: "space-between",
                   height: 42,
                   paddingLeft: 20,
+                  paddingBottom: 20,
                   alignItems: "flex-end",
                 }}
               >
@@ -612,8 +611,9 @@ export default class Checkout extends React.Component {
                     styles.centerElement,
                     {
                       backgroundColor: "#0faf9a",
-                      width: 100,
-                      height: 30,
+                      width: 150,
+                      height: 35,
+                      padding: 10,
                       borderRadius: 5,
                     },
                   ]}
@@ -622,7 +622,7 @@ export default class Checkout extends React.Component {
                   <Text
                     style={{
                       color: "#ffffff",
-                      fontSize: 12,
+                      fontSize: 16,
                       fontWeight: "bold",
                     }}
                   >
