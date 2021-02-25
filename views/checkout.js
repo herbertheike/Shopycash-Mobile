@@ -29,7 +29,7 @@ export default class Checkout extends React.Component {
       cartid: this.props.route.params.params.cartid,
       subtotalPrice: this.props.route.params.params.subtotal,
       nome: this.props.route.params.params.nome,
-      shippingtax: [{label:'', value:0}],
+      shippingtax: 0,
       logradouro: "",
       referencia: "",
       numero: "",
@@ -507,7 +507,7 @@ export default class Checkout extends React.Component {
                     justifyContent: "flex-start",
                   }}
                   onChangeItem={item =>
-                    this.setState({shippingtax:item})
+                    this.setState({shippingtax:item.value})
                   }
                 />
 
@@ -570,7 +570,7 @@ export default class Checkout extends React.Component {
                         paddingLeft: 20,
                       }}
                     >
-                      R${this.state.shippingtax.value.toFixed(2)}
+                      R${this.state.shippingtax.toFixed(2)}
                     </Text>
 
                     <Text
@@ -591,7 +591,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice + this.state.shippingtax.value.toFixed(2))}
+                        this.state.subtotalPrice.toFixed(2) + this.state.shippingtax.toFixed(2))}
                     </Text>
                   </View>
                 </View>

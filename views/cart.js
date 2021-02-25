@@ -334,7 +334,7 @@ export default class Cart extends React.Component {
                         numberOfLines={1}
                         style={{ color: "#333333", marginBottom: 10,fontSize: 15 }}
                       >
-                        Preço: R${item.qty * item.unitPrice.toFixed()}
+                        Preço: R${item.qty * item.unitPrice}
                       </Text>
                       <View style={{ flexDirection: "row" }}>
                         <Text
