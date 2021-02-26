@@ -245,7 +245,7 @@ export default class Checkout extends React.Component {
               <Text
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 13 }}
               >
-                Checkout
+                Checkout - Entrega
               </Text>
             ))
           }
@@ -591,7 +591,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice.toFixed(2) + this.state.shippingtax.toFixed(2))}
+                        this.state.subtotalPrice + this.state.shippingtax)}
                     </Text>
                   </View>
                 </View>
