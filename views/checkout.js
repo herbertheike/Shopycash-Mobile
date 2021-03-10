@@ -149,7 +149,7 @@ export default class Checkout extends React.Component {
             subTotal: subtotal,
             impostos: 0,
             shippingprice: shippingtax,
-            total: (subtotal + shippingtax.value).toFixed(2),
+            total: (subtotal + shippingtax).toFixed(2),
             datacompra: Date.now(),
             vencimento: vencimento,
           }),
