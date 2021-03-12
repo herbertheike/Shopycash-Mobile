@@ -7,6 +7,7 @@ import {
   Image,
   Animated,
   TouchableOpacity,
+  ToastAndroid
 } from "react-native";
 import { Header, AirbnbRating, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -73,6 +74,9 @@ function Prod(props) {
     />
   );
   const storeData = async (value) => {
+    const showToast = () => {
+      ToastAndroid.show('Item adicionado ao carrinho', ToastAndroid.SHORT);
+    };
     const itemcart = {
       produtoid: value._id,
       produto: value.nome,
@@ -99,7 +103,7 @@ function Prod(props) {
         cart.push(itemcart)
         AsyncStorage.setItem('cart',JSON.stringify(cart));
       }
-      alert("Add Cart")
+      showToast()
     })
     .catch((err)=>{
       alert(err)
