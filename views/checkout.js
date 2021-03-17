@@ -148,7 +148,7 @@ export default class Checkout extends React.Component {
             nome: nome,
             subTotal: subtotal,
             impostos: 0,
-            shippingprice: shippingtax,
+            shippingprice: shippingtax, 
             total: (subtotal + shippingtax).toFixed(2),
             datacompra: Date.now(),
             vencimento: vencimento,
@@ -484,14 +484,15 @@ export default class Checkout extends React.Component {
             
             <DropDownPicker
                   items={[
-                    { label: "Delivery Center", value: 5.90},
+                    { label: "Entrega expressa (até 4 horas)", value: 8.90},
+                    { label: "Entrega convencional (até 1 dia)", value: 5.90},
                     { label: "Retirar na Loja", value: 0.001}
                   ]}
                   defaultValue={
                     this.state.shippingmethod
                   }
                   placeholder="Selecione um item"
-                  containerStyle={{
+                  containerStyle={{ 
                     width: "100%",
                     height:60,
                     paddingTop: 6,

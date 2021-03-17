@@ -75,7 +75,7 @@ function Prod(props) {
   );
   const storeData = async (value) => {
     const showToast = () => {
-      ToastAndroid.show('Item adicionado ao carrinho', ToastAndroid.SHORT);
+      ToastAndroid.show('Item adicionado a sacola', ToastAndroid.SHORT);
     };
     const itemcart = {
       produtoid: value._id,
