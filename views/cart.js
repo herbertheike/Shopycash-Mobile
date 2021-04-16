@@ -221,6 +221,7 @@ export default class Cart extends React.Component {
    this.state.jsonarray.length = 0;
    console.log("checkout: \n"+ JSON.stringify(this.state.checkout.status))
    if(this.state.checkout.status== 'OK'){
+     const cartstatus = await AsyncStorage.setItem("cartstatus", )
     this.props.navigation.navigate("Checkout", {
       params:{
        nome:nome,

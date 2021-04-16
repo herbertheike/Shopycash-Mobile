@@ -115,7 +115,7 @@ export default class Checkout extends React.Component {
     const cep = this.state.cep
     const date = Date.now()
     const newDate = new Date(date);
-    const prod = [...this.state.produtos]
+    const prod = this.state.produtos
     const vencimento = newDate.setDate(30).toLocaleString('pt-BR', { timeZone: 'GMT+3' , timeStyle: "short"})
     try {
       await fetch(

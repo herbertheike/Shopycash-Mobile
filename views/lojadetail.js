@@ -251,6 +251,7 @@ function ProdCat() {
         keyExtractor={({ key }, id) => key}
         renderItem={({ item }) => {
           const datacadnome = item.nome;
+          const datacadid = item._id;
           return (
             <View style={styles.container}>
               <Text
@@ -272,7 +273,7 @@ function ProdCat() {
                   extraData={datacadnome}
                   keyExtractor={({ key }, id) => key}
                   renderItem={({ item }) => {
-                    if (datacadnome == item.categoria) {
+                    if (datacadid == item.categoriaid) {
                       return (
                         <TouchableOpacity
                           style={{
