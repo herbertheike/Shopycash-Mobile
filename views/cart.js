@@ -26,21 +26,15 @@ export default class Cart extends React.Component {
       selectAll: false,
       cartItemsIsLoading: false,
       cartItems: [],
+      loja:AsyncStorage.getItem('loja'),
+      lojaid:AsyncStorage.getItem('lojaid'),
+      shopping:AsyncStorage.getItem('shopping'),
+      shoppingid:AsyncStorage.getItem('shoppingid'),
       totalPrice: 0,
       refreshing: false,
       checkout:[],
       jsonarray:[],
       jsonarray2:[],
-      shipping:[{
-        type: "Delivery Center",
-        price:5.99,
-        checked: 0
-      },
-        {
-        type: "Retirar na Loja",
-        price:0,
-        checked: 0
-        }]
     };
   }
 
@@ -166,12 +160,7 @@ export default class Cart extends React.Component {
           categoria:newItems[i].categoria,
           unitPrice:newItems[i].unitPrice,
           qty: newItems[i].qty,
-          image: newItems[i].imagem,
-          loja:newItems[i].loja,
-          lojaid: newItems[i].lojaid,
-          shopping: newItems[i].shopping,
-          shoppingid: newItems[i].shoppingid,
-          modifiedAt: Date.now()     
+          image: newItems[i].imagem,  
         }))
     const obj2 = JSON.parse(JSON.stringify({
       produtoid: newItems[i].produtoid
@@ -188,7 +177,10 @@ export default class Cart extends React.Component {
   }
   checkOut = async (item) => {
     const nome = await AsyncStorage.getItem("nome");
-    const endereco = await AsyncStorage.getItem("endereco");
+    const loja = this.state.loja;
+    const lojaid = this.state.lojaid;
+    const shopping = this.state.shopping;
+    const shoppingid = this.state.shoppingid;
     const user = firebase.auth().currentUser;
    try {
      this.repopulate()
@@ -200,13 +192,16 @@ export default class Cart extends React.Component {
 				  "Content-Type": "application/json",
 				},
 					body: JSON.stringify({
+            loja:loja,
+            loja_id: lojaid,
+            shopping: shopping,
+            shoppingid: shoppingid,
             cartitens:
             [...this.state.jsonarray],
-              adress:endereco,
-							shipping:[...this.state.shipping],
             userId:user.uid,
             nome:nome,
-            isExpired: false,
+            cartstatus:'checkout',
+            createAt: Date.now(),
             subTotal: this.subtotalPrice()			
 				}),
 				  })
@@ -220,8 +215,8 @@ export default class Cart extends React.Component {
    }
    this.state.jsonarray.length = 0;
    console.log("checkout: \n"+ JSON.stringify(this.state.checkout.status))
-   if(this.state.checkout.status== 'OK'){
-     const cartstatus = await AsyncStorage.setItem("cartstatus", )
+   if(this.state.checkout.status == 'OK'){
+     const cartstatus = await AsyncStorage.setItem("cartstatus",'checkout')
     this.props.navigation.navigate("Checkout", {
       params:{
        nome:nome,

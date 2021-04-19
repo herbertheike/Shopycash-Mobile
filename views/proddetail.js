@@ -36,8 +36,7 @@ function Prod(props) {
     "/"+props.route.params.params.idprod)
       .then((response) => response.json())
       .then((res) => setProdData(res))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false),[]);
+      .catch((error) => console.error(error));
     })();
   }, []);
 
@@ -74,9 +73,15 @@ function Prod(props) {
     />
   );
   const storeData = async (value) => {
+    /*console.log()
     const showToast = () => {
       ToastAndroid.show('Item adicionado a sacola', ToastAndroid.SHORT);
     };
+    const loja = value.loja;
+    const lojaid = value.loja_id;
+    const lojaidcart = AsyncStorage.getItem('lojaid')
+    const shopping = value.shopping;
+    const shoppingid = props.route.params.params.shoppingid
     const itemcart = {
       produtoid: value._id,
       produto: value.nome,
@@ -84,40 +89,107 @@ function Prod(props) {
       unitPrice: value.preco,
       qty:  count,
       imagem:value.imagem,
-      loja: value.loja,
-      lojaid: value.loja_id,
-      shopping:value.shopping,
-      shoppingid:props.route.params.params.shoppingid,
       checked: 1
     }
-    AsyncStorage.getItem('cart')
-    .then((datacart)=>{
-      if (datacart !== null) {
-        // We have data!!
-        const cart = JSON.parse(datacart)
-        cart.push(itemcart)
-        AsyncStorage.setItem('cart',JSON.stringify(cart));
-      }
-      else{
-        const cart  = []
-        cart.push(itemcart)
-        AsyncStorage.setItem('cart',JSON.stringify(cart));
-      }
-      showToast()
-    })
-    .catch((err)=>{
-      alert(err)
-    })
+        AsyncStorage.getItem('cart')
+        .then((datacart)=>{
+          if(datacart !== null) {
+            // Já existe items no carrinho!!
+            if(lojaidcart === lojaid){
+              //Os items são da mesma loja!!
+              const cart = JSON.parse(datacart)
+              cart.push(itemcart)
+              AsyncStorage.setItem('cart', JSON.stringify(cart));
+              showToast()
+          }else{
+            const rejectToast = () => {
+              ToastAndroid.show(`Só é possivel adionar produtos de uma mesma loja por pedido\n
+              encerre o pedido atual e tente novamente.`, ToastAndroid.LONG);
+              rejectToast()
+            };
+          }
+          }else if(datacart!== null && datacart.length <=0){
+            AsyncStorage.removeItem('cart')
+            AsyncStorage.removeItem('lojaid')
+            const cart  = []
+            cart.push(itemcart)
+             AsyncStorage.setItem('cart',JSON.stringify(cart));
+             AsyncStorage.setItem('loja', loja)
+             AsyncStorage.setItem('lojaid', lojaid)
+             AsyncStorage.setItem('shopping', shopping)
+             AsyncStorage.setItem('shoppingid', shoppingid)
+            console.log(loja)
+            console.log(lojaid)
+            showToast()
+          }
+          
+        })
+        .catch((err)=>{
+          alert(err)
+        })*/
+        const showToast = () => {
+          ToastAndroid.show('Item adicionado a sacola', ToastAndroid.SHORT);
+        };
+      try {
+        const lojaidcart = await AsyncStorage.getItem('lojaid')
+        const loja = value.loja;
+        const lojaid = value.loja_id;
+        const shopping = value.shopping;
+        const shoppingid = props.route.params.params.shoppingid
+        const itemcart = {
+          produtoid: value._id,
+          produto: value.nome,
+          categoria: value.categoria,
+          unitPrice: value.preco,
+          qty:  count,
+          imagem:value.imagem,
+          checked: 1
+        }
+        await AsyncStorage.getItem('cart')
+        .then((datacart)=>{
+          console.log('00000')
+          console.log(lojaidcart)
+          console.log(lojaid)
+          if(datacart !== null) {
+            // Já existe items no carrinho!!
+            console.log('111111')
+            if(lojaidcart === lojaid){
+              //Os items são da mesma loja!!
+              console.log('22222')
+              const cart = JSON.parse(datacart)
+              cart.push(itemcart)
+              AsyncStorage.setItem('cart', JSON.stringify(cart));
+              showToast()
+          }else{
+            console.log('9999')
+            const rejectToast = () => {
+              ToastAndroid.show(`Só é possivel adionar produtos de uma mesma loja por pedido encerre o pedido atual e tente novamente.`, ToastAndroid.LONG)}
+              rejectToast()
+            ;
+          }
+          }else if(datacart!== null && datacart.length <=0){
+            AsyncStorage.removeItem('cart')
+            AsyncStorage.removeItem('lojaid')
+            const cart  = []
+            cart.push(itemcart)
+             AsyncStorage.setItem('cart',JSON.stringify(cart));
+             AsyncStorage.setItem('loja', loja)
+             AsyncStorage.setItem('lojaid', lojaid)
+             AsyncStorage.setItem('shopping', shopping)
+             AsyncStorage.setItem('shoppingid', shoppingid)
+            console.log(loja)
+            console.log(lojaid)
+            showToast()
+          }
+          
+        })
+        .catch((err)=>{
+          alert(err)
+        })
 
-   /* try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('@product', jsonValue)
-      const jsonValueparse = await AsyncStorage.getItem("@product")
-      console.log("Sem parse: "+jsonValueparse);
-      //console.log(value)
-    } catch (e) {
-      // saving error
-    }*/
+      } catch (error) {
+        
+      }
   }
   
   const [count, setCount] = useState(1);
@@ -134,7 +206,7 @@ function Prod(props) {
     props.route.params.params.imagem,
     props.route.params.params.imagem2,
   ];
-  console.log(props.route.params.params);
+  //console.log(props.route.params.params);
   return (
     <ParallaxScrollView
       backgroundColor="rgba(232, 232, 232, 0)"
