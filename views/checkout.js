@@ -131,6 +131,8 @@ export default class Checkout extends React.Component {
           },
           body: JSON.stringify({
             cartid: cartid,
+            lojaid: "",
+            shoppingid: "",
             deliveryadress: [
               {
                 logradouro: logradouro,
@@ -143,12 +145,12 @@ export default class Checkout extends React.Component {
               },
             ],
             produtos: [...prod],
-            shippingmethod: shippingmethod,
             userId: user.uid,
             nome: nome,
-            subTotal: subtotal,
-            impostos: 0,
+            shippingmethod: shippingmethod,
             shippingprice: shippingtax, 
+            subTotal: subtotal,
+            taxes: 0,
             total: (subtotal + shippingtax).toFixed(2),
             datacompra: Date.now(),
             vencimento: vencimento,
@@ -592,7 +594,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice + this.state.shippingtax)}
+                        this.state.subtotalPrice + this.state.shippingtax).toFixed(2)}
                     </Text>
                   </View>
                 </View>

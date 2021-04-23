@@ -72,64 +72,46 @@ function Prod(props) {
       style={{ marginHorizontal: 10 }}
     />
   );
+
+
   const storeData = async (value) => {
-    /*console.log()
-    const showToast = () => {
-      ToastAndroid.show('Item adicionado a sacola', ToastAndroid.SHORT);
-    };
-    const loja = value.loja;
-    const lojaid = value.loja_id;
-    const lojaidcart = AsyncStorage.getItem('lojaid')
-    const shopping = value.shopping;
-    const shoppingid = props.route.params.params.shoppingid
-    const itemcart = {
-      produtoid: value._id,
-      produto: value.nome,
-      categoria: value.categoria,
-      unitPrice: value.preco,
-      qty:  count,
-      imagem:value.imagem,
-      checked: 1
-    }
-        AsyncStorage.getItem('cart')
-        .then((datacart)=>{
-          if(datacart !== null) {
-            // Já existe items no carrinho!!
-            if(lojaidcart === lojaid){
-              //Os items são da mesma loja!!
-              const cart = JSON.parse(datacart)
-              cart.push(itemcart)
-              AsyncStorage.setItem('cart', JSON.stringify(cart));
-              showToast()
-          }else{
-            const rejectToast = () => {
-              ToastAndroid.show(`Só é possivel adionar produtos de uma mesma loja por pedido\n
-              encerre o pedido atual e tente novamente.`, ToastAndroid.LONG);
-              rejectToast()
-            };
-          }
-          }else if(datacart!== null && datacart.length <=0){
-            AsyncStorage.removeItem('cart')
-            AsyncStorage.removeItem('lojaid')
-            const cart  = []
-            cart.push(itemcart)
-             AsyncStorage.setItem('cart',JSON.stringify(cart));
-             AsyncStorage.setItem('loja', loja)
-             AsyncStorage.setItem('lojaid', lojaid)
-             AsyncStorage.setItem('shopping', shopping)
-             AsyncStorage.setItem('shoppingid', shoppingid)
-            console.log(loja)
-            console.log(lojaid)
-            showToast()
-          }
-          
-        })
-        .catch((err)=>{
-          alert(err)
-        })*/
         const showToast = () => {
           ToastAndroid.show('Item adicionado a sacola', ToastAndroid.SHORT);
         };
+        const rejectToast = () => {
+          ToastAndroid.show(`Só é possivel adicionar produtos de uma mesma loja por pedido encerre o pedido atual e tente novamente.`, ToastAndroid.LONG)
+        };
+        
+        try {
+          await AsyncStorage.getItem('cart')
+          .then(async (datacart)=>{
+            const ver = JSON.parse(datacart);
+            console.log('negoça',ver );
+
+            if(!datacart){
+              console.log('JUMP')
+              AsyncStorage.setItem('cart',JSON.stringify([]))
+            }else{
+              if(ver.length === 0){
+                //Um carrinho esta vazio, então esta liberado para
+                //inserir produtos de uma nova loja
+                console.log('YES')
+                try {
+                  await AsyncStorage.removeItem('lojaid')
+                  return 0
+                } catch(e) {
+                  console.log(e)
+                }
+              }else{
+                return console.log("ver.length")
+              }}
+          }).catch((err)=>{
+            alert(err)
+          })
+        } catch(e) {
+          console.log(e)
+        }
+
       try {
         const lojaidcart = await AsyncStorage.getItem('lojaid')
         const loja = value.loja;
@@ -143,36 +125,49 @@ function Prod(props) {
           unitPrice: value.preco,
           qty:  count,
           imagem:value.imagem,
-          checked: 1
-        }
+          checked: 1}
+
+          
+      
         await AsyncStorage.getItem('cart')
-        .then((datacart)=>{
-          console.log('00000')
-          console.log(lojaidcart)
-          console.log(lojaid)
+        .then(async (datacart)=>{
           if(datacart !== null) {
-            // Já existe items no carrinho!!
-            console.log('111111')
-            if(lojaidcart === lojaid){
-              //Os items são da mesma loja!!
-              console.log('22222')
-              const cart = JSON.parse(datacart)
-              cart.push(itemcart)
-              AsyncStorage.setItem('cart', JSON.stringify(cart));
-              showToast()
-          }else{
-            console.log('9999')
-            const rejectToast = () => {
-              ToastAndroid.show(`Só é possivel adionar produtos de uma mesma loja por pedido encerre o pedido atual e tente novamente.`, ToastAndroid.LONG)}
-              rejectToast()
-            ;
-          }
-          }else if(datacart!== null && datacart.length <=0){
-            AsyncStorage.removeItem('cart')
-            AsyncStorage.removeItem('lojaid')
+            // Já existe  um carrinho!!
+            console.log('WE HAVE A CART')  
+            console.log('Lojacart ID: ', lojaidcart)
+            console.log('Loja ID:',lojaid)        
+              if(lojaidcart === lojaid){
+                //Já existe items de uma loja!!
+                console.log('CART WITH PRODUCT STORE ID SET')
+                const cart = JSON.parse(datacart)
+                cart.push(itemcart)
+                AsyncStorage.setItem('cart', JSON.stringify(cart));
+                showToast()
+              }else if(lojaidcart === null){
+                //existe um carrinho, mas ele esta vazio
+                console.log('CART EMPTY WITHOUT STORE ID SET')
+                const cart  = []
+                cart.push(itemcart)
+                AsyncStorage.setItem('cart',JSON.stringify(cart));
+                AsyncStorage.setItem('loja', loja)
+                AsyncStorage.setItem('lojaid', lojaid)
+                AsyncStorage.setItem('shopping', shopping)
+                AsyncStorage.setItem('shoppingid', shoppingid)
+                console.log(loja)
+                console.log(lojaid)
+                showToast()
+              }else{
+                //Existe carrinho, ele possui items, mas de outra loja
+                console.log('Lojacart ID: ', lojaidcart)
+                console.log('Loja ID:',lojaid)
+                console.log('REJECT');
+                rejectToast();
+              }
+          }else if(datacart === null){
+            //Não existe carrinho, um novo sera criado
             const cart  = []
             cart.push(itemcart)
-             AsyncStorage.setItem('cart',JSON.stringify(cart));
+             AsyncStorage.setItem('cart',cart);
              AsyncStorage.setItem('loja', loja)
              AsyncStorage.setItem('lojaid', lojaid)
              AsyncStorage.setItem('shopping', shopping)
@@ -180,15 +175,14 @@ function Prod(props) {
             console.log(loja)
             console.log(lojaid)
             showToast()
-          }
-          
+          }         
         })
         .catch((err)=>{
           alert(err)
         })
 
       } catch (error) {
-        
+        console.log(error)
       }
   }
   

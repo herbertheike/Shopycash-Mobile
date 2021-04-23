@@ -26,10 +26,10 @@ export default class Cart extends React.Component {
       selectAll: false,
       cartItemsIsLoading: false,
       cartItems: [],
-      loja:AsyncStorage.getItem('loja'),
-      lojaid:AsyncStorage.getItem('lojaid'),
-      shopping:AsyncStorage.getItem('shopping'),
-      shoppingid:AsyncStorage.getItem('shoppingid'),
+      loja:null,
+      lojaid:null,
+      shopping:null,
+      shoppingid:null,
       totalPrice: 0,
       refreshing: false,
       checkout:[],
@@ -38,12 +38,51 @@ export default class Cart extends React.Component {
     };
   }
 
-  componentDidMount() {
-    AsyncStorage.getItem("cart")
+  componentDidMount = async () =>{
+    const nome = await AsyncStorage.getItem("nome");
+    const user = firebase.auth().currentUser;
+
+    await AsyncStorage.getItem('cartstatus')
+    .then((cartstatus)=>{
+      console.log('cartststus', cartstatus)
+      if (cartstatus === 'checkout'){
+        this.props.navigation.navigate("Checkout", {
+          params:{
+           nome:nome,
+           subtotal:this.subtotalPrice(),
+           userId:user.uid,
+           cartid:this.state.checkout.InsertID,
+           produtos:this.state.jsonarray2}});
+      }
+    })
+
+    await AsyncStorage.getItem('loja')
+    .then((loja)=>{
+      this.setState({loja:loja})
+      console.log(this.state.loja)
+    })
+    await AsyncStorage.getItem('lojaid')
+    .then((lojaid)=>{
+      this.setState({lojaid:lojaid})
+      console.log(this.state.lojaid)
+    })
+    await AsyncStorage.getItem('shopping')
+    .then((shopping)=>{
+      this.setState({shopping:shopping})
+      console.log(this.state.shopping)
+    })
+    await AsyncStorage.getItem('shoppingid')
+    .then((shoppingid)=>{
+      this.setState({shoppingid:shoppingid})
+      console.log(this.state.shoppingid)
+    })
+    
+    await AsyncStorage.getItem("cart")
       .then((cart) => {
         if (cart !== null) {
           // We have data!!
           const cartgoods = JSON.parse(cart);
+          console.log(cartgoods.length)
           this.setState({ cartItems: cartgoods });
         }
       })
@@ -71,27 +110,21 @@ export default class Cart extends React.Component {
 
   deleteHandler = (index) => {
     Alert.alert(
-      "Are you sure you want to delete this item from your cart?",
+      "Tem certeza que deseja retirar esse item do carrinho?",
       "",
       [
         {
-          text: "Cancel",
+          text: "Cancelar",
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: "Deletar",
           onPress: async () => {
             //let updatedCart = this.state.cartItems; /* Clone it first */
-            this.state.cartItems.splice(
-              index,
-              1
-            ); /* Remove item from the cloned cart state */
-            //this.setState({cartItems: updatedCart}); /* Update the state */
-            await AsyncStorage.setItem(
-              "cart",
-              JSON.stringify(this.state.cartItems)
-            );
+            this.state.cartItems.splice(index,1);
+            /* Remove item from the cloned cart state */
+            await AsyncStorage.setItem("cart",JSON.stringify(this.state.cartItems));
             this.onRefresh();
           },
         },
@@ -130,11 +163,11 @@ export default class Cart extends React.Component {
       setTimeout(resolve, timeout);
     });
   };
-
   onRefresh = async () => {
     this.setState({ refreshing: true });
     AsyncStorage.getItem("cart")
       .then((cart) => {
+        //console.log(cart)
         if (cart !== null) {
           // We have data!!
           const cartgoods = JSON.parse(cart);
@@ -149,7 +182,7 @@ export default class Cart extends React.Component {
 
   repopulate = async () => {
     const newItems = [...this.state.cartItems];
-    //console.log(newItems)
+    console.log(newItems)
     const jsonarray = this.state.jsonarray;
     const jsonarray2 = this.state.jsonarray2
     for(var i=0; i< newItems.length;i++){
@@ -175,13 +208,29 @@ export default class Cart extends React.Component {
       }   
   }
   }
-  checkOut = async (item) => {
+  checkOut = async () => {
     const nome = await AsyncStorage.getItem("nome");
     const loja = this.state.loja;
     const lojaid = this.state.lojaid;
     const shopping = this.state.shopping;
     const shoppingid = this.state.shoppingid;
     const user = firebase.auth().currentUser;
+
+    console.log(this.state.cartItems)
+
+    const payload = JSON.stringify({
+            loja:loja,
+            lojaid: lojaid,
+            shopping: shopping,
+            shoppingid: shoppingid,
+            cartitens:
+            [...this.state.cartItems],
+            userId:user.uid,
+            nome:nome,
+            cartstatus:'checkout',
+            createAt: Date.now(),
+            subTotal: this.subtotalPrice()			
+  })
    try {
      this.repopulate()
     //console.log(this.state.jsonarray)
@@ -191,19 +240,7 @@ export default class Cart extends React.Component {
 				  Accept: "application/json",
 				  "Content-Type": "application/json",
 				},
-					body: JSON.stringify({
-            loja:loja,
-            loja_id: lojaid,
-            shopping: shopping,
-            shoppingid: shoppingid,
-            cartitens:
-            [...this.state.jsonarray],
-            userId:user.uid,
-            nome:nome,
-            cartstatus:'checkout',
-            createAt: Date.now(),
-            subTotal: this.subtotalPrice()			
-				}),
+					body: payload,
 				  })
 			  .then((response) => response.json())
 			  .then((res) => this.setState({checkout: res}))
@@ -220,7 +257,6 @@ export default class Cart extends React.Component {
     this.props.navigation.navigate("Checkout", {
       params:{
        nome:nome,
-       end:endereco,
        subtotal:this.subtotalPrice(),
        userId:user.uid,
        cartid:this.state.checkout.InsertID,
@@ -232,7 +268,6 @@ export default class Cart extends React.Component {
   };
 
   render() {
-    console.log(this.state.jsonarray2)
     const styles = StyleSheet.create({
       centerElement: { justifyContent: "center", alignItems: "center" },
     });
