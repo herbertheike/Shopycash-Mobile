@@ -98,6 +98,7 @@ function Prod(props) {
                 console.log('YES')
                 try {
                   await AsyncStorage.removeItem('lojaid')
+                  await AsyncStorage.removeItem('cartstatus')
                   return 0
                 } catch(e) {
                   console.log(e)

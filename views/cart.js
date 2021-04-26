@@ -196,6 +196,7 @@ export default class Cart extends React.Component {
           image: newItems[i].imagem,  
         }))
     const obj2 = JSON.parse(JSON.stringify({
+      produto:newItems[i].produto,
       produtoid: newItems[i].produtoid
     }))
     if(i<= newItems.length){

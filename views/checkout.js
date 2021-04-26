@@ -24,7 +24,7 @@ export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      resultcheckout:[],
+      resultcheckout:'',
       produtos:[...this.props.route.params.params.produtos],
       cartid: this.props.route.params.params.cartid,
       subtotalPrice: this.props.route.params.params.subtotal,
@@ -37,18 +37,16 @@ export default class Checkout extends React.Component {
       cidade: "",
       estado: "",
       cep: "",
+      shoppingid: "",
+      lojaid: "",
       shippingmethod: "",
+      shipping: "",
       totalPrice: 0,
-      deliveryopt: [
-        {
-          label: "Delivery Center",
-          value: 5.99,
-        },
-        {
-          label: "Retirar na Loja",
-          value: 0,
-        },
-      ],
+      shippingarray: [
+        { label: "Entrega expressa (até 4 horas)", value: 8.90},
+        { label: "Entrega convencional (até 1 dia)", value: 5.90},
+        { label: "Retirar na Loja", value: 0.001}]
+      
     };
   }
 
@@ -104,7 +102,7 @@ export default class Checkout extends React.Component {
     const user = firebase.auth().currentUser;
     const cartid = this.state.cartid;
     const subtotal = this.state.subtotalPrice;
-    const shippingmethod = this.state.shippingmethod;
+    const shippingmethod = this.state.shipping;
     const shippingtax = this.state.shippingtax;
     const logradouro = this.state.logradouro;
     const referencia = this.state.referencia
@@ -116,7 +114,19 @@ export default class Checkout extends React.Component {
     const date = Date.now()
     const newDate = new Date(date);
     const prod = this.state.produtos
+    console.log(prod)
     const vencimento = newDate.setDate(30).toLocaleString('pt-BR', { timeZone: 'GMT+3' , timeStyle: "short"})
+    await AsyncStorage.getItem('lojaid')
+    .then((lojaid)=>{
+      this.setState({lojaid:lojaid})
+      console.log(this.state.lojaid)
+    })
+    await AsyncStorage.getItem('shoppingid')
+    .then((shoppingid)=>{
+      this.setState({shoppingid:shoppingid})
+      console.log(this.state.shoppingid)
+    })
+    console.log(shippingmethod)
     try {
       await fetch(
         "https://api-shopycash1.herokuapp.com/checkout/" +
@@ -131,8 +141,8 @@ export default class Checkout extends React.Component {
           },
           body: JSON.stringify({
             cartid: cartid,
-            lojaid: "",
-            shoppingid: "",
+            lojaid: this.state.lojaid,
+            shoppingid: this.state.shoppingid,
             deliveryadress: [
               {
                 logradouro: logradouro,
@@ -158,16 +168,21 @@ export default class Checkout extends React.Component {
         }
       )
         .then((response) => response.json())
-        .then((res) => this.setState({ checkout: res }))
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false), []);
-
+        .then((res) => this.setState({ resultcheckout: res }))
+        .catch((error) => console.error(error));
+        
+        console.log(this.state.resultcheckout);
         this.state.produtos.length = 0;
         prod.length = 0;
+
+        if(this.state.resultcheckout.status === 'payment'){
+          const cartstatus = await AsyncStorage.setItem("cartstatus",'payment')
+          this.props.navigation.navigate("Payment");
+        }
+
     } catch (error) {
       console.log(error);
     }
-    
   };
 
   //Função  do gps
@@ -485,11 +500,7 @@ export default class Checkout extends React.Component {
             </Text>
             
             <DropDownPicker
-                  items={[
-                    { label: "Entrega expressa (até 4 horas)", value: 8.90},
-                    { label: "Entrega convencional (até 1 dia)", value: 5.90},
-                    { label: "Retirar na Loja", value: 0.001}
-                  ]}
+                  items={this.state.shippingarray}
                   defaultValue={
                     this.state.shippingmethod
                   }
@@ -509,8 +520,9 @@ export default class Checkout extends React.Component {
                   itemStyle={{
                     justifyContent: "flex-start",
                   }}
-                  onChangeItem={item =>
-                    this.setState({shippingtax:item.value})
+                  onChangeItem={item => {
+                    this.setState({shippingtax:item.value, shipping:item.label})
+                  }
                   }
                 />
 
