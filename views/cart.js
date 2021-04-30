@@ -197,7 +197,8 @@ export default class Cart extends React.Component {
         }))
     const obj2 = JSON.parse(JSON.stringify({
       produto:newItems[i].produto,
-      produtoid: newItems[i].produtoid
+      produtoid: newItems[i].produtoid,
+      qty: newItems[i].qty,
     }))
     if(i<= newItems.length){
       jsonarray.push(obj);

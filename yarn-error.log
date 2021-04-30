@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-native-dropdown-picker
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @fortawesome/fontawesome-svg-core
 
 PATH: 
   C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\herberth\AppData\Local\Microsoft\WindowsApps;C:\Users\herberth\AppData\Roaming\npm;C:\Users\herberth\AppData\Local\Yarn\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\herberth\OneDrive\Documents\ShopyCash\AppMobile\scao\node_modules\@expo\xdl\binaries\windows\adb\AdbWinApi.dll'
+  Error: EPERM: operation not permitted, unlink 'C:\Users\herberth\OneDrive\Documents\ShopyCash\AppMobile\scao\node_modules\@expo\xdl\binaries\windows\adb\adb.exe'
 
 npm manifest: 
   {

@@ -126,7 +126,7 @@ export default class Checkout extends React.Component {
       this.setState({shoppingid:shoppingid})
       console.log(this.state.shoppingid)
     })
-    console.log(shippingmethod)
+    
     try {
       await fetch(
         "https://api-shopycash1.herokuapp.com/checkout/" +
@@ -176,8 +176,15 @@ export default class Checkout extends React.Component {
         prod.length = 0;
 
         if(this.state.resultcheckout.status === 'payment'){
+          const result = this.state.resultcheckout
           const cartstatus = await AsyncStorage.setItem("cartstatus",'payment')
-          this.props.navigation.navigate("Payment");
+          console.log(result)
+          this.props.navigation.navigate("Payment",{
+            params:{
+              resultcheckout:result.data._id,
+              cartid:cartid,
+              userId:user.uid,
+            }});
         }
 
     } catch (error) {
