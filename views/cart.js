@@ -32,7 +32,7 @@ export default class Cart extends React.Component {
       shoppingid:null,
       totalPrice: 0,
       refreshing: false,
-      checkout:[],
+      delivery:'',
       jsonarray:[],
       jsonarray2:[],
     };
@@ -44,15 +44,9 @@ export default class Cart extends React.Component {
 
     await AsyncStorage.getItem('cartstatus')
     .then((cartstatus)=>{
-      console.log('cartststus', cartstatus)
+     // console.log('cartststus', cartstatus)
       if (cartstatus === 'checkout'){
-        this.props.navigation.navigate("Checkout", {
-          params:{
-           nome:nome,
-           subtotal:this.subtotalPrice(),
-           userId:user.uid,
-           cartid:this.state.checkout.InsertID,
-           produtos:this.state.jsonarray2}});
+        this.props.navigation.navigate("Checkout");
       }
     })
 
@@ -182,7 +176,7 @@ export default class Cart extends React.Component {
 
   repopulate = async () => {
     const newItems = [...this.state.cartItems];
-    console.log(newItems)
+   // console.log(newItems)
     const jsonarray = this.state.jsonarray;
     const jsonarray2 = this.state.jsonarray2
     for(var i=0; i< newItems.length;i++){
@@ -195,6 +189,7 @@ export default class Cart extends React.Component {
           qty: newItems[i].qty,
           image: newItems[i].imagem,  
         }))
+        //console.log(obj)
     const obj2 = JSON.parse(JSON.stringify({
       produto:newItems[i].produto,
       produtoid: newItems[i].produtoid,
@@ -218,25 +213,23 @@ export default class Cart extends React.Component {
     const shoppingid = this.state.shoppingid;
     const user = firebase.auth().currentUser;
 
-    console.log(this.state.cartItems)
 
     const payload = JSON.stringify({
             loja:loja,
             lojaid: lojaid,
             shopping: shopping,
             shoppingid: shoppingid,
-            cartitens:
+            produtos:
             [...this.state.cartItems],
-            userId:user.uid,
+            userid:user.uid,
             nome:nome,
             cartstatus:'checkout',
-            createAt: Date.now(),
+            datacompra: Date.now(),
             subTotal: this.subtotalPrice()			
   })
    try {
      this.repopulate()
-    //console.log(this.state.jsonarray)
-     await fetch("https://api-shopycash1.herokuapp.com/cart/"+user.uid, {
+     await fetch("https://api-shopycash1.herokuapp.com/cart/", {
 				method: "POST",
 				headers: {
 				  Accept: "application/json",
@@ -245,7 +238,7 @@ export default class Cart extends React.Component {
 					body: payload,
 				  })
 			  .then((response) => response.json())
-			  .then((res) => this.setState({checkout: res}))
+			  .then((res) => this.setState({delivery: res}))
 			  .catch((error) => console.error(error))
         .finally(() => setLoading(false),[]);
               
@@ -253,16 +246,12 @@ export default class Cart extends React.Component {
      console.log(error)
    }
    this.state.jsonarray.length = 0;
-   console.log("checkout: \n"+ JSON.stringify(this.state.checkout.status))
-   if(this.state.checkout.status == 'OK'){
+   console.log("checkout: \n"+ JSON.stringify(this.state.delivery))
+   if(this.state.delivery.status === 'OK'){
      const cartstatus = await AsyncStorage.setItem("cartstatus",'checkout')
-    this.props.navigation.navigate("Checkout", {
-      params:{
-       nome:nome,
-       subtotal:this.subtotalPrice(),
-       userId:user.uid,
-       cartid:this.state.checkout.InsertID,
-       produtos:this.state.jsonarray2}});       
+     const cartid = await AsyncStorage.setItem("cartid",this.state.delivery.InsertID)
+     console.log('909090')
+    this.props.navigation.navigate("Checkout");       
    }else{
       Alert.alert("Shopycash Payment", "Infelizmente houve um problema com seu carrinho.\nVerique os produtos e tente novamente.")
    }

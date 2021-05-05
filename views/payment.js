@@ -26,18 +26,23 @@ export default class Checkout extends React.Component {
     super(props);
     this.state = {
       paymentmethod: null,
+      troco: null,
       needchange: null,
       result:'',
       cart:'',
+      cpf:'',
+      resultpayment:'',
       userid:this.props.route.params.params.userId,
       cartid:this.props.route.params.params.cartid,
-      _id:this.props.route.params.params.resultcheckout
+      _id:this.props.route.params.params.resultcheckout,
+      deliveryresult:''
     }
   }
 
   componentDidMount = async() =>{
     const userid = this.state.userid;
     const cartid = this.state.cartid;
+    
     const _id = this.state._id;
 
     await fetch("https://api-shopycash1.herokuapp.com/viewcheckout/"+_id)
@@ -50,9 +55,60 @@ export default class Checkout extends React.Component {
       .then((res) => this.setState({cart:res[0].cartitens}))
       .catch((error) => console.error(error));
 
-      //console.log(this.state.result)
+      console.log(this.state.result[0].deliveryadress[0].logradouro+", "+
+      this.state.result[0].deliveryadress[0].numero+"\n"+
+      this.state.result[0].deliveryadress[0].bairro+", "+
+      this.state.result[0].deliveryadress[0].cidade+"- "+
+      this.state.result[0].deliveryadress[0].estado+"\n"+
+      this.state.result[0].deliveryadress[0].referencia)
   }
 
+  delivery = async (item) => {
+    const result = item;
+    //console.log(result)
+    const troco = this.state.troco;
+    const user = firebase.auth().currentUser;
+    const address =  this.state.result[0].deliveryadress[0];
+
+    const payload = JSON.stringify({
+      lojaid:result[0].lojaid,
+      shoppingid:result[0].shoppingid,
+      cartid:this.state.cartid,
+      osid:result[0]._id,
+      userid:user.uid,
+      nome:result[0].nome,
+      cpf:this.state.cpf,
+      address:(address.logradouro+", "+
+      address.numero+", "+
+      address.bairro+", "+
+      address.cidade+"- "+
+      address.estado+"/"+
+      address.referencia),
+      paymentmethod:this.state.paymentmethod,
+      troco:troco === null ? 0 : troco,
+      shippingprice:result[0].shippingprice,
+      total:result[0].total,
+    })
+
+    await fetch(
+      "https://api-shopycash1.herokuapp.com/delivery/",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: payload,
+      }
+    )
+      .then((response) => response.json())
+      .then((res) => this.setState({ resultpayment: res }))
+      .catch((error) => console.error(error));
+
+      console.log(this.state.resultpayment);
+      AsyncStorage.setItem('status', 'await')
+
+  }
 
   render() {
     const paymentmethod = this.state.paymentmethod;
@@ -223,6 +279,8 @@ export default class Checkout extends React.Component {
                   selectionColor={"#5eaaa8"}
                   label={"Troco para?"}
                   theme={temaInput}
+                  value={this.state.troco}
+                  onChangeText={(text)=>this.setState({troco:text})}
                   />
                 </View>
                 :
@@ -276,7 +334,9 @@ export default class Checkout extends React.Component {
                   underlineColor={"#5eaaa8"}
                   selectionColor={"#5eaaa8"}
                   label={"CPF"}
+                  value={this.state.cpf}
                   theme={temaInput}
+                  onChangeText={(text)=>this.setState({cpf: text })}
                   />
                   </View>
                   <FlatList
@@ -310,14 +370,15 @@ export default class Checkout extends React.Component {
                 )}
                 }/>                 
           <View>
-          <Button 
-          disabled={disabledbt}
-          style={{padding:10}}
-          contentStyle={{backgroundColor:'#53aaa8', padding:10}}
-          labelStyle={{color:colortext,fontSize: 24}}
-          mode="text" onPress={() => console.log('Negoça')}>
-            Fazer pedido
-          </Button>
+              <Button 
+              disabled={disabledbt}
+              style={{padding:10}}
+              contentStyle={{backgroundColor:'#53aaa8', padding:10}}
+              labelStyle={{color:colortext,fontSize: 24}}
+              mode="text"
+              onPress={() =>this.delivery(result)}>
+                Fazer pedido
+              </Button>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

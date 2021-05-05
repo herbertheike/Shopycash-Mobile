@@ -20,15 +20,15 @@ import {
 } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as Location from "expo-location";
+import { MaterialIndicator  } from "react-native-indicators";
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      resultcheckout:'',
-      produtos:[...this.props.route.params.params.produtos],
-      cartid: this.props.route.params.params.cartid,
-      subtotalPrice: this.props.route.params.params.subtotal,
-      nome: this.props.route.params.params.nome,
+      orderdata:'',
+      cartid: '',
+      subtotalPrice: 0,
+      nome: '',
       shippingtax: 0,
       logradouro: "",
       referencia: "",
@@ -42,6 +42,7 @@ export default class Checkout extends React.Component {
       shippingmethod: "",
       shipping: "",
       totalPrice: 0,
+      isLoaded: false,
       shippingarray: [
         { label: "Entrega expressa (até 4 horas)", value: 8.90},
         { label: "Entrega convencional (até 1 dia)", value: 5.90},
@@ -50,8 +51,20 @@ export default class Checkout extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () =>{
     this.locale();
+    await AsyncStorage.getItem('cartid')
+    .then((cartid)=>{
+      this.setState({cartid:cartid})
+      console.log(this.state.cartid)
+    })
+    await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state.cartid)
+          .then((res) => res.json())
+          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal
+           }))
+          .catch((error) => console.log(error))
+          .finally(() => this.setState({isLoaded: true}),[]);
+          console.log(this.state.orderdata.subtotal)
   }
 
   subtotalPrice = () => {
@@ -161,30 +174,25 @@ export default class Checkout extends React.Component {
             shippingprice: shippingtax, 
             subTotal: subtotal,
             taxes: 0,
-            total: (subtotal + shippingtax).toFixed(2),
+            total: (subtotal + shippingtax),
             datacompra: Date.now(),
             vencimento: vencimento,
           }),
         }
       )
         .then((response) => response.json())
-        .then((res) => this.setState({ resultcheckout: res }))
+        .then((res) => this.setState({ orderdata: res }))
         .catch((error) => console.error(error));
         
-        console.log(this.state.resultcheckout);
+        console.log(this.state.orderdata);
         this.state.produtos.length = 0;
         prod.length = 0;
 
-        if(this.state.resultcheckout.status === 'payment'){
-          const result = this.state.resultcheckout
+        if(this.state.orderdata.status === 'payment'){
+          const result = this.state.orderdata
           const cartstatus = await AsyncStorage.setItem("cartstatus",'payment')
           console.log(result)
-          this.props.navigation.navigate("Payment",{
-            params:{
-              resultcheckout:result.data._id,
-              cartid:cartid,
-              userId:user.uid,
-            }});
+          this.props.navigation.navigate("Payment");
         }
 
     } catch (error) {
@@ -284,7 +292,18 @@ export default class Checkout extends React.Component {
             flexDirection: "column",
             paddingHorizontal: 10,
           }}
-        >
+        >{this.state.isLoaded === false ? 
+          <View style={{ justifyContent: "center", alignItems: "center", paddingTop:300}}>
+            <View>
+          <MaterialIndicator
+          style={{position:'relative'}}
+          trackWidth={10}
+          color={"#5eaaa8"}
+          size={90}
+        />
+        <Text>Carregando...</Text>
+        </View>
+        </View> :
           <View style={{ justifyContent: "space-around" }}>
             <View>
               <Text
@@ -574,7 +593,7 @@ export default class Checkout extends React.Component {
                         paddingLeft: 20,
                       }}
                     >
-                      R${this.state.subtotalPrice.toFixed(2)}
+                      R${this.state.subtotalPrice}
                     </Text>
                     <Text
                       style={{
@@ -592,7 +611,7 @@ export default class Checkout extends React.Component {
                         paddingLeft: 20,
                       }}
                     >
-                      R${this.state.shippingtax.toFixed(2)}
+                      R${this.state.shippingtax}
                     </Text>
 
                     <Text
@@ -613,7 +632,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice + this.state.shippingtax).toFixed(2)}
+                        this.state.subtotalPrice + this.state.shippingtax)}
                     </Text>
                   </View>
                 </View>
@@ -654,6 +673,7 @@ export default class Checkout extends React.Component {
               </View>
             </View>
           </View>
+  }
         </ScrollView>
       </KeyboardAvoidingView>
     );
