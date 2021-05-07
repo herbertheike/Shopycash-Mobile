@@ -32,40 +32,29 @@ export default class Checkout extends React.Component {
       cart:'',
       cpf:'',
       resultpayment:'',
-      userid:this.props.route.params.params.userId,
-      cartid:this.props.route.params.params.cartid,
-      _id:this.props.route.params.params.resultcheckout,
+      _id:'',
       deliveryresult:''
     }
   }
 
   componentDidMount = async() =>{
-    const userid = this.state.userid;
-    const cartid = this.state.cartid;
-    
-    const _id = this.state._id;
 
-    await fetch("https://api-shopycash1.herokuapp.com/viewcheckout/"+_id)
+    await AsyncStorage.getItem('cartid')
+    .then((_id)=>{
+      this.setState({_id:_id})
+     // console.log(this.state._id)
+    })
+      
+    await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state._id)
       .then((response) => response.json())
-      .then((res) => this.setState({result:res}))
+      .then((res) => this.setState({cart:res[0].produtos, result:res}))
       .catch((error) => console.error(error));
-
-      await fetch("https://api-shopycash1.herokuapp.com/cart/"+userid+"/"+cartid)
-      .then((response) => response.json())
-      .then((res) => this.setState({cart:res[0].cartitens}))
-      .catch((error) => console.error(error));
-
-      console.log(this.state.result[0].deliveryadress[0].logradouro+", "+
-      this.state.result[0].deliveryadress[0].numero+"\n"+
-      this.state.result[0].deliveryadress[0].bairro+", "+
-      this.state.result[0].deliveryadress[0].cidade+"- "+
-      this.state.result[0].deliveryadress[0].estado+"\n"+
-      this.state.result[0].deliveryadress[0].referencia)
+      console.log(this.state.result)
   }
 
   delivery = async (item) => {
     const result = item;
-    //console.log(result)
+    
     const troco = this.state.troco;
     const user = firebase.auth().currentUser;
     const address =  this.state.result[0].deliveryadress[0];
@@ -86,7 +75,7 @@ export default class Checkout extends React.Component {
       address.referencia),
       paymentmethod:this.state.paymentmethod,
       troco:troco === null ? 0 : troco,
-      shippingprice:result[0].shippingprice,
+      shippingprice:0,
       total:result[0].total,
     })
 
@@ -343,8 +332,9 @@ export default class Checkout extends React.Component {
                   style={{ margin: 5}}
                   data={result}
                   keyExtractor={({ id }) => id}
-                  renderItem={({item, index})=>
+                  renderItem={({item})=>
                       {
+                        console.log('this', item)
                   return(
                 
                     <View style={{borderColor:"#5eaaa8", borderWidth:1, borderRadius:5, padding: 10, margin: 5, justifyContent:"space-between", flexDirection:'column'}}>

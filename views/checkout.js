@@ -30,6 +30,7 @@ export default class Checkout extends React.Component {
       subtotalPrice: 0,
       nome: '',
       shippingtax: 0,
+      shipping:'',
       logradouro: "",
       referencia: "",
       numero: "",
@@ -40,7 +41,6 @@ export default class Checkout extends React.Component {
       shoppingid: "",
       lojaid: "",
       shippingmethod: "",
-      shipping: "",
       totalPrice: 0,
       isLoaded: false,
       shippingarray: [
@@ -56,15 +56,16 @@ export default class Checkout extends React.Component {
     await AsyncStorage.getItem('cartid')
     .then((cartid)=>{
       this.setState({cartid:cartid})
-      console.log(this.state.cartid)
+      //console.log(this.state.cartid)
     })
     await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state.cartid)
           .then((res) => res.json())
-          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal
-           }))
+          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal}))
           .catch((error) => console.log(error))
           .finally(() => this.setState({isLoaded: true}),[]);
-          console.log(this.state.orderdata.subtotal)
+        
+          console.log('ORDER DATA', this.state.orderdata)
+          console.log("SUB TOTAL ONLY",this.state.subtotalPrice)
   }
 
   subtotalPrice = () => {
@@ -111,87 +112,46 @@ export default class Checkout extends React.Component {
   };*/
 
   payment = async () => {
-    const nome = this.state.nome;
-    const user = firebase.auth().currentUser;
-    const cartid = this.state.cartid;
-    const subtotal = this.state.subtotalPrice;
-    const shippingmethod = this.state.shipping;
-    const shippingtax = this.state.shippingtax;
-    const logradouro = this.state.logradouro;
-    const referencia = this.state.referencia
-    const numero = this.state.numero
-    const bairro = this.state.bairro
-    const cidade = this.state.cidade
-    const estado = this.state.estado
-    const cep = this.state.cep
-    const date = Date.now()
-    const newDate = new Date(date);
-    const prod = this.state.produtos
-    console.log(prod)
-    const vencimento = newDate.setDate(30).toLocaleString('pt-BR', { timeZone: 'GMT+3' , timeStyle: "short"})
-    await AsyncStorage.getItem('lojaid')
-    .then((lojaid)=>{
-      this.setState({lojaid:lojaid})
-      console.log(this.state.lojaid)
-    })
-    await AsyncStorage.getItem('shoppingid')
-    .then((shoppingid)=>{
-      this.setState({shoppingid:shoppingid})
-      console.log(this.state.shoppingid)
+    const payload = JSON.stringify({
+      deliveryadress: 
+        {
+          logradouro: this.state.logradouro,
+          referencia: this.state.referencia,
+          numero: this.state.numero,
+          bairro: this.state.bairro,
+          cidade: this.state.cidade,
+          estado: this.state.estado,
+          cep: this.state.cep,
+        },
+        nome:this.state.nome,
+        shippingmethod: this.state.shipping,
+        shippingprice: this.state.shippingtax,
+        total: (this.state.subtotalPrice+this.state.shippingtax).toFixed(2),
+        cartstatus:'payment'
     })
     
+    const _id = this.state.cartid;
     try {
       await fetch(
-        "https://api-shopycash1.herokuapp.com/checkout/" +
-          user.uid +
-          "/" +
-          cartid,
+        "https://api-shopycash1.herokuapp.com/delivery/" +
+          _id,
         {
           method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            cartid: cartid,
-            lojaid: this.state.lojaid,
-            shoppingid: this.state.shoppingid,
-            deliveryadress: [
-              {
-                logradouro: logradouro,
-                referencia: referencia,
-                numero: numero,
-                bairro: bairro,
-                cidade: cidade,
-                estado: estado,
-                cep: cep,
-              },
-            ],
-            produtos: [...prod],
-            userId: user.uid,
-            nome: nome,
-            shippingmethod: shippingmethod,
-            shippingprice: shippingtax, 
-            subTotal: subtotal,
-            taxes: 0,
-            total: (subtotal + shippingtax),
-            datacompra: Date.now(),
-            vencimento: vencimento,
-          }),
+          body: payload,
         }
       )
         .then((response) => response.json())
         .then((res) => this.setState({ orderdata: res }))
         .catch((error) => console.error(error));
-        
-        console.log(this.state.orderdata);
-        this.state.produtos.length = 0;
-        prod.length = 0;
 
+        //console.log(this.state.orderdata)
         if(this.state.orderdata.status === 'payment'){
-          const result = this.state.orderdata
           const cartstatus = await AsyncStorage.setItem("cartstatus",'payment')
-          console.log(result)
+          console.log('ok')
           this.props.navigation.navigate("Payment");
         }
 
@@ -249,11 +209,11 @@ export default class Checkout extends React.Component {
         cep: address[0].postalCode,
       });
     }
-    return console.log(address);
+    return //console.log(address);
   };
 
   render() {
-    console.log(this.state.shippingtax)
+   // console.log(this.state.shippingtax)
     const newDelivery = this.state.newDelivery;
     const zero = 0.001;
     const temaInput = {
