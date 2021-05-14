@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
@@ -56,31 +57,15 @@ export default class Checkout extends React.Component {
     const result = item;
     
     const troco = this.state.troco;
-    const user = firebase.auth().currentUser;
-    const address =  this.state.result[0].deliveryadress[0];
-
+    const _id = this.state._id;
     const payload = JSON.stringify({
-      lojaid:result[0].lojaid,
-      shoppingid:result[0].shoppingid,
-      cartid:this.state.cartid,
-      osid:result[0]._id,
-      userid:user.uid,
-      nome:result[0].nome,
       cpf:this.state.cpf,
-      address:(address.logradouro+", "+
-      address.numero+", "+
-      address.bairro+", "+
-      address.cidade+"- "+
-      address.estado+"/"+
-      address.referencia),
       paymentmethod:this.state.paymentmethod,
-      troco:troco === null ? 0 : troco,
-      shippingprice:0,
-      total:result[0].total,
+      change:troco === null ? 0 : troco,
     })
 
     await fetch(
-      "https://api-shopycash1.herokuapp.com/delivery/",
+      "https://api-shopycash1.herokuapp.com/payment/"+_id ,
       {
         method: "POST",
         headers: {
@@ -95,7 +80,13 @@ export default class Checkout extends React.Component {
       .catch((error) => console.error(error));
 
       console.log(this.state.resultpayment);
-      AsyncStorage.setItem('status', 'await')
+      if(this.state.resultpayment.status === 'await'){
+        const cartstatus = await AsyncStorage.clear();
+        console.log('ok')
+        Alert.alert("ShopyCash Payment","Congrats")
+        this.props.navigation.navigate("Extrato");
+      }
+      
 
   }
 

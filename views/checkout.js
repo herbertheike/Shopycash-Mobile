@@ -134,7 +134,7 @@ export default class Checkout extends React.Component {
     try {
       await fetch(
         "https://api-shopycash1.herokuapp.com/delivery/" +
-          _id,
+          _id,                                                                                                                                                                                      
         {
           method: "POST",
           headers: {
@@ -592,7 +592,7 @@ export default class Checkout extends React.Component {
                     >
                       R$
                       {(
-                        this.state.subtotalPrice + this.state.shippingtax)}
+                        this.state.subtotalPrice + this.state.shippingtax).toFixed(2)}
                     </Text>
                   </View>
                 </View>
