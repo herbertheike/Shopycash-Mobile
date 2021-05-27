@@ -14,12 +14,11 @@ import LoadingScreen from "./views/loadingScreen";
 import Cadastro from "./views/Cadastro";
 import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
-import Extrato from "./views/extrato";
+import MeusPedidos from "./views/meuspedidos";
 import GetShoppings from "./views/getshopping"
 import GetStoreByMall from "./views/getlojabyshop"
 import PaymentScan from "./views/PaymentScan"
 import InviteView from "./views/inviteview"
-import TermsAndConditions from "./views/userterms"
 import Profile from "./views/userProfile"
 import Cart from "./views/cart"
 import Checkout from "./views/checkout"
@@ -117,8 +116,8 @@ class App extends React.Component {
             options={{ headerShown: false }}
           />
           <MainStack.Screen
-            name="Extrato"
-            component={Extrato}
+            name="MeusPedidos"
+            component={MeusPedidos}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

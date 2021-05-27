@@ -17,7 +17,7 @@ import { Header, SearchBar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { DrawerContentMenu } from "./DrawerContent";
 import Categorias from "./getcategorias";
-import Extrato from "./extrato";
+import MeusPedidos from "./meuspedidos";
 import GetShoppings from "./getshopping";
 import GetStoreByMall from "./getlojabyshop"
 import PaymentScan from "./PaymentScan"
@@ -354,7 +354,7 @@ export default function lojasMain() {
     >
       <Drawer.Screen name="home" component={HomeScreen} />
       <Drawer.Screen name="Categorias" component={Categorias} />
-      <Drawer.Screen name="Extrato" component={Extrato} />
+      <Drawer.Screen name="MeusPedidos" component={MeusPedidos} />
       <Drawer.Screen name="Shoppings" component={GetShoppings} />
       <Drawer.Screen name="StorebyMall" component={GetStoreByMall}/>
       <Drawer.Screen name="PaymentScan" component={PaymentScan}/>

@@ -131,9 +131,9 @@ export class DrawerContentMenu extends React.Component {
                 icon={({ color, size }) => (
                   <Icon name="chart-bar"  color={"#5eaaa8"} size={26}  />
                 )}
-                label="Extrato"
+                label="Meus Pedidos"
                 onPress={() => {
-                  this.props.navigation.navigate("Extrato");
+                  this.props.navigation.navigate("MeusPedidos");
                 }}
               />
 

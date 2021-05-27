@@ -84,7 +84,7 @@ export default class Checkout extends React.Component {
         const cartstatus = await AsyncStorage.clear();
         console.log('ok')
         Alert.alert("ShopyCash Payment","Congrats")
-        this.props.navigation.navigate("Extrato");
+        this.props.navigation.navigate("MeusPedidos");
       }
       
 
