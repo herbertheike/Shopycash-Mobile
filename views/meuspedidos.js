@@ -15,6 +15,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import firebase from "firebase";
 import { MaterialIndicator  } from "react-native-indicators"; 
+import 'moment/locale/pt-br';
 
 class MeusPedidos extends React.Component {
   constructor(props) {
@@ -22,11 +23,23 @@ class MeusPedidos extends React.Component {
     this.state = {
       isLoading : true,
       compraresult : [],
+      datearray:[{
+        month: 'Anteriores',
+        year: '',
+        day:''
+        },
+        {
+          month: moment().format("MMMM"),
+          year: moment().format("YYYY"),
+          day: moment().format("D")
+        }
+      ]
       
     }
   }
 
   componentDidMount= async () => {
+    moment.locale('pt-br', null);
     const user = firebase.auth().currentUser;
     const userid = user.uid
     console.log(userid)
@@ -44,6 +57,7 @@ class MeusPedidos extends React.Component {
 
   render() {
     const data = this.state.compraresult;
+    
     const menuicon = (
       <Icon
         style={{ marginLeft: 10 }}
@@ -92,50 +106,72 @@ class MeusPedidos extends React.Component {
         </View>
         </View> : 
           <FlatList
-            data={data}
+            data={this.state.datearray}
             keyExtractor={({ id }, item) => id}
             renderItem={({ item }) => {
-              let bgcolor = 'white';
-              if (item.cartstatus === 'await') {
-                bgcolor = '#B3E7FF'
-              }
-              if (item.cartstatus === 'onroute') {
-                bgcolor = '#9EFA79'
-              }
-              if (item.cartstatus === 'delivered') {
-                bgcolor = '#CAD1DE'
-              }
-              
-              return(
+              const month =  moment().format("MMMM")
+             return(
               <TouchableOpacity
-                style={{
-                  borderRadius: 7,
-                  color: "black",
-                  backgroundColor: bgcolor,
-                  marginHorizontal: 10,
-                  marginVertical: 10,
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  padding: 5,
-                }}
-                title="Login"
+                style={{padding: 5}}
                 color= "black"
-                onPress={() => alert(item.cartstatus)}
+                onPress={() => alert(item)}
               >
-                <View style={{
-                  borderRadius: 7,
-                  color: "black",
-                  marginHorizontal: 10,
-                  marginVertical: 10,
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  padding: 5,
-                }}>
-                <Text style={styles.botaotext}>Compra nº: {item._id}</Text>
-                <Text style={styles.botaotext}>Loja: {item.loja} - {item.shopping}</Text>
-                <Text style={styles.botaotext}>Valor: {item.total}</Text>
-                <Text style={styles.botaotext}>Forma de pagamento: {item.paymentmethod}</Text>
-                <Text style={styles.botaotext}>Data da compra: {moment(item.datacompra).format("D/MM/YYYY [às] H:m:s")}</Text>
+                <View style={{padding: 5}}>
+                <Text style={styles.botaotext}>
+                {item}</Text>
+                </View>
+                <View>
+                <FlatList
+                data={data}
+                keyExtractor={({ id }, item) => id}
+                renderItem={({ item }) => {   
+                    let bgcolor = 'white';
+                    if (item.cartstatus === 'await') {
+                      bgcolor = '#B3E7FF'
+                    }
+                    if (item.cartstatus === 'onroute') {
+                      bgcolor = '#9EFA79'
+                    }
+                    if (item.cartstatus === 'delivered') {
+                      bgcolor = '#CAD1DE'
+                    }
+
+                  if (moment(item.datacompra).format('MMMM') === month) {            
+                    return(
+                    <TouchableOpacity
+                      style={{
+                        borderRadius: 7,
+                        color: "black",
+                        backgroundColor: bgcolor,
+                        marginHorizontal: 10,
+                        marginVertical: 10,
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-between',
+                        padding: 5,
+                      }}
+                      title="Login"
+                      color= "black"
+                      onPress={() => alert(item.cartstatus)}
+                    >
+                      <View style={{
+                        borderRadius: 7,
+                        color: "black",
+                        marginHorizontal: 10,
+                        marginVertical: 10,
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-between',
+                        padding: 5,
+                      }}>
+                      <Text style={styles.botaotext}>Compra nº: {item._id}</Text>
+                      <Text style={styles.botaotext}>Loja: {item.loja} - {item.shopping}</Text>
+                      <Text style={styles.botaotext}>Valor: {item.total}</Text>
+                      <Text style={styles.botaotext}>Forma de pagamento: {item.paymentmethod}</Text>
+                      <Text style={styles.botaotext}>Data da compra: {moment(item.datacompra).format("D/MM/YYYY [às] H:m:s")}</Text>
+                      </View>
+                    </TouchableOpacity>
+                
+                )}}}
+                 />
                 </View>
               </TouchableOpacity>
               )}}
