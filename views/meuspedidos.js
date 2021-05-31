@@ -4,6 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Image,
   ScrollView,
   SafeAreaView,
   FlatList
@@ -23,6 +24,7 @@ class MeusPedidos extends React.Component {
     this.state = {
       isLoading : true,
       compraresult : [],
+      lojaresult:[],
       datearray:[{
         month: 'Anteriores',
         year: '',
@@ -50,13 +52,19 @@ class MeusPedidos extends React.Component {
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading:false}),[]);
 
-      console.log(this.state.compraresult)
+      await fetch("https://api-shopycash1.herokuapp.com/indexstore")
+      .then((response) => response.json())
+      .then((json) =>this.setState({lojaresult:json}))
+      .catch((error) => console.error(error));
+
+      //console.log(this.state.compraresult)
     
   }
 
 
   render() {
     const data = this.state.compraresult;
+    const data2 = this.state.lojaresult;
     
     const menuicon = (
       <Icon
@@ -104,78 +112,32 @@ class MeusPedidos extends React.Component {
         />
         <Text>Carregando...</Text>
         </View>
-        </View> : 
-          <FlatList
-            data={this.state.datearray}
-            keyExtractor={({ id }, item) => id}
-            renderItem={({ item }) => {
-              const month =  moment().format("MMMM")
-             return(
-              <TouchableOpacity
-                style={{padding: 5}}
-                color= "black"
-                onPress={() => alert(item)}
-              >
-                <View style={{padding: 5}}>
-                <Text style={styles.botaotext}>
-                {item}</Text>
-                </View>
-                <View>
-                <FlatList
-                data={data}
-                keyExtractor={({ id }, item) => id}
-                renderItem={({ item }) => {   
-                    let bgcolor = 'white';
-                    if (item.cartstatus === 'await') {
-                      bgcolor = '#B3E7FF'
-                    }
-                    if (item.cartstatus === 'onroute') {
-                      bgcolor = '#9EFA79'
-                    }
-                    if (item.cartstatus === 'delivered') {
-                      bgcolor = '#CAD1DE'
-                    }
-
-                  if (moment(item.datacompra).format('MMMM') === month) {            
+        </View> :
+        <View>
+        <View>
+          <Text>Lojas onde pediu</Text>
+          {data2.map((item) =>{
+            return(
+              <View>
+                {data.map((item2)=>{
+                  if(item._id === item2.lojaid){
                     return(
-                    <TouchableOpacity
-                      style={{
-                        borderRadius: 7,
-                        color: "black",
-                        backgroundColor: bgcolor,
-                        marginHorizontal: 10,
-                        marginVertical: 10,
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between',
-                        padding: 5,
-                      }}
-                      title="Login"
-                      color= "black"
-                      onPress={() => alert(item.cartstatus)}
-                    >
-                      <View style={{
-                        borderRadius: 7,
-                        color: "black",
-                        marginHorizontal: 10,
-                        marginVertical: 10,
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between',
-                        padding: 5,
-                      }}>
-                      <Text style={styles.botaotext}>Compra nº: {item._id}</Text>
-                      <Text style={styles.botaotext}>Loja: {item.loja} - {item.shopping}</Text>
-                      <Text style={styles.botaotext}>Valor: {item.total}</Text>
-                      <Text style={styles.botaotext}>Forma de pagamento: {item.paymentmethod}</Text>
-                      <Text style={styles.botaotext}>Data da compra: {moment(item.datacompra).format("D/MM/YYYY [às] H:m:s")}</Text>
+                      <View>
+                      <Text>{item2.loja}</Text>
+                      <Image source={{uri:item.logo}} style={{width:120, height:120}}/>
                       </View>
-                    </TouchableOpacity>
-                
-                )}}}
-                 />
-                </View>
-              </TouchableOpacity>
-              )}}
-          />
+                    )
+                  }
+                })}
+
+              </View>
+            )
+          })}
+        </View>
+        <View>
+          <Text>Historico</Text>
+        </View>
+        </View>
         }
       </View>
         </ScrollView>
