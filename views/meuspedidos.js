@@ -7,7 +7,8 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Button
 } from "react-native";
 import moment from 'moment'
 import { Header } from "react-native-elements";
@@ -18,13 +19,13 @@ import firebase from "firebase";
 import { MaterialIndicator  } from "react-native-indicators"; 
 import 'moment/locale/pt-br';
 
-class MeusPedidos extends React.Component {
+export default class MeusPedidos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading : true,
-      compraresult : [],
-      lojaresult:[],
+      compraresult:[],
+      lojasarray:[],
       datearray:[{
         month: 'Anteriores',
         year: '',
@@ -51,20 +52,11 @@ class MeusPedidos extends React.Component {
       .then((res) => this.setState({compraresult:res}))
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading:false}),[]);
-
-      await fetch("https://api-shopycash1.herokuapp.com/indexstore")
-      .then((response) => response.json())
-      .then((json) =>this.setState({lojaresult:json}))
-      .catch((error) => console.error(error));
-
-      //console.log(this.state.compraresult)
-    
   }
-
 
   render() {
     const data = this.state.compraresult;
-    const data2 = this.state.lojaresult;
+
     
     const menuicon = (
       <Icon
@@ -116,26 +108,20 @@ class MeusPedidos extends React.Component {
         <View>
         <View>
           <Text>Lojas onde pediu</Text>
-          {data2.map((item) =>{
-            return(
-              <View>
-                {data.map((item2)=>{
-                  if(item._id === item2.lojaid){
+              <ScrollView horizontal>
+                {data.map((item)=>{
                     return(
-                      <View>
-                      <Text>{item2.loja}</Text>
-                      <Image source={{uri:item.logo}} style={{width:120, height:120}}/>
+                      <View style={{padding:10, width:100, height: 100,  backgroundColor: "#5eaaa8", margin: 3, alignItems: "center", justifyContent:'center'}}>
+                      <Text>{item.loja}</Text>
+                      <Text>{item.total}</Text>
                       </View>
                     )
-                  }
                 })}
-
-              </View>
-            )
-          })}
+              </ScrollView>
         </View>
         <View>
-          <Text>Historico</Text>
+          <Text>Ultima compra.</Text>
+
         </View>
         </View>
         }
@@ -146,8 +132,7 @@ class MeusPedidos extends React.Component {
     );
   }
 }
-
-class Saldo extends React.Component {
+/*class Saldo extends React.Component {
   componentDidMount() {}
 
   render() {
@@ -215,12 +200,12 @@ class Saldo extends React.Component {
       </SafeAreaView>
     );
   }
-}
+}*/
 
-export default function MyTabs() {
+/*export default function MyTabs() {
   const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer independent={true}>
+    <NavigationContainer independent={false}>
       <Tab.Navigator tabBarOptions={{
           activeTintColor: '#5eaaa8',
           inactiveTintColor: 'gray',
@@ -231,7 +216,7 @@ export default function MyTabs() {
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+}*/
 
 //export default Extrato;
 

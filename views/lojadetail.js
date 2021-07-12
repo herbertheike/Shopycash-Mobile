@@ -152,13 +152,14 @@ export default function Getloja(props) {
   );
 }
 
-function ProdCat() {
+function ProdCat () {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();
   const shid = route.params.params.shoppingid;
+console.log(route.params.params.id)
 
   useEffect(() => {
     fetch(
@@ -166,10 +167,14 @@ function ProdCat() {
         route.params.params.id
     )
       .then((response) => response.json())
-      .then((json) => setData2(json))
+      .then((json) => setData2(json.data))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+
+  data2.map((item)=>{
+    console.log(item.nome)
+  })
 
   useEffect(() => {
     fetch(
@@ -181,7 +186,7 @@ function ProdCat() {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  console.log(shid)
+  //console.log(shid)
   return (
     <View>
       <Text
@@ -193,7 +198,7 @@ function ProdCat() {
                 }}
               >
                Mais vendidos!
-              </Text>
+              </Text> 
       <FlatList
             horizontal
             data={data}
@@ -247,11 +252,11 @@ function ProdCat() {
       <FlatList
         style={{ margin: 5 }}
         data={data2}
-        refreshing={false}
         keyExtractor={({ key }, id) => key}
         renderItem={({ item }) => {
           const datacadnome = item.nome;
           const datacadid = item._id;
+          console.log(item.nome)
           return (
             <View style={styles.container}>
               <Text
@@ -273,7 +278,7 @@ function ProdCat() {
                   extraData={datacadnome}
                   keyExtractor={({ key }, id) => key}
                   renderItem={({ item }) => {
-                    if (datacadid == item.categoriaid) {
+                    if (datacadid === item.categoriaid) {
                       return (
                         <TouchableOpacity
                           style={{
