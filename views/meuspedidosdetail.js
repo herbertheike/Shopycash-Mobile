@@ -11,7 +11,7 @@ import {
   Button
 } from "react-native";
 import moment from 'moment'
-import { Header, AirbnbRating } from "react-native-elements";
+import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -55,19 +55,7 @@ export default class MeusPedidos extends React.Component {
   }
 
   render() {
-    const data = this.state.compraresult;
-
     
-    const menuicon = (
-      <Icon
-        style={{ marginLeft: 10 }}
-        onPress={() => this.props.navigation.toggleDrawer()}
-        name="bars"
-        color="#5eaaa8"
-        size={25}
-      />
-    );
-    const extractcolor = ["#rgba(94,170,168, 0.25)", "rgba(234,67,53,0.25)"]
     return (
       
       <SafeAreaView style={styles.container}>
@@ -84,7 +72,7 @@ export default class MeusPedidos extends React.Component {
               fontFamily: "Roboto",
             },
           },<Text style={{ fontWeight: "bold", color: "#53aaa8", fontSize:15}}>
-          Meus Pedidos
+          Extrato
         </Text>}
           containerStyle={{
             backgroundColor: "#ffffff",
@@ -107,84 +95,22 @@ export default class MeusPedidos extends React.Component {
         </View> :
         <View>
         <View>
-          <Text style={{fontSize:18,textAlign:'justify'}}>Historico</Text>
-              <ScrollView>
+          <Text>Lojas onde pediu</Text>
+              <ScrollView horizontal>
                 {data.map((item)=>{
-                  var status = '';
-                  var statusicon = '';
-                  var statuscolor = '';
-                  if(item.cartstatus === "await"){
-                    status = 'Em Separação'
-                    statusicon = 'store'
-                    statuscolor = "#7C83FD"
-                  }else if(item.cartstatus === 'onroute'){
-                    status = "Enviado"
-                    statusicon = 'truck'
-                    tatuscolor = "#7FFC93C"
-                  }else if(item.cartstatus === 'delivered'){
-                    status = 'Entregue'
-                    statusicon = 'check-circle'
-                    statuscolor = "#00BD56"
-                  }else{
-                    status = 'Cancelado'
-                    statusicon = 'ban'
-                    statuscolor = "#DA0037"
-                  }
                     return(
-                      <View style={{ flexDirection:"column",padding:5, width:'100%'}}>
-                        <Text style={{ fontWeight: "bold", color: "#616161", fontSize:10, padding: 5}}>
-                          {moment(item.datacompra).format("dddd, DD [de] MMMM [de] YYYY").toUpperCase()}
-                          </Text>
-                          <View style={{backgroundColor: "#ffffff", borderRadius:10,shadowColor: "#000",
-                          shadowOffset: {
-                            width: 2,
-                            height: 3,
-                          },
-                          shadowOpacity: 1,
-                          shadowRadius: 4,
-                          elevation: 3}}>
-                        <View style={{ flexDirection:"row", width:'100%',
-                              justifyContent:'space-between', alignItems:'flex-start', padding: 5}}>
-                              <View style={{flexDirection:"column", width:'100%'}}>
-                                <Text style={{fontSize:18}}>{item.loja} - {item.shopping}</Text>
-                                <Text style={{ fontWeight: "100",fontSize:12}}>
-                                  <Icon name={statusicon} size={12} color={statuscolor}  style={{paddingRight: 10}}/> - 
-                                Pedido Nº:{item._id} - {status}</Text>
-                              </View>
-                        </View>
-                        <View style={{backgroundColor: "#ffffff"}}>
-                        <Text style={{fontSize:10,textAlign:'justify', paddingLeft:5}}>Produtos</Text>
-                          <FlatList
-                            style={{ margin: 5, width: '100%'}}
-                            data={item.produtos}
-                            keyExtractor={({ id }) => id}
-                            renderItem={({item, index})=>
-                                {
-                                  return(
-                                <View style={{display: "flex", flexDirection:'row', paddingLeft:5, alignItems:'center', justifyContent:"center"}}>       
-                                  <Text style={{fontSize:10,textAlign:'justify'}}>{item.qty}x - </Text> 
-                                  <Text numberOfLines={1} style={{width:'85%', fontWeight:'normal', fontSize:10,textAlign:'justify'}}>
-                                    {item.produto}
-                                  </Text>
-                                </View>)}
-                                }/>
-                              </View>
-                              <View style={{flexDirection:"row",width:'100%',backgroundColor: "#ffffff", padding: 10, justifyContent:'space-between'}}>
-                                  <Text>Avaliação</Text>
-                                  <AirbnbRating showRating={false} size={16} />
-                              </View>
-                            <View style={{borderBottomLeftRadius:10, borderBottomRightRadius:10,flexDirection:"row",width:'100%',backgroundColor: "#ffffff", alignItems: "center",justifyContent:'space-around', padding:15}}>
-                                <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Ajuda</Text>
-                                <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Comprar Novamente</Text>
-                            </View>
-                          </View>
+                      <View style={{padding:10, width:100, height: 100,  backgroundColor: "#5eaaa8", margin: 3, alignItems: "center", justifyContent:'center'}}>
+                      <Text>{item.loja}</Text>
+                      <Text>{item.total}</Text>
                       </View>
-                      
                     )
                 })}
               </ScrollView>
         </View>
+        <View>
+          <Text>Ultima compra.</Text>
 
+        </View>
         </View>
         }
       </View>
