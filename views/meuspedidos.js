@@ -132,28 +132,28 @@ export default class MeusPedidos extends React.Component {
                   }
                     return(
                       <View style={{ flexDirection:"column",padding:5, width:'100%'}}>
-                        <Text style={{ fontWeight: "bold", color: "#616161", fontSize:10, padding: 5}}>
+                        <Text style={{ fontWeight: "bold", color: "#616161", fontSize:12, padding: 10}}>
                           {moment(item.datacompra).format("dddd, DD [de] MMMM [de] YYYY").toUpperCase()}
                           </Text>
                           <View style={{backgroundColor: "#ffffff", borderRadius:10,shadowColor: "#000",
                           shadowOffset: {
-                            width: 2,
-                            height: 3,
+                            width: 0,
+                            height: 0,
                           },
                           shadowOpacity: 1,
-                          shadowRadius: 4,
-                          elevation: 3}}>
+                          shadowRadius: 0,
+                          elevation:4}}>
                         <View style={{ flexDirection:"row", width:'100%',
-                              justifyContent:'space-between', alignItems:'flex-start', padding: 5}}>
+                              justifyContent:'space-between', alignItems:'flex-start', padding: 15}}>
                               <View style={{flexDirection:"column", width:'100%'}}>
-                                <Text style={{fontSize:18}}>{item.loja} - {item.shopping}</Text>
-                                <Text style={{ fontWeight: "100",fontSize:12}}>
-                                  <Icon name={statusicon} size={12} color={statuscolor}  style={{paddingRight: 10}}/> - 
+                                <Text style={{fontSize:18, fontWeight: "bold"}}>{item.loja} - {item.shopping}</Text>
+                                <Text style={{ fontWeight: "100",fontSize:10, paddingTop:10}}>
+                                  <Icon name={statusicon} size={10} color={statuscolor}  style={{paddingRight: 10}}/> - 
                                 Pedido Nº:{item._id} - {status}</Text>
                               </View>
                         </View>
                         <View style={{backgroundColor: "#ffffff"}}>
-                        <Text style={{fontSize:10,textAlign:'justify', paddingLeft:5}}>Produtos</Text>
+                        <Text style={{fontSize:10,textAlign:'justify', paddingLeft:15}}>Produtos</Text>
                           <FlatList
                             style={{ margin: 5, width: '100%'}}
                             data={item.produtos}
@@ -169,11 +169,11 @@ export default class MeusPedidos extends React.Component {
                                 </View>)}
                                 }/>
                               </View>
-                              <View style={{flexDirection:"row",width:'100%',backgroundColor: "#ffffff", padding: 10, justifyContent:'space-between'}}>
+                              <View style={{flexDirection:"row",width:'100%',backgroundColor: "#ffffff", padding: 15, justifyContent:'space-between'}}>
                                   <Text>Avaliação</Text>
                                   <AirbnbRating showRating={false} size={16} />
                               </View>
-                            <View style={{borderBottomLeftRadius:10, borderBottomRightRadius:10,flexDirection:"row",width:'100%',backgroundColor: "#ffffff", alignItems: "center",justifyContent:'space-around', padding:15}}>
+                            <View style={{borderBottomLeftRadius:10, borderBottomRightRadius:10,flexDirection:"row",width:'100%',backgroundColor: "#ffffff", alignItems: "center",justifyContent:'space-around', padding:25}}>
                                 <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Ajuda</Text>
                                 <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Comprar Novamente</Text>
                             </View>
