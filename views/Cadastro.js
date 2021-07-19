@@ -3,32 +3,63 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   SafeAreaView,
+  ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
+  PermissionsAndroid
 } from "react-native";
+import {
+  TextInput,
+} from "react-native-paper";
 import "firebase/firestore";
 import firebase from "firebase";
 import * as Facebook from "expo-facebook";
 import * as GoogleSignIn from "expo-google-sign-in";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import PasswordInputText from 'react-native-hide-show-password-input';
+//import PasswordInputText from 'react-native-hide-show-password-input';
+import * as Location from "expo-location";
+
+import Geolocation from 'react-native-geolocation-service';
+
 
 class Cadastro extends React.Component {
   state = {
     displayName: "",
     email: "",
+    telefone: "",
     password: "",
     errorMessage: "",
+    errorMsg: null,
+    addressStreet: "",
+    addressNumber: "",
+    addressDistrict: "",
+    addressCity: "",
+    addressState: "",
+    addressCountry: "",
+    addressPostalCode: "",
     loading: false,
   };
-  onLoginSuccess() {
-    this.props.navigation.navigate("MainPage");
+
+  componentDidMount = async () =>{
+    
+    let status = await Location.requestPermissionsAsync();
+        if (status !== "granted") {
+          this.setState({errorMsg:"Permission to access location was denied"});
+        }
+       let apikey = await Location.setApiKey("AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ");
+    this.Locale();
   }
+
+  onLoginSuccess() {
+    this.props.navigation.navigate("CadMap");
+  }
+  /*onFederateLoginSuccess() {
+    this.props.navigation.navigate("Mainpage");
+  }*/
   onLoginFailure(errorMessage) {
     this.setState({ error: errorMessage, loading: false });
   }
@@ -62,6 +93,16 @@ class Cadastro extends React.Component {
               nickName:this.state.displayName,
               displayName:this.state.displayName,
               email: user.email,
+              phoneNumber:this.state.telefone,
+              address:{
+                street:this.state.addressStreet,
+                number:this.state.addressNumber,
+                district:this.state.addressDistrict,
+                city:this.state.addressCity,
+                state:this.state.addressState,
+                country:this.state.addressCountry,
+                postalcode:this.state.addressPostalCode
+              },
               createAt: Date.now(),
             });
             this.onLoginSuccess.bind(this)
@@ -119,7 +160,7 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onFederateLoginSuccess.bind(this);
       }
     } catch ({ message }) {
       alert(`Erro ao logar com o facebook: ${message}`);
@@ -166,14 +207,58 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onFederateLoginSuccess.bind(this);
       }
     } catch ({ message }) {
       alert("login: Error:" + message);
     }
   }
 
+
+  Locale = async () => {
+    var location = null;
+    var errorMsg = null;
+    var address = null;
+    var longitude = null;
+    var latitude = null;
+    var addressinfo = null;
+        
+        let nlocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
+        location = (nlocation);
+        console.log("Location", location)
+        let naddress = await Location.reverseGeocodeAsync({
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+          useGoogleMaps  :true});
+        address = naddress;
+  
+    if (errorMsg) {
+      longitude = this.state.errorMsg; 
+      latitude = errorMsg;
+      addressinfo = errorMsg;
+    } else if (address) {
+      longitude = JSON.stringify(location.coords.longitude);
+      latitude = JSON.stringify(location.coords.latitude);
+  
+      address.find((ad) => {
+      this.state.addressStreet = ad.street;
+        this.state.addressNumber = ad.name;
+        this.state.addressStreet = ad.street;
+        this.state.addressStreet = ad.street;
+        this.state.addressStreet = ad.street;
+        this.state.addressStreet = ad.street;
+        this.state.addressStreet = ad.street;
+        console.log(ad)
+        
+      });
+    }
+    //console.log("Address:\n", address)
+  }
+
   render() {
+    const temaInput = {
+      colors: { text: "black", placeholder: "#5eaaa8", primary: "#5eaaa8" },
+    };
     return (
       <TouchableWithoutFeedback
         onPress={() => {
@@ -182,11 +267,16 @@ class Cadastro extends React.Component {
       >
         <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <Text style={{ fontSize: 32, fontWeight: "bold", color: "black" }}>
+            <Text style={{ fontSize: 28, fontWeight: "bold", color: "black" }}>
               ShopyCash
             </Text>
+            <ScrollView style={styles.scrollcontainer}>
             <View style={styles.form}>
               <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
                 style={styles.input}
                 placeholder="Nome"
                 placeholderTextColor="#B1B1B1"
@@ -196,6 +286,10 @@ class Cadastro extends React.Component {
                 onChangeText={displayName => this.setState({ displayName:displayName})}
               />
               <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
                 style={styles.input}
                 placeholder="Email"
                 placeholderTextColor="#B1B1B1"
@@ -206,6 +300,10 @@ class Cadastro extends React.Component {
                 onChangeText={email => this.setState({ email:email })}
               />
               <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
                 style={styles.input}
                 placeholder="Senha"
                 placeholderTextColor="#B1B1B1"
@@ -214,6 +312,78 @@ class Cadastro extends React.Component {
                 secureTextEntry={true}
                 value={this.state.password}
                 onChangeText={password => this.setState({ password:password })}
+              />
+            </View>
+            <View style={styles.form}>
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Rua"
+                value={this.state.addressStreet}
+                onChangeText={addressStreet => this.setState({ addressStreet:addressStreet})}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Numero"
+                value={this.state.addressNumber}
+                onChangeText={addressNumber => this.setState({ addressNumber:addressNumber })}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Bairro"
+                value={this.state.addressDistrict}
+                onChangeText={addressDistrict => this.setState({ addressDistrict:addressDistrict })}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Cidade"
+                value={this.state.addressCity}
+                onChangeText={addressCity => this.setState({ addressCity:addressCity})}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Estado"
+                value={this.state.addressState}
+                onChangeText={addressState => this.setState({ addressState:addressState })}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Pais"
+                value={this.state.addressCountry}
+                onChangeText={addressCountry => this.setState({ addressCountry:addressCountry })}
+              />
+              <TextInput
+              mode={"outlined"}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                style={styles.input}
+                placeholder="Codigo Postal"
+                value={this.state.addressPostalCode}
+                onChangeText={addressPostalCode => this.setState({ addressPostalCode:addressPostalCode })}
               />
             </View>
             {this.renderLoading()}
@@ -285,6 +455,7 @@ class Cadastro extends React.Component {
                 Já tem uma conta?
               </Text>
             </View>
+            </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
@@ -296,21 +467,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    paddingTop: "50%",
+    paddingTop: "15%",
+  },
+  scrollcontainer: {
+    width: "100%",
+    flexDirection: "column",
+    padding: "5%",
+    
   },
   form: {
-    width: "86%",
-    marginTop: 15,
+    marginTop: 5,
+    justifyContent:'center'
   },
   logo: {
     marginTop: 20,
   },
   input: {
-    fontSize: 20,
+    fontSize: 16,
     borderColor: "#707070",
-    borderBottomWidth: 1,
-    paddingBottom: 1.5,
-    marginTop: 25.5,
+    paddingBottom: 5,
   },
   button: {
     backgroundColor: "#3A559F",

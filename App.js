@@ -12,6 +12,7 @@ import LojaDetail from "./views/lojadetail";
 import GetRegistro from "./views/getregistro";
 import LoadingScreen from "./views/loadingScreen";
 import Cadastro from "./views/Cadastro";
+import CadMap from "./views/cadastromap"
 import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
 import MeusPedidos from "./views/meuspedidos";
@@ -103,6 +104,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="Cadastro"
             component={Cadastro}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="CadMap"
+            component={CadMap}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

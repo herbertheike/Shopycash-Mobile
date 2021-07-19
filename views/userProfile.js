@@ -28,6 +28,7 @@ export default class Profile extends React.Component {
       name: "Sem nome",
       email: "",
       endereco: "",
+      telefone: "",
       modalVisible: false,
       isLogedin: false,
       photoURL:
@@ -44,6 +45,7 @@ export default class Profile extends React.Component {
       nickName: this.state.name,
       endereco: this.state.endereco,
       email:this.state.email,
+      phoneNumber:this.state.telefone,
       createAt: Date.now(),
     });
     user.updateEmail(this.state.email                                                                               )
@@ -260,6 +262,17 @@ export default class Profile extends React.Component {
                     style={{padding:10, margin: 10}}
                   >
                     Salvar
+                  </Button>
+                  <Button
+                    icon="pencil"
+                    color="#5eaaa8"
+                    mode="contained"
+                    onPress={() => {
+                      this.setState({ modalVisible: false });
+                    }}
+                    style={{padding:10, margin: 10}}
+                  >
+                    Fechar
                   </Button>
                 </View>
               </View>
