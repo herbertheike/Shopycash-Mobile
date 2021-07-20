@@ -21,7 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 class Login extends React.Component {
   state = { email: "", password: "", errorMessage: "", loading: false };
   onLoginSuccess() {
-    this.props.navigation.navigate("MainPage");
+    this.props.navigation.navigate("CadMap");
   }
   onLoginFailure(errorMessage) {
     this.setState({ error: errorMessage, loading: false });

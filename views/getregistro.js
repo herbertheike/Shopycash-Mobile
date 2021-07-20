@@ -21,7 +21,7 @@ export default function registro({ navigation }) {
       <TouchableOpacity style={styles.botaotext} title="Login" color="#ffffff">
         <Button
           title={"Avançar"}
-          onPress={() => navigation.navigate("MainPage")}
+          onPress={() => navigation.navigate("Cadastro")}
         />
       </TouchableOpacity>
     </KeyboardAvoidingView>

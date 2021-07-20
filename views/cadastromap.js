@@ -10,7 +10,8 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
-  PermissionsAndroid
+  PermissionsAndroid,
+  Dimensions 
 } from "react-native";
 import {
   TextInput,
@@ -26,7 +27,7 @@ class CadMap extends React.Component {
     longitute:''
   };
 
-  componentDidMount = async () =>{
+  componentDidMount (){
   
   }
 
@@ -35,6 +36,7 @@ class CadMap extends React.Component {
     return (
         <View>
         <MapView
+        style={styles.map}
             initialRegion={{
             latitude: 37.78825,
             longitude: -122.4324,
@@ -49,9 +51,13 @@ class CadMap extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: "15%",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
   scrollcontainer: {
     width: "100%",
