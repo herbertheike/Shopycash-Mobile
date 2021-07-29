@@ -3,8 +3,10 @@ import { StyleSheet, View, Image, ImageBackground } from "react-native";
 import { BarIndicator } from "react-native-indicators";
 import * as firebase from "firebase";
 import {Permissions, Notifications} from 'expo'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 class LoadingScreen extends React.Component {
-  componentDidMount() {
+
+  componentDidMount = async()=> {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.props.navigation.navigate("MainPage");

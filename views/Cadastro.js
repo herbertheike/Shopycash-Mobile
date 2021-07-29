@@ -22,8 +22,7 @@ import * as GoogleSignIn from "expo-google-sign-in";
 import Icon from "react-native-vector-icons/FontAwesome5";
 //import PasswordInputText from 'react-native-hide-show-password-input';
 import * as Location from "expo-location";
-
-import Geolocation from 'react-native-geolocation-service';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 class Cadastro extends React.Component {
@@ -34,12 +33,7 @@ class Cadastro extends React.Component {
     password: "",
     errorMessage: "",
     errorMsg: null,
-    addressStreet: "",
-    addressNumber: "",
-    addressDistrict: "",
-    addressCity: "",
-    addressState: "",
-    addressCountry: "",
+
     addressPostalCode: "",
     loading: false,
   };
@@ -54,12 +48,9 @@ class Cadastro extends React.Component {
     this.Locale();
   }
 
-  onLoginSuccess() {
+  onLoginSuccess = ()=> {
     this.props.navigation.navigate("CadMap");
   }
-  /*onFederateLoginSuccess() {
-    this.props.navigation.navigate("Mainpage");
-  }*/
   onLoginFailure(errorMessage) {
     this.setState({ error: errorMessage, loading: false });
   }
@@ -74,7 +65,7 @@ class Cadastro extends React.Component {
   }
 
   //Login Email e senha
-  async signInWithEmail() {
+  signInWithEmail = async()=> {
  
     await firebase
       .auth()
@@ -84,7 +75,6 @@ class Cadastro extends React.Component {
           if(!user){
             this.onLoginFailure.bind(this)(errorMessage);
           }else{
-            console.log(JSON.stringify(user))
           firebase
             .database()
             .ref("/user/" + user.uid)
@@ -93,22 +83,10 @@ class Cadastro extends React.Component {
               nickName:this.state.displayName,
               displayName:this.state.displayName,
               email: user.email,
-              phoneNumber:this.state.telefone,
-              address:{
-                street:this.state.addressStreet,
-                number:this.state.addressNumber,
-                district:this.state.addressDistrict,
-                city:this.state.addressCity,
-                state:this.state.addressState,
-                country:this.state.addressCountry,
-                postalcode:this.state.addressPostalCode
-              },
               createAt: Date.now(),
             });
-            this.onLoginSuccess.bind(this)
         }
-      }
-        
+      }   
       )
       .catch((error) => {
         let errorCode = error.code;
@@ -119,6 +97,8 @@ class Cadastro extends React.Component {
           this.onLoginFailure.bind(this)(errorMessage);
         }
       });
+      this.onLoginSuccess();
+      //this.props.navigation.navigate("CadMap");
   }
 
   //Login Facebook
@@ -225,7 +205,7 @@ class Cadastro extends React.Component {
         
         let nlocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
         location = (nlocation);
-        console.log("Location", location)
+       //console.log("Location", location)
         let naddress = await Location.reverseGeocodeAsync({
           longitude: location.coords.longitude,
           latitude: location.coords.latitude,
@@ -248,7 +228,7 @@ class Cadastro extends React.Component {
         this.state.addressStreet = ad.street;
         this.state.addressStreet = ad.street;
         this.state.addressStreet = ad.street;
-        console.log(ad)
+       // console.log(ad)
         
       });
     }
@@ -260,13 +240,7 @@ class Cadastro extends React.Component {
       colors: { text: "black", placeholder: "#5eaaa8", primary: "#5eaaa8" },
     };
     return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
-      >
-        <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <KeyboardAvoidingView style={styles.container}>
             <Text style={{ fontSize: 28, fontWeight: "bold", color: "black" }}>
               ShopyCash
             </Text>
@@ -314,78 +288,7 @@ class Cadastro extends React.Component {
                 onChangeText={password => this.setState({ password:password })}
               />
             </View>
-            <View style={styles.form}>
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Rua"
-                value={this.state.addressStreet}
-                onChangeText={addressStreet => this.setState({ addressStreet:addressStreet})}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Numero"
-                value={this.state.addressNumber}
-                onChangeText={addressNumber => this.setState({ addressNumber:addressNumber })}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Bairro"
-                value={this.state.addressDistrict}
-                onChangeText={addressDistrict => this.setState({ addressDistrict:addressDistrict })}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Cidade"
-                value={this.state.addressCity}
-                onChangeText={addressCity => this.setState({ addressCity:addressCity})}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Estado"
-                value={this.state.addressState}
-                onChangeText={addressState => this.setState({ addressState:addressState })}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Pais"
-                value={this.state.addressCountry}
-                onChangeText={addressCountry => this.setState({ addressCountry:addressCountry })}
-              />
-              <TextInput
-              mode={"outlined"}
-              underlineColor={"#5eaaa8"}
-              selectionColor={"#5eaaa8"}
-              theme={temaInput}
-                style={styles.input}
-                placeholder="Codigo Postal"
-                value={this.state.addressPostalCode}
-                onChangeText={addressPostalCode => this.setState({ addressPostalCode:addressPostalCode })}
-              />
-            </View>
+            <View style={{alignItems: "center", justifyContent: "center"}}>
             {this.renderLoading()}
             <Text
               style={{
@@ -454,11 +357,10 @@ class Cadastro extends React.Component {
               >
                 Já tem uma conta?
               </Text>
+              </View>
             </View>
             </ScrollView>
           </KeyboardAvoidingView>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
     );
   }
 }
@@ -472,6 +374,7 @@ const styles = StyleSheet.create({
   scrollcontainer: {
     width: "100%",
     flexDirection: "column",
+    
     padding: "5%",
     
   },

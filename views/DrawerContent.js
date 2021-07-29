@@ -43,7 +43,7 @@ export class DrawerContentMenu extends React.Component {
                 this.setState({ email: snapshot.val().email });
                 AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().displayName))
                 AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email))
-                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco))
+                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().address))
               }
               if (snapshot.val().loginType === "Facebook") {
                 this.setState({ name: snapshot.val().nickName });
@@ -57,7 +57,7 @@ export class DrawerContentMenu extends React.Component {
                 this.setState({ email: snapshot.val().email });
                 AsyncStorage.setItem('nome', JSON.stringify(snapshot.val().nickName));
                 AsyncStorage.setItem('email', JSON.stringify(snapshot.val().email));
-                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().endereco));
+                AsyncStorage.setItem('endereco', JSON.stringify(snapshot.val().address));
               }
             }.bind(this)
           );
@@ -85,8 +85,8 @@ export class DrawerContentMenu extends React.Component {
                 }}
               >
                 <Avatar.Image source={{ uri: this.state.photoURL }} size={60} />
-                <View style={{ flexDirection: "column", marginLeft: 15 }}>
-                  <Title style={styles.title}>{this.state.name}</Title>
+                <View style={{ flexDirection: "column", marginLeft: 10 }}>
+                  <Title style={styles.title}>{this.state.name.split(" ",1)}</Title>
                   <Caption style={styles.caption}>{this.state.email}</Caption>
                 </View>
               </View>
@@ -204,16 +204,18 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     marginTop: -5,
-    paddingLeft: 15,
+    paddingLeft: 10,
     backgroundColor: "#5eaaa8",
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
+    letterSpacing:0.5,
     marginTop: 3,
     fontWeight: "bold",
   },
   caption: {
     fontSize: 12,
+    letterSpacing:0.5,
     lineHeight: 12,
   },
   row: {

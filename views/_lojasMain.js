@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
 import { Header, SearchBar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { DrawerContentMenu } from "./DrawerContent";
@@ -27,130 +28,104 @@ import Cart from "./cart"
 import * as Location from "expo-location";
 import firebase from "firebase";
 const Drawer = createDrawerNavigator();
-class HomeScreen extends React.Component{
-  constructor(props) {
-    super(props);
+
+
+//função principal
+function HomeScreen(props) {
+  const [search, setSearch] = useState();
+
+  function updateSearch(search) {
+    setSearch(search);
   }
-
-    state = {
-      search: '',
-      isLoading:true,
-      data:[],
-      datal:[],
-      seg:[],
-      address:'',
-      addressformat:''
-     };
-  
-  componentDidMount= async ()=>{
-
-    await fetch("https://api-shopycash1.herokuapp.com/segmento")
-      .then((response) => response.json())
-      .then((res) => this.setState({seg:res}))
-      .catch((error) => console.error(error))
-      .finally(() => this.setState({isLoading:false}));
-   
-    this.indexpropduct();
-    this.indexstore();
-    this.databaseaddr();
-    
-  }
-  indexstore = async () =>{
-    await fetch("https://api-shopycash1.herokuapp.com/indexstore")
-      .then((response) => response.json())
-      .then((res) => this.setState({datal:res}))
-      .catch((error) => console.error(error))
-      
-
-  }
-  indexpropduct = async () =>{
-    await fetch("https://api-shopycash1.herokuapp.com/indexproduct/enable")
-    .then((response) => response.json())
-    .then((res) => this.setState({data:res}))
-    .catch((error) => console.error(error))
-
-  }
-
-  updateSearch(search) {
-    this.setState({search:search});
-  }
-
   //refresh
-  refresh(){
-    const wait = (timeout) => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, timeout);
-      });
-    };
-  }
-  databaseaddr = () =>{
-       firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          const userId = firebase.auth().currentUser.uid;
-           firebase
-            .database()
-            .ref("/user/" + userId)
-            .once(
-              "value",
-              function (snapshot) {
-                  this.setState({address:snapshot.val().address})
-                  this.setState({addressformat:this.state.address.street +", "+this.state.address.number+", "+this.state.address.district+", "+this.state.address.city+" - "+this.state.address.state})
-                  console.log("Array\n",this.state.address)
-                  console.log("Formatado\n",this.state.addressformat)
-                }.bind(this)
-                
-            )
-            
-        } else {
-          console.log("Error")
-        }
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
     });
-    console.log(this.state.address)
-    }
- render () {
+  };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  async function geocodeadr(){
+    
+    const [adr, setAdr] = useState();
+    await firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const userId = firebase.auth().currentUser.uid;
+        firebase
+          .database()
+          .ref("/user/" + userId)
+          .once(
+            "value",
+            function (snapshot) {
+                setAdr(snapshot.val().address);
+              }
+          )
+      }
+    }
+  )
+  const adrformt = adr.street+", "+adr.number+", "+adr.district+", "+adr.city+" "+adr.state
+ // Location.geocodeAsync(adr.street+", "+adr.number+", "+adr.district+", "+adr.city+" "+adr.state)
+  //console.log(adr.street+", "+adr.number+", "+adr.district+", "+adr.city+" "+adr.state)
+return adrformt;
+}
+
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [seg, setSeg] = useState([]);
   const carticon = (
     <Icon
       name="shopping-bag"
       size={25}
       color="#5eaaa8"
       style={{ marginHorizontal: 10 }}
-      onPress={() => this.props.navigation.navigate('Cart')}
+      onPress={() => props.navigation.navigate('Cart')}
     />
   );
   const menuicon = (
     <Icon
       style={{ marginLeft: 10 }}
-      onPress={() => this.props.navigation.toggleDrawer}
+      onPress={() => props.navigation.toggleDrawer()}
       name="bars"
       color="#5eaaa8"
       size={25}
     />
   );
-
-  const pinIcon = (
-    <Icon
-      style={{ marginLeft: 10 }}
-      name="map-marker-alt"
-      color="#5eaaa8"
-      size={18}
-    />
-  );
-  
+  const [datal, setDatal] = useState([]);
+  const navigation = useNavigation();
   const staricon = <Icon name="star" size={12} />;
 
-
-  const refreshing = false;
-
-  
-    const onRefresh = (() => {
-      refreshing = true;
-  
-      wait(2000).then(() => refreshing = false);
-    }, []);
-    const filtered = this.state.datal.filter((item) => {
-      return item.nomefantasia.match(this.state.search) || item.shopping.match(this.state.search) || item.segmento[0].match(this.state.search);
-    });
+  useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/segmento")
+      .then((response) => response.json())
+      .then((res) => setSeg(res))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false),[]);
+  }, []);
+   useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/indexproduct/enable")
+      .then((response) => response.json())
+      .then((res) => setData(res))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false),[]);
+  }, []);
+  useEffect(async () => {
+    await fetch("https://api-shopycash1.herokuapp.com/indexstore")
+      .then((response) => response.json())
+      .then((json) => setDatal(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+  const filtered = datal.filter((item) => {
+    return item.nomefantasia.match(search) || item.shopping.match(search) || item.segmento[0].match(search);
+  });
+ // console.log(datal)
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header
@@ -172,9 +147,7 @@ class HomeScreen extends React.Component{
           justifyContent: "space-around",
         }}
       />
-        <Text style={{ color: "#a3d2ca", fontSize: 12, textAlign: "center" }}>
-          {pinIcon} - {this.state.addressformat}
-          </Text>
+      {this.databaseaddr()}
       <View>
         <SearchBar
           lightTheme={true}
@@ -182,8 +155,8 @@ class HomeScreen extends React.Component{
           inputContainerStyle={{backgroundColor: "#ffffff"}}
           inputStyle={{color: "#a3d2ca", fontWeight: "200"}}
           placeholder="Busque por loja ou Shopping"
-          onChangeText={() =>this.updateSearch()}
-          value={this.state.search}
+          onChangeText={updateSearch}
+          value={search}
         />
       </View>
       <ScrollView
@@ -197,13 +170,13 @@ class HomeScreen extends React.Component{
           </Text>
           <FlatList
             horizontal
-            data={this.state.data}
+            data={data}
             keyExtractor={({ id }, item) => id}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={{
                   width: 300,
-                  borderRadius: 5,
+                  borderRadius: 15,
                   borderWidth: 0.1,
                   backgroundColor: "#ffffff",
                   color: "#000000",
@@ -214,7 +187,7 @@ class HomeScreen extends React.Component{
                 title="Login"
                 color="#ffffff"
                 onPress={() =>
-                  this.props.navigation.navigate("Proddetail", {
+                  navigation.navigate("Proddetail", {
                     params: {
                       idloja: item.loja_id,
                       idprod: item._id,
@@ -249,12 +222,12 @@ class HomeScreen extends React.Component{
           <Text style={{ fontWeight: "bold", color: "#5eaaa8", padding: 10 }}>
             Categorias
           </Text>
-          {this.state.isLoading ? (
+          {isLoading ? (
             <ActivityIndicator />
           ) : (
             <FlatList
               horizontal
-              data={this.state.seg}
+              data={seg}
               keyExtractor={({ id }, item) => id}
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -271,7 +244,7 @@ class HomeScreen extends React.Component{
                   }}
                   title="Login"
                   color="#ffffff"
-                  onPress={() => this.setState({search:item.nome})}
+                  onPress={() => setSearch(item.nome)}
                 >
                   <Text style={styles.botaotext}>{item.nome}</Text>
                 </TouchableOpacity>
@@ -290,7 +263,7 @@ class HomeScreen extends React.Component{
           >
             Lojas
           </Text>
-          {this.state.isLoading ? (
+          {isLoading ? (
             <ActivityIndicator />
           ) : (
             <FlatList
@@ -306,14 +279,14 @@ class HomeScreen extends React.Component{
                   title="Login"
                   color="#ffffff"
                   onPress={() =>
-                    this.props.navigation.navigate("LojaDetail", {
+                    navigation.navigate("LojaDetail", {
                       params: { id: item._id, logo: item.Logo, shoppingid: item.shopping_id },
                     })
                   }
                 >
                   <View style={{ flexDirection: "row" }}>
                     <Image
-                      style={{ width: 70, height: 70 , marginRight: 5, borderWidth: 0.1,borderColor:'#263646',  }}
+                      style={{ width: 70, height: 70 , marginRight: 5, borderRadius:50, borderWidth: 0.1,borderColor:'#263646',  }}
                       source={{ uri: item.Logo }}
                     />
                     <View style={{ flexDirection: "column" }}>
@@ -342,8 +315,119 @@ class HomeScreen extends React.Component{
     </KeyboardAvoidingView>
   );
 }
+//Função  do gps
+function Locale() {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [address, setAddress] = useState(null);
+  const pinIcon = (
+    <Icon
+      style={{ marginLeft: 10 }}
+      name="map-marker-alt"
+      color="#5eaaa8"
+      size={18}
+    />
+  );
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+      }
+      let addr = await Location.geocodeAsync()
+      console.log(addr)
+     
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      let address = await Location.reverseGeocodeAsync({
+        longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+      });
+      setAddress(address);
+    })();
+  }, []);
+
+  let longitude = "Waiting..";
+  let latitude = "Waiting..";
+  let addressinfo = "Waiting..";
+  if (errorMsg) {
+    longitude = errorMsg; 
+    latitude = errorMsg;
+    addressinfo = errorMsg;
+  } else if (address) {
+    longitude = JSON.stringify(location.coords.longitude);
+
+    address.find((ad) => {
+      region = ad.region;
+      street = ad.street;
+      number = ad.name;
+      addressinfo = street + " - " + number + " - " + region;
+    });
+  }
+
+  return (
+      <Text style={{ color: "#a3d2ca", fontSize: 12, textAlign: "center" }}>
+        {pinIcon} - {addressinfo}
+      </Text>
+  );
 }
 
+function Databaseaddr (){
+  const pinIcon = (
+    <Icon
+      style={{ marginLeft: 10 }}
+      name="map-marker-alt"
+      color="#5eaaa8"
+      size={18}
+    />
+  );
+  const [adrformt, setAdrformt] = useState();
+  const [adrdb, setAdrdb] = useState();
+  useEffect(() => {
+    (async () => {
+ await firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      const userId = firebase.auth().currentUser.uid;
+       firebase
+        .database()
+        .ref("/user/" + userId)
+        .once(
+          "value",
+          function (snapshot) {
+              setAdrdb(snapshot.val().address)
+            }
+        );
+        setAdrformt(adrdb.street +", "+adrdb.number+", "+adrdb.district+", "+adrdb.city+" - "+adrdb.state)
+              console.log("Array\n",adrdb)
+              console.log("Formatado\n",adrformt)
+    } else {
+    }
+  })
+})();
+  });
+
+ 
+  return(
+    <Text style={{ color: "#a3d2ca", fontSize: 12, textAlign: "center" }}>
+        {pinIcon} - {adrformt}
+      </Text>
+  )
+
+}
+
+//Drawer 
 export default function lojasMain() {
   return (
     <Drawer.Navigator
@@ -362,7 +446,6 @@ export default function lojasMain() {
     </Drawer.Navigator>
   );
 }
-
 
 //Estilo
 const styles = StyleSheet.create({
@@ -404,7 +487,6 @@ const styles = StyleSheet.create({
   },
   imageloja: {
     width: 60,
-    resizeMode:'contain',
     height: 60,
   },
   ImageStyle: {

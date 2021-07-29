@@ -45,7 +45,7 @@ export default class Profile extends React.Component {
       nickName: this.state.name,
       endereco: this.state.endereco,
       email:this.state.email,
-      phoneNumber:this.state.telefone,
+      //phoneNumber:this.state.telefone,
       createAt: Date.now(),
     });
     user.updateEmail(this.state.email                                                                               )
@@ -82,7 +82,7 @@ export default class Profile extends React.Component {
               } else {
                 this.setState({name: snapshot.val().nickName})
                 this.setState({ email: snapshot.val().email });
-                this.setState({ endereco: snapshot.val().endereco});
+                this.setState({ endereco: snapshot.val().address});
               }
             }.bind(this)
           );
@@ -211,7 +211,7 @@ export default class Profile extends React.Component {
                 borderColor: "#e2e2e2"
               }}
             >
-              {this.state.endereco}
+              {this.state.endereco.street}, {this.state.endereco.number}, {this.state.endereco.district} {this.state.endereco.city} - {this.state.endereco.state}
             </Text>
           </View>
           <View style={{alignItems: "center", padding: 20}}>

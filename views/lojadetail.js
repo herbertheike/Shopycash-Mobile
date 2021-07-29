@@ -322,7 +322,6 @@ console.log(route.params.params.id)
                                 marginLeft: 10,
                                 borderRadius: 500,
                                 borderWidth: 0.3,
-                                Width: 0.1,
                                 borderColor: "#a3d2ca",
                               }}
                               source={{ uri: item.imagem }}
