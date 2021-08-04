@@ -11,13 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase from "firebase";
-import {
-  Avatar,
-  Caption,
-  TextInput,
-  Button,
-  RadioButton,
-} from "react-native-paper";
+import {TextInput} from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as Location from "expo-location";
 import { MaterialIndicator  } from "react-native-indicators";
@@ -29,6 +23,9 @@ export default class Checkout extends React.Component {
       cartid: '',
       subtotalPrice: 0,
       nome: '',
+      cpf: '',
+      email: '',
+      telefone: '',
       shippingtax: 0,
       shipping:'',
       logradouro: "",
@@ -38,6 +35,7 @@ export default class Checkout extends React.Component {
       cidade: "",
       estado: "",
       cep: "",
+      address:"",
       shoppingid: "",
       lojaid: "",
       shippingmethod: "",
@@ -52,21 +50,68 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount = async () =>{
-    this.locale();
+  //this.databaseaddr;
+   // this.locale();
     await AsyncStorage.getItem('cartid')
     .then((cartid)=>{
       this.setState({cartid:cartid})
       //console.log(this.state.cartid)
     })
+    await AsyncStorage.getItem('nome')
+    .then((nome)=>{
+      this.setState({nome:nome})
+      //console.log(this.state.cartid)
+    })
     await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state.cartid)
           .then((res) => res.json())
-          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal}))
+          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal, logradouro:result[0].address.street}))
           .catch((error) => console.log(error))
           .finally(() => this.setState({isLoaded: true}),[]);
         
-          console.log('ORDER DATA', this.state.orderdata)
-          console.log("SUB TOTAL ONLY",this.state.subtotalPrice)
+          console.log('ORDER DATA', this.state.orderdata[0].dadoscliente.email)
+          this.setState({email:this.state.orderdata[0].dadoscliente.email})
+          this.setState({userid:this.state.orderdata[0].dadoscliente.userid})
+          this.setState({logradouro:this.orderdata[0].address.street,
+            numero:this.orderdata[0].address.number,
+            bairro:this.orderdata[0].address.district,
+            cidade:this.orderdata[0].address.city,
+            estado:this.orderdata[0].address.state,
+            referencia:this.orderdata[0].address.reference,
+            cep:this.orderdata[0].address.postalCode })
+          console.log("SUB TOTAL ONLY",this.state.logradouro)
+
+          
+
   }
+
+  /*databaseaddr = async () =>{
+    const address = this.state.address;
+    await firebase.auth().onAuthStateChanged((user) => {
+     if (user) {
+       const userId = firebase.auth().currentUser.uid;
+        firebase
+         .database()
+         .ref("/user/" + userId)
+         .once(
+           "value",
+           function (snapshot) {
+               this.setState({address:snapshot.val().address})
+               this.setState({logradouro:address.street,
+                numero:address.number,
+                bairro:address.district,
+                cidade:address.city,
+                estado:address.state,
+                referencia:address.reference,
+                cep:address.postalCode })
+             }.bind(this)
+         )
+         
+     } else {
+       console.log("Error")
+     }
+ });
+ console.log(this.state.address)
+ }*/
 
   subtotalPrice = () => {
     const { cartItems } = this.state;
@@ -123,18 +168,17 @@ export default class Checkout extends React.Component {
           estado: this.state.estado,
           cep: this.state.cep,
         },
-        nome:this.state.nome,
         shippingmethod: this.state.shipping,
         shippingprice: this.state.shippingtax,
         total: (this.state.subtotalPrice+this.state.shippingtax).toFixed(2),
         cartstatus:'payment'
-    })
-    
+    }) 
     const _id = this.state.cartid;
+    console.log("coisa",payload)
     try {
       await fetch(
         "https://api-shopycash1.herokuapp.com/delivery/" +
-          _id,                                                                                                                                                                                      
+          _id,                                            
         {
           method: "POST",
           headers: {
@@ -161,7 +205,7 @@ export default class Checkout extends React.Component {
   };
 
   //Função  do gps
-  locale = async () => {
+/* locale = async () => {
     var location = null;
     var errorMsg = null;
     let address = [];
@@ -210,7 +254,7 @@ export default class Checkout extends React.Component {
       });
     }
     return //console.log(address);
-  };
+  };*/
 
   render() {
    // console.log(this.state.shippingtax)
@@ -238,6 +282,7 @@ export default class Checkout extends React.Component {
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 13 }}
               >
                 Checkout - Entrega
+                {this.state.logradouro}
               </Text>
             ))
           }

@@ -83,11 +83,11 @@ class HomeScreen extends React.Component{
       });
     };
   }
-  databaseaddr = () =>{
+  databaseaddr = async () =>{
        firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           const userId = firebase.auth().currentUser.uid;
-           firebase
+           await firebase
             .database()
             .ref("/user/" + userId)
             .once(
@@ -98,7 +98,6 @@ class HomeScreen extends React.Component{
                   console.log("Array\n",this.state.address)
                   console.log("Formatado\n",this.state.addressformat)
                 }.bind(this)
-                
             )
             
         } else {
@@ -107,6 +106,8 @@ class HomeScreen extends React.Component{
     });
     console.log(this.state.address)
     }
+
+    
  render () {
 
   const carticon = (

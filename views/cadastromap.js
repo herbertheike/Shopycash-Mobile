@@ -30,6 +30,7 @@ class CadMap extends React.Component {
     addressDistrict: "",
     addressCity: "",
     addressState: "",
+    addressReference: ""
 
   };
 
@@ -98,7 +99,8 @@ class CadMap extends React.Component {
               district:this.state.addressDistrict,
               city:this.state.addressCity,
               state:this.state.addressState,
-              postalcode:this.state.cep
+              postalcode:this.state.cep,
+              reference:this.state.addressReference
             },
             updateAt: Date.now(),
           }),
@@ -192,6 +194,16 @@ class CadMap extends React.Component {
                 placeholder="Estado"
                 value={this.state.addressState}
                 onChangeText={addressState => this.setState({ addressState:addressState })}
+              />
+              <TextInput
+              mode={"outlined"}
+              style={{padding:5, margin:5}}
+              underlineColor={"#5eaaa8"}
+              selectionColor={"#5eaaa8"}
+              theme={temaInput}
+                placeholder="Estado"
+                value={this.state.addressReference}
+                onChangeText={addressReference => this.setState({ addressReference:addressReference })}
               />
             </View>
             <Button 

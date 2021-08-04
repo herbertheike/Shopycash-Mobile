@@ -6,7 +6,7 @@ import Constants from 'expo-constants';
 import LoginSelect from "./views/loginview";
 import LoginPhone from "./views/loginphone";
 import NextPhone from "./views/nextphone";
-import LojasMain from "./views/lojasMain";
+import LojasMain from "./views/_lojasMain";
 import Categorias from "./views/getcategorias";
 import LojaDetail from "./views/lojadetail";
 import GetRegistro from "./views/getregistro";
@@ -161,18 +161,6 @@ class App extends React.Component {
       </NavigationContainer>
     );
   }
-}
-
-function Select() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="LoginSelect"
-        component={LoginSelect}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
 }
 function TelefoneLogin() {
   return (

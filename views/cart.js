@@ -206,12 +206,18 @@ export default class Cart extends React.Component {
   }
   }
   checkOut = async () => {
-    const nome = await AsyncStorage.getItem("nome");
+    const setnome = await AsyncStorage.getItem("nome")
+    .then((nome)=>{
+      this.setState({nome:JSON.parse(nome)})
+    })
     const loja = this.state.loja;
     const lojaid = this.state.lojaid;
     const shopping = this.state.shopping;
     const shoppingid = this.state.shoppingid;
-    const user = firebase.auth().currentUser;
+    const userId = firebase.auth().currentUser.uid;
+    const email = firebase.auth().currentUser.email;
+    const nome = this.state.nome
+    console.log(nome)
 
 
     const payload = JSON.stringify({
@@ -221,8 +227,12 @@ export default class Cart extends React.Component {
             shoppingid: shoppingid,
             produtos:
             [...this.state.cartItems],
-            userid:user.uid,
-            nome:nome,
+            dadoscliente:
+            {
+              userid: userId,
+              nome:nome,
+              email: email,
+            },
             cartstatus:'checkout',
             datacompra: Date.now(),
             subTotal: this.subtotalPrice()			
