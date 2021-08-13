@@ -44,7 +44,6 @@ export default class Cart extends React.Component {
 
     await AsyncStorage.getItem('cartstatus')
     .then((cartstatus)=>{
-     // console.log('cartststus', cartstatus)
       if (cartstatus === 'checkout'){
         this.props.navigation.navigate("Checkout");
       }
@@ -250,7 +249,7 @@ export default class Cart extends React.Component {
 			  .then((response) => response.json())
 			  .then((res) => this.setState({delivery: res}))
 			  .catch((error) => console.error(error))
-        .finally(() => setLoading(false),[]);
+        .finally(() => console.log("delivery ok"),[]);
               
    } catch (error) {
      console.log(error)

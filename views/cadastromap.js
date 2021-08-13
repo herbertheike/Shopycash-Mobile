@@ -67,9 +67,6 @@ class CadMap extends React.Component {
           { cancelable: false }
         );*/
   }
-  onAddressRegister = () =>{
-
-  }
 
   addressDetails = async () => {
     const user = firebase.auth().currentUser;

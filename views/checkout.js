@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase from "firebase";
-import {TextInput} from "react-native-paper";
+import {TextInput, RadioButton} from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as Location from "expo-location";
 import { MaterialIndicator  } from "react-native-indicators";
@@ -41,6 +41,39 @@ export default class Checkout extends React.Component {
       shippingmethod: "",
       totalPrice: 0,
       isLoaded: false,
+      open: false,
+      value:null,
+      items: [
+        { label: "AC", value: "Acre"},
+        { label: "AL", value: "Alagoas"},
+        { label: "AP", value: "Amapá"},
+        { label: "AM", value: "Amazonas"},
+        { label: "BA", value: "Bahia"},
+        { label: "CE", value: "Ceará"},
+        { label: "DF", value: "Distrito Federal"},
+        { label: "ES", value: "Espírito Santo"},
+        { label: "GO", value: "Goiás"},
+        { label: "MA", value: "Maranhão"},
+        { label: "MT", value: "Mato Grosso"},
+        { label: "MS", value: "Mato Grosso do Sul"},
+        { label: "MG", value: "Minas Gerais"},
+        { label: "PA", value: "Pará" },
+        { label: "PB", value: "Paraíba" },
+        { label: "PR", value: "Paraná" },
+        { label: "PE", value: "Pernambuco" },
+        { label: "PI", value: "Piauí" },
+        { label: "RJ", value: "Rio de Janeiro" },
+        { label: "RN", value: "Rio Grande do Norte" },
+        { label: "RS", value: "Rio Grande do Sul" },
+        { label: "RO", value: "Rondônia" },
+        { label: "RR", value: "Roraima" },
+        { label: "SC", value: "Santa Catarina" },
+        { label: "SP", value: "São Paulo" },
+        { label: "SE", value: "Sergipe" },
+        { label: "TO", value: "Tocantins" },
+      ],
+      opensh: false,
+      valuesh:null,
       shippingarray: [
         { label: "Entrega expressa (até 4 horas)", value: 8.90},
         { label: "Entrega convencional (até 1 dia)", value: 5.90},
@@ -50,41 +83,47 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount = async () =>{
-  //this.databaseaddr;
-   // this.locale();
+  this.databaseaddr();
+
     await AsyncStorage.getItem('cartid')
     .then((cartid)=>{
       this.setState({cartid:cartid})
-      //console.log(this.state.cartid)
+      console.log(this.state.cartid)
     })
-    await AsyncStorage.getItem('nome')
-    .then((nome)=>{
-      this.setState({nome:nome})
-      //console.log(this.state.cartid)
-    })
+    
     await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state.cartid)
           .then((res) => res.json())
-          .then((result) => this.setState({ orderdata:result, subtotalPrice: result[0].subTotal, logradouro:result[0].address.street}))
+          .then((result) => this.setState({ orderdata:result}))
           .catch((error) => console.log(error))
-          .finally(() => this.setState({isLoaded: true}),[]);
+          .finally(() => this.setState({isLoaded: true}));
         
-          console.log('ORDER DATA', this.state.orderdata[0].dadoscliente.email)
+          console.log('ORDER DATA', this.state.orderdata)
+          this.setState({nome:this.state.orderdata[0].dadoscliente.nome})
           this.setState({email:this.state.orderdata[0].dadoscliente.email})
-          this.setState({userid:this.state.orderdata[0].dadoscliente.userid})
-          this.setState({logradouro:this.orderdata[0].address.street,
-            numero:this.orderdata[0].address.number,
-            bairro:this.orderdata[0].address.district,
-            cidade:this.orderdata[0].address.city,
-            estado:this.orderdata[0].address.state,
-            referencia:this.orderdata[0].address.reference,
-            cep:this.orderdata[0].address.postalCode })
-          console.log("SUB TOTAL ONLY",this.state.logradouro)
+          this.setState({subtotalPrice:this.state.orderdata[0].subTotal})
+          console.log("lograd",this.state.logradouro)
 
-          
+          this.setValue = this.setValue.bind(this);
 
   }
 
-  /*databaseaddr = async () =>{
+  setOpen =(open) =>{   
+      this.setState({open:open})
+  }
+
+  setValue=(callback)=> {
+    this.setState(state => ({
+      value: callback(this.state.estado)
+    }));
+    console.log(this.state.value)
+  }
+
+  setItems(callback) {
+    this.setState(state => ({
+      items: callback(state.items)
+    }));
+  }
+  databaseaddr = async () =>{
     const address = this.state.address;
     await firebase.auth().onAuthStateChanged((user) => {
      if (user) {
@@ -95,14 +134,14 @@ export default class Checkout extends React.Component {
          .once(
            "value",
            function (snapshot) {
-               this.setState({address:snapshot.val().address})
-               this.setState({logradouro:address.street,
-                numero:address.number,
-                bairro:address.district,
-                cidade:address.city,
-                estado:address.state,
-                referencia:address.reference,
-                cep:address.postalCode })
+              this.setState({address:snapshot.val().address});
+              this.setState({logradouro:snapshot.val().address.street});
+              this.setState({numero:snapshot.val().address.number});
+              this.setState({bairro:snapshot.val().address.district});
+              this.setState({cidade:snapshot.val().address.city});
+              this.setState({estado:snapshot.val().address.state});
+              this.setState({referencia:snapshot.val().address.reference});
+              this.setState({cep:snapshot.val().address.postalcode});
              }.bind(this)
          )
          
@@ -111,7 +150,7 @@ export default class Checkout extends React.Component {
      }
  });
  console.log(this.state.address)
- }*/
+ }
 
   subtotalPrice = () => {
     const { cartItems } = this.state;
@@ -125,39 +164,11 @@ export default class Checkout extends React.Component {
     return 0;
   };
 
-  /*repopulate = async () => {
-    const newItems = [...this.state.cartItems];
-    //console.log(newItems)
-    const jsonarray = this.state.jsonarray;
-    for (var i = 0; i < newItems.length; i++) {
-      try {
-        const obj = JSON.parse(
-          JSON.stringify({
-            produtoid: newItems[i].produtoid,
-            produto: newItems[i].produto,
-            categoria: newItems[i].categoria,
-            unitPrice: newItems[i].unitPrice,
-            qty: newItems[i].qty,
-            image: newItems[i].imagem,
-            loja: newItems[i].loja,
-            lojaid: newItems[i].lojaid,
-            shopping: newItems[i].shopping,
-            shoppingid: newItems[i].shoppingid,
-            modifiedAt: Date.now(),
-          })
-        );
-        if (i <= newItems.length) {
-          jsonarray.push(obj);
-        }
-        //console.log(jsonarray)
-      } catch (error) {
-        console.log("THIS ERROR" + error);
-      }
-    }
-  };*/
-
   payment = async () => {
     const payload = JSON.stringify({
+      dadoscliente:{
+        telefone: this.state.telefone
+      },
       deliveryadress: 
         {
           logradouro: this.state.logradouro,
@@ -168,7 +179,7 @@ export default class Checkout extends React.Component {
           estado: this.state.estado,
           cep: this.state.cep,
         },
-        shippingmethod: this.state.shipping,
+        shippingmethod: this.state.shippingmethod,
         shippingprice: this.state.shippingtax,
         total: (this.state.subtotalPrice+this.state.shippingtax).toFixed(2),
         cartstatus:'payment'
@@ -204,59 +215,11 @@ export default class Checkout extends React.Component {
     }
   };
 
-  //Função  do gps
-/* locale = async () => {
-    var location = null;
-    var errorMsg = null;
-    let address = [];
-    var pinIcon = (
-      <Icon
-        style={{ marginLeft: 10 }}
-        name="map-marker-alt"
-        color="#5eaaa8"
-        size={18}
-      />
-    );
-
-    try {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        errorMsg = "Permission to access location was denied";
-      }
-      let nlocation = await Location.getCurrentPositionAsync({});
-      location = nlocation;
-      let naddress = await Location.reverseGeocodeAsync({
-        longitude: location.coords.longitude,
-        latitude: location.coords.latitude,
-      });
-      address = naddress;
-    } catch (error) {
-      console.log(error);
-    }
-
-    let longitude = "Waiting..";
-    let latitude = "Waiting..";
-    let addressinfo = "Waiting..";
-    if (errorMsg) {
-      longitude = errorMsg;
-      latitude = errorMsg;
-      addressinfo = errorMsg;
-    } else if (address) {
-      longitude = JSON.stringify(location.coords.longitude);
-
-      this.setState({
-        logradouro: address[0].street,
-        numero: address[0].name,
-        bairro: "",
-        cidade: address[0].city == null ? "" : address[0].city,
-        estado: address[0].region,
-        cep: address[0].postalCode,
-      });
-    }
-    return //console.log(address);
-  };*/
 
   render() {
+    const { open, value, items } = this.state;
+    const {opensh, valuesh, itemssh} = this.state;
+    const checked = 'checked'
    // console.log(this.state.shippingtax)
     const newDelivery = this.state.newDelivery;
     const zero = 0.001;
@@ -282,7 +245,6 @@ export default class Checkout extends React.Component {
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 13 }}
               >
                 Checkout - Entrega
-                {this.state.logradouro}
               </Text>
             ))
           }
@@ -350,7 +312,6 @@ export default class Checkout extends React.Component {
                 onChangeText={(text) => this.setState({ nome: text })}
               />
             </View>
-
             <View>
               <Text
                 style={{
@@ -401,6 +362,7 @@ export default class Checkout extends React.Component {
                   selectionColor={"#5eaaa8"}
                   label={"Numero"}
                   theme={temaInput}
+                  keyboardType={'numeric'}
                   value={this.state.numero}
                   style={{
                     fontSize: 16,
@@ -463,59 +425,32 @@ export default class Checkout extends React.Component {
                   }}
                   onChangeText={(text) => this.setState({ cidade: text })}
                 />
+                {console.log(open)}
                 <DropDownPicker
-                  items={[
-                    { label: "AC", value: "Acre"},
-                    { label: "AL", value: "Alagoas"},
-                    { label: "AP", value: "Amapá"},
-                    { label: "AM", value: "Amazonas"},
-                    { label: "BA", value: "Bahia"},
-                    { label: "CE", value: "Ceará"},
-                    { label: "DF", value: "Distrito Federal"},
-                    { label: "ES", value: "Espírito Santo"},
-                    { label: "GO", value: "Goiás"},
-                    { label: "MA", value: "Maranhão"},
-                    { label: "MT", value: "Mato Grosso"},
-                    { label: "MS", value: "Mato Grosso do Sul"},
-                    { label: "MG", value: "Minas Gerais"},
-                    { label: "PA", value: "Pará" },
-                    { label: "PB", value: "Paraíba" },
-                    { label: "PR", value: "Paraná" },
-                    { label: "PE", value: "Pernambuco" },
-                    { label: "PI", value: "Piauí" },
-                    { label: "RJ", value: "Rio de Janeiro" },
-                    { label: "RN", value: "Rio Grande do Norte" },
-                    { label: "RS", value: "Rio Grande do Sul" },
-                    { label: "RO", value: "Rondônia" },
-                    { label: "RR", value: "Roraima" },
-                    { label: "SC", value: "Santa Catarina" },
-                    { label: "SP", value: "São Paulo" },
-                    { label: "SE", value: "Sergipe" },
-                    { label: "TO", value: "Tocantins" },
-                  ]}
-                  defaultValue={
-                    this.state.estado === "" ? "Acre" : this.state.estado
-                  }
-                  placeholder="Selecione um item"
+                  items={items}
+                  open={open}
+                  value={this.state.value}
+                  setOpen={this.setOpen}
+                  setValue={this.setValue}
+                  setItems={this.setItems}
+                  placeholder={"Estado"}
+                  onClose={() => console.log('bye!')}
+                  onPress={(open) => console.log('was the picker open?', open)}
                   containerStyle={{
                     width: "30%",
                     paddingTop: 6,
                     paddingRight: 5,
                   }}
-                  dropDownStyle={{ backgroundColor: "#fafafa" }}
                   style={{
                     fontSize: 16,
+                    height:58,
+                    borderRadius: 5,
                     backgroundColor: "#fafafa",
                     borderColor: "#5eaaa8",
                   }}
                   itemStyle={{
                     justifyContent: "flex-start",
                   }}
-                  onChangeItem={(item) =>
-                    this.setState({
-                      estado: item.value,
-                    })
-                  }
                 />
               </View>
             </View>
@@ -529,40 +464,28 @@ export default class Checkout extends React.Component {
             >
               Forma de entrega:
             </Text>
-            
-            <DropDownPicker
-                  items={this.state.shippingarray}
-                  defaultValue={
-                    this.state.shippingmethod
-                  }
-                  placeholder="Selecione um item"
-                  containerStyle={{ 
-                    width: "100%",
-                    height:60,
-                    paddingTop: 6,
-                    paddingHorizontal: 5,
-                  }}
-                  dropDownStyle={{ backgroundColor: "#fafafa" }}
-                  style={{
-                    fontSize: 16,
-                    backgroundColor: "#fafafa",
-                    borderColor: "#5eaaa8",
-                  }}
-                  itemStyle={{
-                    justifyContent: "flex-start",
-                  }}
-                  onChangeItem={item => {
-                    this.setState({shippingtax:item.value, shipping:item.label})
-                  }
-                  }
-                />
-
+            <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={this.state.shippingarray[0].label}
+            status={ this.state.shippingmethod === this.state.shippingarray[0].label ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({shippingmethod:this.state.shippingarray[0].label, shippingtax:this.state.shippingarray[0].value})}
+          />
+          <Text>{this.state.shippingarray[0].label}</Text>
+          </View>
+          <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={this.state.shippingarray[1].label}
+            status={ this.state.shippingmethod === this.state.shippingarray[1].label ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({shippingmethod:this.state.shippingarray[1].label, shippingtax:this.state.shippingarray[1].value})}
+          />
+          <Text>{this.state.shippingarray[1].label}</Text>
+          </View>
             <View
               style={{
                 backgroundColor: "#fff",
                 borderColor: "#5eaaa8",
                 borderRadius: 5,
-                marginTop: 10,
+                marginTop: 5,
                 borderWidth: 0.5,
               }}
             >
@@ -572,7 +495,7 @@ export default class Checkout extends React.Component {
                     flexDirection: "column",
                     justifyContent: "space-around",
                     alignItems: "flex-start",
-                    paddingTop: 10,
+                    paddingTop: 5,
                     paddingLeft: 20,
                   }}
                 >
@@ -587,6 +510,7 @@ export default class Checkout extends React.Component {
                         color: "#8f8f8f",
                         fontSize: 18,
                         fontWeight: "bold",
+                        paddingTop: 20
                       }}
                     >
                       Produtos:{" "}
@@ -596,6 +520,7 @@ export default class Checkout extends React.Component {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 20,
+                        
                       }}
                     >
                       R${this.state.subtotalPrice}
@@ -660,6 +585,7 @@ export default class Checkout extends React.Component {
                       width: 150,
                       height: 35,
                       padding: 10,
+                      marginRight:5,
                       borderRadius: 5,
                     },
                   ]}

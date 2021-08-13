@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   Image,
   ScrollView,
   SafeAreaView,
@@ -56,7 +56,6 @@ export default class MeusPedidos extends React.Component {
 
   render() {
     const data = this.state.compraresult;
-
     
     const menuicon = (
       <Icon
@@ -131,10 +130,12 @@ export default class MeusPedidos extends React.Component {
                     statuscolor = "#DA0037"
                   }
                     return(
+                      
                       <View style={{ flexDirection:"column",padding:5, width:'100%'}}>
                         <Text style={{ fontWeight: "bold", color: "#616161", fontSize:12, padding: 10}}>
                           {moment(item.datacompra).format("dddd, DD [de] MMMM [de] YYYY").toUpperCase()}
                           </Text>
+                         
                           <View style={{backgroundColor: "#ffffff", borderRadius:10,shadowColor: "#000",
                           shadowOffset: {
                             width: 0,
@@ -143,6 +144,20 @@ export default class MeusPedidos extends React.Component {
                           shadowOpacity: 1,
                           shadowRadius: 0,
                           elevation:4}}>
+                             <Pressable
+                      onPress={() => {
+                        console.log("Pressed")
+                      }}
+                      style={({ pressed }) => [
+                        {
+                          backgroundColor: pressed
+                            ? 'rgba(94, 170, 168,0.2)'
+                            : 'white',borderRadius:10
+                        },
+                       { borderBottomLeftRadius:10, borderBottomRightRadius:10}
+
+                      ]}
+                      >
                         <View style={{ flexDirection:"row", width:'100%',
                               justifyContent:'space-between', alignItems:'flex-start', padding: 15}}>
                               <View style={{flexDirection:"column", width:'100%'}}>
@@ -152,7 +167,7 @@ export default class MeusPedidos extends React.Component {
                                 Pedido Nº:{item._id} - {status}</Text>
                               </View>
                         </View>
-                        <View style={{backgroundColor: "#ffffff"}}>
+                        <View>
                         <Text style={{fontSize:10,textAlign:'justify', paddingLeft:15}}>Produtos</Text>
                           <FlatList
                             style={{ margin: 5, width: '100%'}}
@@ -169,15 +184,14 @@ export default class MeusPedidos extends React.Component {
                                 </View>)}
                                 }/>
                               </View>
-                              <View style={{flexDirection:"row",width:'100%',backgroundColor: "#ffffff", padding: 15, justifyContent:'space-between'}}>
+                              <View style={{flexDirection:"row",width:'100%', padding: 15, justifyContent:'space-between'}}>
                                   <Text>Avaliação</Text>
                                   <AirbnbRating showRating={false} size={16} />
                               </View>
-                            <View style={{borderBottomLeftRadius:10, borderBottomRightRadius:10,flexDirection:"row",width:'100%',backgroundColor: "#ffffff", alignItems: "center",justifyContent:'space-around', padding:25}}>
-                                <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Ajuda</Text>
-                                <Text style={{fontWeight:'bold', color:"#5eaaa8"}}>Comprar Novamente</Text>
-                            </View>
+
+                            </Pressable>
                           </View>
+                          
                       </View>
                       
                     )

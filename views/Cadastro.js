@@ -140,7 +140,7 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onFederateLoginSuccess.bind(this);
+        this.onLoginSuccess.bind(this);
       }
     } catch ({ message }) {
       alert(`Erro ao logar com o facebook: ${message}`);
@@ -187,7 +187,7 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onFederateLoginSuccess.bind(this);
+        this.onLoginSuccess.bind(this);
       }
     } catch ({ message }) {
       alert("login: Error:" + message);

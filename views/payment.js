@@ -30,36 +30,63 @@ export default class Checkout extends React.Component {
       troco: null,
       needchange: null,
       result:'',
+      userdata: '',
+      nome:'',
+      email:'',
+      userid:'',
       cart:'',
       cpf:'',
       resultpayment:'',
       _id:'',
-      deliveryresult:''
+      deliveryresult:'',
+      paymentitems:[
+        { label: "Dinheiro", value: "Dinheiro", icon: () =><Icon name="money-bill" size={30} color="#009900" style={{paddingRight: 10}}/>},
+        { label: "Cartão", value: "Cartão", icon: () =><Icon name="credit-card" size={30} color="#880000" style={{paddingRight: 10}}/>},
+      ]
     }
   }
 
   componentDidMount = async() =>{
-
     await AsyncStorage.getItem('cartid')
     .then((_id)=>{
       this.setState({_id:_id})
-     // console.log(this.state._id)
     })
-      
+
+          
     await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state._id)
       .then((response) => response.json())
       .then((res) => this.setState({cart:res[0].produtos, result:res}))
       .catch((error) => console.error(error));
-      console.log(this.state.result)
-  }
+      //console.log("resultado:"+ JSON.stringify(this.state.result))
 
+   /*   await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state._id)
+    .then((res) => res.json())
+    .then((result) => this.setState({ userdata:result}))
+    .catch((error) => console.log(error));*/
+
+    this.setState({nome:this.state.result[0].dadoscliente.nome})
+    console.log("nome ",this.state.result[0].dadoscliente.nome)
+    console.log("email ",this.state.result[0].dadoscliente.email)
+    console.log("userid ",this.state.result[0].dadoscliente.userid)
+    this.setState({email:this.state.result[0].dadoscliente.email})
+    this.setState({userid:this.state.result[0].dadoscliente.userid})
+    console.log("nome2 ",this.state.nome)
+    console.log("email2 ",this.state.email)
+    console.log("userid2 ",this.state.userid)
+
+  }
   delivery = async (item) => {
     const result = item;
     
     const troco = this.state.troco;
     const _id = this.state._id;
     const payload = JSON.stringify({
-      cpf:this.state.cpf,
+      dadoscliente:{
+        userid: this.state.userid,
+        nome: this.state.nome,
+        email: this.state.email,
+        cpf:this.state.cpf,
+      },
       paymentmethod:this.state.paymentmethod,
       change:troco === null ? 0 : troco,
     })
@@ -86,10 +113,7 @@ export default class Checkout extends React.Component {
         Alert.alert("ShopyCash Payment","Congrats")
         this.props.navigation.navigate("MeusPedidos");
       }
-      
-
   }
-
   render() {
     const paymentmethod = this.state.paymentmethod;
     const needchange = this.state.needchange;
@@ -172,7 +196,22 @@ export default class Checkout extends React.Component {
                   </View>)}
                 }/>
 
-                  
+        <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={this.state.paymentitems[0].label}
+            status={ this.state.paymentmethod === this.state.paymentitems[0].label ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({paymentmethod:this.state.paymentitems[0].label, shippingtax:this.state.paymentitems[0].value})}
+          />
+          <Text>{this.state.paymentitems[0].label}</Text>
+          </View>
+          <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={this.state.paymentitems[1].label}
+            status={ this.state.paymentmethod === this.state.paymentitems[1].label ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({paymentmethod:this.state.paymentitems[1].label, shippingtax:this.state.paymentitems[1].value})}
+          />
+          <Text>{this.state.paymentitems[1].label}</Text>
+          </View> 
           </View>      
           <View style={{
                     width: "100%",
@@ -180,37 +219,7 @@ export default class Checkout extends React.Component {
                     display:'flex',
                     padding: 10,
                     justifyContent: 'center'
-                  }}>
-              <DropDownPicker
-                  items={[
-                    { label: "Dinheiro", value: "Dinheiro", icon: () =><Icon name="money-bill" size={30} color="#009900" style={{paddingRight: 10}}/>},
-                    { label: "Cartão", value: "Cartão", icon: () =><Icon name="credit-card" size={30} color="#880000" style={{paddingRight: 10}}/>},
-                  ]}
-                  defaultValue={
-                    paymentmethod
-                  }
-                  placeholder="Selecione a forma de pagamento"
-                  containerStyle={{
-                    width: "100%",
-                    height:60,
-                  }}
-                  dropDownStyle={{ backgroundColor: "#fafafa",height:'auto'}}
-                  style={{
-                    width: "100%",
-                    fontSize: 16,
-                    backgroundColor: "#fafafa",
-                    borderColor: "#5eaaa8",
-                    textAlign:'center'
-                  }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',alignItems:'center'
-                  }}
-                  onChangeItem={(item) =>
-                    this.setState({
-                      paymentmethod: item.value,
-                    })
-                  }
-                />
+                  }}>             
           </View>
           {paymentmethod === "Dinheiro"
           ? <View>
@@ -220,37 +229,24 @@ export default class Checkout extends React.Component {
             <Text style={{padding:10}}>
               Precisa de troco?
             </Text>
-            <DropDownPicker
-                  items={[
-                    { label: "Sim", value: true},
-                    { label: "Não", value: false},
-                  ]}
-                  defaultValue={
-                    needchange
-                  }
-                  placeholder="Precisa de troco?"
-                  containerStyle={{
-                    width: "100%",
-                    height:80,
-                    padding: 10
-                  }}
-                  dropDownStyle={{ backgroundColor: "#fafafa",height:'auto'}}
-                  style={{
-                    width: "100%",
-                    fontSize: 16,
-                    backgroundColor: "#fafafa",
-                    borderColor: "#5eaaa8",
-                    textAlign:'center'
-                  }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',alignItems:'center'
-                  }}
-                  onChangeItem={(item) =>
-                    this.setState({
-                      needchange: item.value,
-                    })
-                  }
-                />
+
+            <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={needchange}
+            status={ needchange === true ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({needchange:true})}
+          />
+          <Text>SIM</Text>
+          </View>
+          <View style={{flexDirection: "row", alignItems: "center", padding:5}}>
+            <RadioButton
+            value={needchange}
+            status={ needchange === false ? 'checked' : 'unchecked' }
+            onPress={() => this.setState({needchange:false})}
+          />
+          <Text>NÃO</Text>
+          </View>
+            
                 {needchange === true
                 ? <View>
                   <TextInput mode={"outlined"}
@@ -325,7 +321,6 @@ export default class Checkout extends React.Component {
                   keyExtractor={({ id }) => id}
                   renderItem={({item})=>
                       {
-                        console.log('this', item)
                   return(
                 
                     <View style={{borderColor:"#5eaaa8", borderWidth:1, borderRadius:5, padding: 10, margin: 5, justifyContent:"space-between", flexDirection:'column'}}>
@@ -374,3 +369,34 @@ const styles = StyleSheet.create({
   },
   centerElement: { justifyContent: "center", alignItems: "center" },
 });
+
+/*<DropDownPicker
+                  items={[
+                    { label: "Dinheiro", value: "Dinheiro", icon: () =><Icon name="money-bill" size={30} color="#009900" style={{paddingRight: 10}}/>},
+                    { label: "Cartão", value: "Cartão", icon: () =><Icon name="credit-card" size={30} color="#880000" style={{paddingRight: 10}}/>},
+                  ]}
+                  defaultValue={
+                    paymentmethod
+                  }
+                  placeholder="Selecione a forma de pagamento"
+                  containerStyle={{
+                    width: "100%",
+                    height:60,
+                  }}
+                  dropDownStyle={{ backgroundColor: "#fafafa",height:'auto'}}
+                  style={{
+                    width: "100%",
+                    fontSize: 16,
+                    backgroundColor: "#fafafa",
+                    borderColor: "#5eaaa8",
+                    textAlign:'center'
+                  }}
+                  itemStyle={{
+                    justifyContent: 'flex-start',alignItems:'center'
+                  }}
+                  onChangeItem={(item) =>
+                    this.setState({
+                      paymentmethod: item.value,
+                    })
+                  }
+                />*/

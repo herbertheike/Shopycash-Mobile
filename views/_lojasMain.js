@@ -147,7 +147,6 @@ return adrformt;
           justifyContent: "space-around",
         }}
       />
-      {this.databaseaddr()}
       <View>
         <SearchBar
           lightTheme={true}
