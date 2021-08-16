@@ -19,13 +19,13 @@ import firebase from "firebase";
 import { MaterialIndicator  } from "react-native-indicators"; 
 import 'moment/locale/pt-br';
 
-export default class MeusPedidos extends React.Component {
+export default class MeusPedidosDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading : true,
-      compraresult:[],
-      lojasarray:[],
+      cartresult:[],
+      lojarray:[],
       datearray:[{
         month: 'Anteriores',
         year: '',
@@ -43,27 +43,47 @@ export default class MeusPedidos extends React.Component {
 
   componentDidMount= async () => {
     moment.locale('pt-br', null);
-    const user = firebase.auth().currentUser;
-    const userid = user.uid
-    console.log(userid)
+    const cartid = this.props.route.params.params.cartid
+    console.log("CARTID",cartid)
+    
       
-    await fetch("https://api-shopycash1.herokuapp.com/cart/user/"+userid)
+    await fetch("https://api-shopycash1.herokuapp.com/cart/"+cartid)
       .then((response) => response.json())
-      .then((res) => this.setState({compraresult:res}))
+      .then((res) => this.setState({cartresult:res}))
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading:false}),[]);
+
+      this.storeInfo;
   }
 
-  render() {
-    
+  storeInfo = async () => {
+    const lojaid = this.state.cartresult[0].lojaid
+    await fetch("https://api-shopycash1.herokuapp.com/indexstoreby/"+lojaid)
+      .then((response) => response.json())
+      .then((res) => this.setState({lojarray:res}))
+      .catch((error) => console.error(error))
+      .finally(() => this.setState({isLoading:false}),[]);
+
+      console.log(this.state.lojarray)
+
+  }
+
+  render() {    
+    const backicon = (
+      <Icon
+        name="arrow-left"
+        style={{ marginLeft: 10 }}
+        onPress={() => props.navigation.goBack()}
+        color="#5eaaa8"
+        size={25}
+      />
+    );
     return (
-      
-      <SafeAreaView style={styles.container}>
-        
+      <SafeAreaView style={styles.container}>        
         <Header
           statusBarProps={{ barStyle: "light-content" }}
           barStyle="light-content"
-          leftComponent={menuicon}
+          leftComponent={backicon}
           centerComponent={{
             style: {
               color: "#25282B",
@@ -72,11 +92,12 @@ export default class MeusPedidos extends React.Component {
               fontFamily: "Roboto",
             },
           },<Text style={{ fontWeight: "bold", color: "#53aaa8", fontSize:15}}>
-          Extrato
+          Detalhes do Pedido 
         </Text>}
+        rightComponent={<Text style={{paddingRight:10}}>Ajuda</Text>}
           containerStyle={{
             backgroundColor: "#ffffff",
-            justifyContent: "space-around",
+            justifyContent: "space-around"
           }}
         />
 
@@ -95,21 +116,20 @@ export default class MeusPedidos extends React.Component {
         </View> :
         <View>
         <View>
-          <Text>Lojas onde pediu</Text>
-              <ScrollView horizontal>
-                {data.map((item)=>{
-                    return(
-                      <View style={{padding:10, width:100, height: 100,  backgroundColor: "#5eaaa8", margin: 3, alignItems: "center", justifyContent:'center'}}>
-                      <Text>{item.loja}</Text>
-                      <Text>{item.total}</Text>
+          <Text style={{fontFamily:'Roboto', fontSize:20, textAlign: 'left', fontWeight: "bold"}}>Detalhes do pedido</Text>
+                      <View>
+                        {this.state.lojarray.map((iteml)=>{
+                          return(
+                        <Image
+                          style={{ width: "100%", height: 500, resizeMode: "cover",opacity:15 }}
+                          blurRadius={1}
+                          source={{uri: iteml.capa}}
+                        />
+                        )})}
                       </View>
-                    )
-                })}
-              </ScrollView>
         </View>
         <View>
           <Text>Ultima compra.</Text>
-
         </View>
         </View>
         }

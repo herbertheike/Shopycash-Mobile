@@ -16,6 +16,7 @@ import CadMap from "./views/cadastromap"
 import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
 import MeusPedidos from "./views/meuspedidos";
+import MeusPedidosDetail from "./views/meuspedidosdetail";
 import GetShoppings from "./views/getshopping"
 import GetStoreByMall from "./views/getlojabyshop"
 import PaymentScan from "./views/PaymentScan"
@@ -124,6 +125,11 @@ class App extends React.Component {
           <MainStack.Screen
             name="MeusPedidos"
             component={MeusPedidos}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="MeusPedidosDetail"
+            component={MeusPedidosDetail}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

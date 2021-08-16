@@ -60,15 +60,13 @@ class HomeScreen extends React.Component{
       .then((response) => response.json())
       .then((res) => this.setState({datal:res}))
       .catch((error) => console.error(error))
-      
-
   }
+
   indexpropduct = async () =>{
     await fetch("https://api-shopycash1.herokuapp.com/indexproduct/enable")
     .then((response) => response.json())
     .then((res) => this.setState({data:res}))
     .catch((error) => console.error(error))
-
   }
 
   updateSearch(search) {
@@ -83,6 +81,7 @@ class HomeScreen extends React.Component{
       });
     };
   }
+
   databaseaddr = async () =>{
        firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -99,7 +98,6 @@ class HomeScreen extends React.Component{
                   console.log("Formatado\n",this.state.addressformat)
                 }.bind(this)
             )
-            
         } else {
           console.log("Error")
         }
@@ -144,7 +142,7 @@ class HomeScreen extends React.Component{
   const refreshing = false;
 
   
-    const onRefresh = (() => {
+  const onRefresh = (() => {
       refreshing = true;
   
       wait(2000).then(() => refreshing = false);
@@ -204,8 +202,8 @@ class HomeScreen extends React.Component{
               <TouchableOpacity
                 style={{
                   width: 300,
-                  borderRadius: 5,
                   borderWidth: 0.1,
+                  borderRadius: 10,
                   backgroundColor: "#ffffff",
                   color: "#000000",
                   marginHorizontal: 10,
@@ -233,13 +231,13 @@ class HomeScreen extends React.Component{
                 }
               >
                 <Image
-                  style={{ width: "98%", height: 150, borderRadius: 15, resizeMode: "cover"}}
+                  style={{ width: "98%", height: 150,borderRadius: 10, resizeMode: "cover"}}
                   source={{uri:item.imagem}}
                 />
                 <Text style={styles.ofertastext} numberOfLines={1}>{item.nome}</Text>
                 <Text style={styles.lojades}>R${item.preco}</Text>
                 <Text style={styles.lojades}> Disponivel em: {item.loja} - {item.shopping}</Text>
-                <Text style={{color: "#ffffff", fontWeight: "100", fontSize: 10, backgroundColor: "#34CC95", borderRadius: 15, padding: 2}}>
+                <Text style={{color: "#ffffff", fontWeight: "100", fontSize: 10, backgroundColor: "#34CC95", padding: 2}}>
                   Cashback disponivel: 1%
                   </Text>
               </TouchableOpacity>

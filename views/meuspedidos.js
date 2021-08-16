@@ -146,7 +146,7 @@ export default class MeusPedidos extends React.Component {
                           elevation:4}}>
                              <Pressable
                       onPress={() => {
-                        console.log("Pressed")
+                        this.props.navigation.navigate("MeusPedidosDetail", {params:{cartid:item._id}})
                       }}
                       style={({ pressed }) => [
                         {
