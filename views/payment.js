@@ -57,14 +57,7 @@ export default class Checkout extends React.Component {
       .then((response) => response.json())
       .then((res) => this.setState({cart:res[0].produtos, result:res}))
       .catch((error) => console.error(error));
-      //console.log("resultado:"+ JSON.stringify(this.state.result))
-
-   /*   await fetch("https://api-shopycash1.herokuapp.com/cart/"+this.state._id)
-    .then((res) => res.json())
-    .then((result) => this.setState({ userdata:result}))
-    .catch((error) => console.log(error));*/
-
-    this.setState({nome:this.state.result[0].dadoscliente.nome})
+         this.setState({nome:this.state.result[0].dadoscliente.nome})
     console.log("nome ",this.state.result[0].dadoscliente.nome)
     console.log("email ",this.state.result[0].dadoscliente.email)
     console.log("userid ",this.state.result[0].dadoscliente.userid)

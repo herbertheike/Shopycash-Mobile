@@ -17,6 +17,9 @@ import Login from "./views/Login";
 import Proddetail from "./views/proddetail";
 import MeusPedidos from "./views/meuspedidos";
 import MeusPedidosDetail from "./views/meuspedidosdetail";
+import MeusPedidosRecibo from "./views/meuspedidosrecibo";
+import MeusPedidosAjuda from "./views/meuspedidosajuda";
+import MeusPedidosAvaliar from "./views/meuspedidosavaliar";
 import GetShoppings from "./views/getshopping"
 import GetStoreByMall from "./views/getlojabyshop"
 import PaymentScan from "./views/PaymentScan"
@@ -130,6 +133,21 @@ class App extends React.Component {
           <MainStack.Screen
             name="MeusPedidosDetail"
             component={MeusPedidosDetail}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="MeusPedidosRecibo"
+            component={MeusPedidosRecibo}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="MeusPedidosAjuda"
+            component={MeusPedidosAjuda}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="MeusPedidosAvaliar"
+            component={MeusPedidosAvaliar}
             options={{ headerShown: false }}
           />
           <MainStack.Screen

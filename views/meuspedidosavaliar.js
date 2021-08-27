@@ -3,11 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
+  TextInput,
   Image,
   ScrollView,
   SafeAreaView,
-  FlatList
+  ToastAndroid
 } from "react-native";
 import {
   Button
@@ -15,19 +15,19 @@ import {
 import moment from "moment";
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import firebase from "firebase";
 import { MaterialIndicator } from "react-native-indicators";
+import {AirbnbRating } from "react-native-elements";
 import "moment/locale/pt-br";
 
-export default class MeusPedidosDetail extends React.Component {
+export default class MeusPedidosAvaliar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: true,
       cartresult: [],
       lojarray: [],
+      caracnumber: 140,
+      comentario:'',
       datearray: [
         {
           month: "Anteriores",
@@ -56,6 +56,10 @@ export default class MeusPedidosDetail extends React.Component {
 
     this.storeInfo();
     console.log();
+
+
+    
+
   };
 
   storeInfo = async () => {
@@ -67,7 +71,9 @@ export default class MeusPedidosDetail extends React.Component {
       .finally(() => this.setState({ isLoading: false }), []);
 
     console.log(this.state.lojarray);
+
   };
+
 
   render() {
     const backicon = (
@@ -103,11 +109,11 @@ export default class MeusPedidosDetail extends React.Component {
               <Text
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 15 }}
               >
-                Detalhes do Pedido
+                Avaliar pedido
               </Text>
             ))
           }
-          rightComponent={<Text style={{ paddingRight: 10 }}>Ajuda</Text>}
+          rightComponent={<Text style={{ paddingRight: 10 }}></Text>}
           containerStyle={{
             backgroundColor: "#ffffff",
             justifyContent: "space-around",
@@ -134,15 +140,16 @@ export default class MeusPedidosDetail extends React.Component {
             </View>
           ) : (
             <View>
-              
-              <View>
+              <View style={{alignItems: "center"}}>
                 <Image
                   style={{
-                    width: "100%",
+                    width: 200,
                     height: 200,
-                    borderColor: "#a3d2ca",
+                    borderRadius:100,
+                    borderWidth:0.8,
+                    borderColor: "#dedede"
                   }}
-                  source={{ uri: lojarray.capa }}
+                  source={{ uri: lojarray.logo }}
                 />
                 <Text
                   style={{
@@ -151,113 +158,63 @@ export default class MeusPedidosDetail extends React.Component {
                     textAlign: "left",
                     fontWeight: "bold",
                     paddingTop: 15,
-                    paddingLeft:10
+                    paddingLeft:15
                   }}
                 >
-                  {lojarray.nomefantasia}
+                  Como foi seu pedido em {lojarray.nomefantasia}?
                 </Text>
               </View>
               <View>
                 {cartresult.map((item)=>{
-                  var status = "";
-                  var statusicon = "";
-                  var statuscolor = "";
-                  var statusmoto =""
-                  if (item.cartstatus === "await") {
-                    status = "Pedido em Separação";
-                    statusicon = "store";
-                    statuscolor = "#7C83FD";
-                    statusmoto="Seu pedido está sendo separado para entrega"
-                  } else if (item.cartstatus === "onroute") {
-                    status = "Pedido Enviado";
-                    statusicon = "truck";
-                    tatuscolor = "#7FFC93C";
-                    statusmoto="Sua entrega será feita por (nome do entregador)"
-                  } else if (item.cartstatus === "delivered") {
-                    status = "Pedido Concluido";
-                    statusicon = "check-circle";
-                    statuscolor = "#00BD56";
-                    statusmoto="Sua entrega foi feita por (nome do entregador)"
-                  } else {
-                    status = "Pedido Cancelado";
-                    statusicon = "ban";
-                    statuscolor = "#DA0037";
-                    statusmoto="O pedido foi cancelado"
-                  }
+                  var fullcount = 140
+                  var countinput = this.state.comentario.length
+                  var emptycount = fullcount-countinput
+                  const showToastWithGravity = () => {
+                    ToastAndroid.showWithGravity(
+                      "Comentario enviado, Obrigado!\nSeu feedback é muito importante.",
+                      ToastAndroid.LONG,
+                      ToastAndroid.BOTTOM
+                    );
+                    this.props.navigation.navigate("MeusPedidos")
+                  };
+                  
                   return(
                     <View style={{paddingLeft:15, paddingRight:15}}>
-                      <View style={{flexDirection: "row"}}>
-                        <Text style={{fontSize:12, color: statuscolor, fontWeight: "bold"}}>{status} </Text>
-                        <Text style={{fontSize:12, fontWeight: "100"}}> - {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
-                      </View>
-                      <View style={{flexDirection: "row",justifyContent:'space-between', paddingTop:20}}>
-                        <Text style={{fontWeight: "bold", fontSize:24,textAlign:"center"}}>Seu Pedido</Text>
-                        <Pressable 
-                        style={({ pressed }) => [
-                          {
-                            backgroundColor: pressed
-                              ? 'rgb(94, 170, 168)'
-                              : '#dedede',borderRadius:10
-                          },
-                         { height: 40, width:"45%", borderRadius: 30, alignItems: "center", justifyContent:"center",shadowColor: "#000",
-                         shadowOffset: {
-                           width: 0,
-                           height: 0,
-                         },
-                         shadowOpacity: 1,
-                         shadowRadius: 0,
-                         elevation:4}
-  
-                        ]}
-                        onPress={() =>this.props.navigation.navigate("MeusPedidosAvaliar",{params:{cartid:item._id}})}
-                        >
-                        <Text style={{fontWeight: "100", fontSize:15, textAlign:"center"}}>Avaliar Pedido</Text>
-                        </Pressable>
-                      </View>
-                      <View>
-                          <FlatList
-                            style={{width: '100%', paddingVertical:40}}
-                            data={item.produtos}
-                            keyExtractor={({ id }) => id}
-                            renderItem={({item, index})=>
-                                {
-                                  return(
-                                <View style={{display: "flex", flexDirection:'row', alignItems:'center', margin:3}}>       
-                                  <Text style={{fontSize:18,textAlign:'justify', backgroundColor:'#e5e5e5', padding: 10}}>{item.qty}</Text> 
-                                  <Text numberOfLines={1} style={{width:'85%', fontWeight:'normal', fontSize:18,textAlign:'justify', paddingLeft:20}}>
-                                    {item.produto}
-                                  </Text>
-                                </View>)}
-                                }/>
-                              </View>
-                                <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>
-                                <Icon name="receipt" size={24}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> Total:  R${item.total.toFixed(2)}</Text>
-                              </View>
-                              <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>  
-                                <Icon name="motorcycle" size={18}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> {statusmoto}</Text>  
-                              </View>
-                              <View>
+                      <View style={{flexDirection: "column"}}>
+                        <Text style={{fontSize:12, fontWeight: "100"}}>Data e hora do pedido: 
+                          <Text style={{fontSize:12, fontWeight: "300", }}> {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
+                        </Text>
+                        </View>
+                        <View style={{padding:15}}>
+                        <Text>Comentario:</Text>
+                        <TextInput
+                        style={{padding: 10,borderColor:"#dedede", borderWidth:0.6, borderRadius:5, textAlignVertical:"top"}}
+                        editable
+                        multiline
+                        numberOfLines={4}
+                        onChangeText={text => this.setState({comentario:text})}
+                        value={this.state.comentario}
+                        maxLength={140}
+                        />
+                        <Text style={{fontSize:12,color:"#808080"}}>{emptycount}</Text>
+                        <View style={{padding: 10}}>
+                        <AirbnbRating
+                        reviews={["Pessimo", "Ruim", "Razoavel", "Bom", "Otimo"]}
+                        showRating={true}
+                        type='heart'
+                        size={40} 
+                        defaultRating={1}/>
                               <Button 
                                 mode={"contained"}
                                 style={{margin:5}}
                                 contentStyle={{backgroundColor:'#53aaa8'}}
                                 labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosRecibo", {params:{cartid:item._id}})}>
-                                  Ver Recibo
+                                onPress={() =>showToastWithGravity()}>
+                                  Enviar
                                 </Button>
-                                <Button 
-                                mode={"contained"}
-                                style={{margin:5}}
-                                contentStyle={{backgroundColor:'#FBA33F'}}
-                                labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosAjuda",{params:{cartid:item._id}})}>
-                                  Ajuda
-                                </Button>
-                              </View>  
+                        </View>
+                      </View>
+                      
                           </View> 
                   )
                 })}

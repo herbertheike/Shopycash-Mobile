@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
+  TouchableOpacity,
   Image,
   ScrollView,
   SafeAreaView,
@@ -21,7 +21,7 @@ import firebase from "firebase";
 import { MaterialIndicator } from "react-native-indicators";
 import "moment/locale/pt-br";
 
-export default class MeusPedidosDetail extends React.Component {
+export default class MeusPedidosRecibo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,11 +103,10 @@ export default class MeusPedidosDetail extends React.Component {
               <Text
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 15 }}
               >
-                Detalhes do Pedido
+                Recibo
               </Text>
             ))
           }
-          rightComponent={<Text style={{ paddingRight: 10 }}>Ajuda</Text>}
           containerStyle={{
             backgroundColor: "#ffffff",
             justifyContent: "space-around",
@@ -134,140 +133,107 @@ export default class MeusPedidosDetail extends React.Component {
             </View>
           ) : (
             <View>
-              
-              <View>
-                <Image
-                  style={{
-                    width: "100%",
-                    height: 200,
-                    borderColor: "#a3d2ca",
-                  }}
-                  source={{ uri: lojarray.capa }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Roboto",
-                    fontSize: 20,
-                    textAlign: "left",
-                    fontWeight: "bold",
-                    paddingTop: 15,
-                    paddingLeft:10
-                  }}
-                >
-                  {lojarray.nomefantasia}
-                </Text>
-              </View>
-              <View>
-                {cartresult.map((item)=>{
+              {cartresult.map((item)=>{
                   var status = "";
                   var statusicon = "";
                   var statuscolor = "";
-                  var statusmoto =""
                   if (item.cartstatus === "await") {
                     status = "Pedido em Separação";
                     statusicon = "store";
                     statuscolor = "#7C83FD";
-                    statusmoto="Seu pedido está sendo separado para entrega"
                   } else if (item.cartstatus === "onroute") {
                     status = "Pedido Enviado";
                     statusicon = "truck";
                     tatuscolor = "#7FFC93C";
-                    statusmoto="Sua entrega será feita por (nome do entregador)"
                   } else if (item.cartstatus === "delivered") {
                     status = "Pedido Concluido";
                     statusicon = "check-circle";
                     statuscolor = "#00BD56";
-                    statusmoto="Sua entrega foi feita por (nome do entregador)"
                   } else {
                     status = "Pedido Cancelado";
                     statusicon = "ban";
                     statuscolor = "#DA0037";
-                    statusmoto="O pedido foi cancelado"
                   }
                   return(
-                    <View style={{paddingLeft:15, paddingRight:15}}>
-                      <View style={{flexDirection: "row"}}>
-                        <Text style={{fontSize:12, color: statuscolor, fontWeight: "bold"}}>{status} </Text>
-                        <Text style={{fontSize:12, fontWeight: "100"}}> - {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
-                      </View>
-                      <View style={{flexDirection: "row",justifyContent:'space-between', paddingTop:20}}>
-                        <Text style={{fontWeight: "bold", fontSize:24,textAlign:"center"}}>Seu Pedido</Text>
-                        <Pressable 
-                        style={({ pressed }) => [
-                          {
-                            backgroundColor: pressed
-                              ? 'rgb(94, 170, 168)'
-                              : '#dedede',borderRadius:10
-                          },
-                         { height: 40, width:"45%", borderRadius: 30, alignItems: "center", justifyContent:"center",shadowColor: "#000",
-                         shadowOffset: {
-                           width: 0,
-                           height: 0,
-                         },
-                         shadowOpacity: 1,
-                         shadowRadius: 0,
-                         elevation:4}
-  
-                        ]}
-                        onPress={() =>this.props.navigation.navigate("MeusPedidosAvaliar",{params:{cartid:item._id}})}
-                        >
-                        <Text style={{fontWeight: "100", fontSize:15, textAlign:"center"}}>Avaliar Pedido</Text>
-                        </Pressable>
-                      </View>
-                      <View>
-                          <FlatList
-                            style={{width: '100%', paddingVertical:40}}
+                    <View>
+                        <View style={{backgroundColor:"rgb(248,162,61)", width:'100%', height:100, flexDirection: "row",alignItems: "flex-start", justifyContent:"space-around"}}>
+                          <Text style={{fontSize:28, fontWeight: "bold", padding:40,paddingLeft:15}}>Shopy Cash</Text>
+                          <View style={{flexDirection:"column", padding:40,paddingRight:30}}>
+                          <Text style={{fontSize:12, fontWeight: "100", textAlign:"right"}}>Total: <Text style={{fontWeight: "bold"}}>R${item.total.toFixed(2)}</Text></Text>
+                          <Text style={{fontSize:12, fontWeight: "100", textAlign:"right"}}>{moment(item.datacompra).format("DD [de] MMMM [de] YYYY")}</Text>
+                          </View>
+                          </View>
+                        <View style={{backgroundColor:"rgb(248,162,61)", width:'100%', height:250, borderBottomRightRadius:100, alignItems: "flex-start", justifyContent:"flex-start"}}>
+                          <Text style={{fontWeight: "600", fontSize:25, paddingLeft:15, paddingTop:15}}>Obrigado pelo Pedido,</Text>
+                          <Text style={{fontWeight: "600", fontSize:25, paddingLeft:15}}>{item.dadoscliente.nome.split(" ", 1)}</Text>
+                          <Text style={{fontWeight: "600", fontSize:12, paddingLeft:15, paddingTop:15}}>Aqui está o seu recibo da {item.loja}</Text>
+                        </View>
+                        <View style={{flexDirection: "row", justifyContent:'space-between' }}>
+                        <View style={{backgroundColor:"rgb(248,162,61)", width:'30%', height:80, borderBottomRightRadius:1000}}></View>
+                        <Image
+                              style={{
+                                marginTop:-135,
+                                width:220,
+                                height: 220,
+                                zIndex:2,
+                                marginRight:30
+                              }}
+                              source={require("../assets/flatilu.png")}
+                            />
+                        </View>
+                              <View style={{flexDirection:"row", paddingLeft:15, paddingRight:30,alignItem:"center", justifyContent:"space-between", paddingTop:15}}>
+                                <Text style={{fontSize:28, fontWeight: "bold", textAlign:"left"}}>Total</Text>
+                                <Text style={{fontSize:28, fontWeight: "bold", textAlign:"left"}}>R${item.total.toFixed(2)}</Text>
+                                </View>
+                        <FlatList
+                            style={{width: '100%', paddingVertical:15}}
                             data={item.produtos}
                             keyExtractor={({ id }) => id}
                             renderItem={({item, index})=>
                                 {
                                   return(
-                                <View style={{display: "flex", flexDirection:'row', alignItems:'center', margin:3}}>       
-                                  <Text style={{fontSize:18,textAlign:'justify', backgroundColor:'#e5e5e5', padding: 10}}>{item.qty}</Text> 
-                                  <Text numberOfLines={1} style={{width:'85%', fontWeight:'normal', fontSize:18,textAlign:'justify', paddingLeft:20}}>
+                                <View style={{display: "flex", flexDirection:'row', alignItems:'center', margin:3, justifyContent:"space-between", paddingLeft:15}}>       
+                                  <Text style={{fontSize:16,textAlign:'justify', backgroundColor:'#e5e5e5', padding: 10}}>{item.qty}</Text> 
+                                  <Text numberOfLines={1} style={{width: "60%", fontWeight:'normal', fontSize:16,textAlign:'justify', paddingLeft:20}}>
                                     {item.produto}
+                                  </Text>
+                                  <Text  style={{textAlign:"right", fontWeight:'normal', fontSize:16, paddingRight:30}}>
+                                    R${item.unitPrice.toFixed(2)}
                                   </Text>
                                 </View>)}
                                 }/>
-                              </View>
                                 <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>
-                                <Icon name="receipt" size={24}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> Total:  R${item.total.toFixed(2)}</Text>
-                              </View>
-                              <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>  
-                                <Icon name="motorcycle" size={18}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> {statusmoto}</Text>  
-                              </View>
-                              <View>
-                              <Button 
-                                mode={"contained"}
-                                style={{margin:5}}
-                                contentStyle={{backgroundColor:'#53aaa8'}}
-                                labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosRecibo", {params:{cartid:item._id}})}>
-                                  Ver Recibo
-                                </Button>
-                                <Button 
-                                mode={"contained"}
-                                style={{margin:5}}
-                                contentStyle={{backgroundColor:'#FBA33F'}}
-                                labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosAjuda",{params:{cartid:item._id}})}>
-                                  Ajuda
-                                </Button>
-                              </View>  
-                          </View> 
+                                <View style={{paddingLeft:15, paddingRight:30, flexDirection:"column"}}>
+                                  <View style={{ flexDirection:"row", paddingBottom:15, paddingTop:15, justifyContent:"space-between"}}>
+                                    <Text style={{fontWeight: "bold"}}>Sub-Total</Text>
+                                    <Text style={{textAlign:"right", fontWeight: "bold"}}>R${item.subTotal.toFixed(2)}</Text>
+                                    </View>
+                                  <View style={{ flexDirection:"row", paddingBottom:15, justifyContent:"space-between"}}>
+                                    <Text>Frete</Text>
+                                    <Text style={{textAlign:"right"}}>R${item.shippingprice.toFixed(2)}</Text>
+                                    </View>
+                                  <View style={{ flexDirection:"row", paddingBottom:15,justifyContent:"space-between"}}>
+                                    <Text>Taxas e Impostos</Text>
+                                    <Text style={{textAlign:"right"}}>R$0.00</Text>
+                                    </View>
+                                  <View style={{ flexDirection:"row", paddingBottom:15,justifyContent:"space-between"}}>
+                                    <Text>Promoções e Descontos</Text>
+                                    <Text style={{textAlign:"right"}}>R$0.00</Text>
+                                    </View>
+                                  <View style={{flexDirection:"row", paddingBottom:15,justifyContent:"space-between"}}>
+                                    <Text>Cupom</Text>
+                                    <Text style={{textAlign:"right"}}>R$0.00</Text>
+                                    </View>
+                                </View>
+                          </View>
                   )
-                })}
+              })}
               </View>
-            </View>
-                
           )}
         </ScrollView>
       </SafeAreaView>
-    );
+    )
+    
   }
 }
 

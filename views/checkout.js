@@ -166,9 +166,6 @@ export default class Checkout extends React.Component {
 
   payment = async () => {
     const payload = JSON.stringify({
-      dadoscliente:{
-        telefone: this.state.telefone
-      },
       deliveryadress: 
         {
           logradouro: this.state.logradouro,

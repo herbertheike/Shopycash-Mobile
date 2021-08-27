@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
+  TouchableOpacity,
   Image,
   ScrollView,
   SafeAreaView,
@@ -21,7 +21,7 @@ import firebase from "firebase";
 import { MaterialIndicator } from "react-native-indicators";
 import "moment/locale/pt-br";
 
-export default class MeusPedidosDetail extends React.Component {
+export default class MeusPedidosAjuda extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,11 +103,11 @@ export default class MeusPedidosDetail extends React.Component {
               <Text
                 style={{ fontWeight: "bold", color: "#53aaa8", fontSize: 15 }}
               >
-                Detalhes do Pedido
+                Ajuda
               </Text>
             ))
           }
-          rightComponent={<Text style={{ paddingRight: 10 }}>Ajuda</Text>}
+          rightComponent={<Text style={{ paddingRight: 10 }}></Text>}
           containerStyle={{
             backgroundColor: "#ffffff",
             justifyContent: "space-around",
@@ -134,12 +134,11 @@ export default class MeusPedidosDetail extends React.Component {
             </View>
           ) : (
             <View>
-              
               <View>
                 <Image
                   style={{
                     width: "100%",
-                    height: 200,
+                    height: 400,
                     borderColor: "#a3d2ca",
                   }}
                   source={{ uri: lojarray.capa }}
@@ -162,103 +161,36 @@ export default class MeusPedidosDetail extends React.Component {
                   var status = "";
                   var statusicon = "";
                   var statuscolor = "";
-                  var statusmoto =""
                   if (item.cartstatus === "await") {
                     status = "Pedido em Separação";
                     statusicon = "store";
                     statuscolor = "#7C83FD";
-                    statusmoto="Seu pedido está sendo separado para entrega"
                   } else if (item.cartstatus === "onroute") {
                     status = "Pedido Enviado";
                     statusicon = "truck";
                     tatuscolor = "#7FFC93C";
-                    statusmoto="Sua entrega será feita por (nome do entregador)"
                   } else if (item.cartstatus === "delivered") {
                     status = "Pedido Concluido";
                     statusicon = "check-circle";
                     statuscolor = "#00BD56";
-                    statusmoto="Sua entrega foi feita por (nome do entregador)"
                   } else {
                     status = "Pedido Cancelado";
                     statusicon = "ban";
                     statuscolor = "#DA0037";
-                    statusmoto="O pedido foi cancelado"
                   }
                   return(
-                    <View style={{paddingLeft:15, paddingRight:15}}>
-                      <View style={{flexDirection: "row"}}>
-                        <Text style={{fontSize:12, color: statuscolor, fontWeight: "bold"}}>{status} </Text>
-                        <Text style={{fontSize:12, fontWeight: "100"}}> - {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
+                    <View style={{paddingLeft:10, paddingRight:10}}>
+                      <View style={{flexDirection: "row",}}>
+                        <Text style={{fontSize:12, color: statuscolor, fontWeight: "bold"}}>{status}: </Text>
+                        <Text style={{fontSize:12, fontWeight: "100"}}> {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
                       </View>
-                      <View style={{flexDirection: "row",justifyContent:'space-between', paddingTop:20}}>
-                        <Text style={{fontWeight: "bold", fontSize:24,textAlign:"center"}}>Seu Pedido</Text>
-                        <Pressable 
-                        style={({ pressed }) => [
-                          {
-                            backgroundColor: pressed
-                              ? 'rgb(94, 170, 168)'
-                              : '#dedede',borderRadius:10
-                          },
-                         { height: 40, width:"45%", borderRadius: 30, alignItems: "center", justifyContent:"center",shadowColor: "#000",
-                         shadowOffset: {
-                           width: 0,
-                           height: 0,
-                         },
-                         shadowOpacity: 1,
-                         shadowRadius: 0,
-                         elevation:4}
-  
-                        ]}
-                        onPress={() =>this.props.navigation.navigate("MeusPedidosAvaliar",{params:{cartid:item._id}})}
-                        >
-                        <Text style={{fontWeight: "100", fontSize:15, textAlign:"center"}}>Avaliar Pedido</Text>
-                        </Pressable>
-                      </View>
-                      <View>
-                          <FlatList
-                            style={{width: '100%', paddingVertical:40}}
-                            data={item.produtos}
-                            keyExtractor={({ id }) => id}
-                            renderItem={({item, index})=>
-                                {
-                                  return(
-                                <View style={{display: "flex", flexDirection:'row', alignItems:'center', margin:3}}>       
-                                  <Text style={{fontSize:18,textAlign:'justify', backgroundColor:'#e5e5e5', padding: 10}}>{item.qty}</Text> 
-                                  <Text numberOfLines={1} style={{width:'85%', fontWeight:'normal', fontSize:18,textAlign:'justify', paddingLeft:20}}>
-                                    {item.produto}
-                                  </Text>
-                                </View>)}
-                                }/>
-                              </View>
-                                <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>
-                                <Icon name="receipt" size={24}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> Total:  R${item.total.toFixed(2)}</Text>
-                              </View>
-                              <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400}}/>
-                              <View style={{ flexDirection: "row", paddingVertical:40}}>  
-                                <Icon name="motorcycle" size={18}/>
-                                <Text style={{paddingLeft:10, fontWeight: "100"}}> {statusmoto}</Text>  
-                              </View>
-                              <View>
-                              <Button 
-                                mode={"contained"}
-                                style={{margin:5}}
-                                contentStyle={{backgroundColor:'#53aaa8'}}
-                                labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosRecibo", {params:{cartid:item._id}})}>
-                                  Ver Recibo
-                                </Button>
-                                <Button 
-                                mode={"contained"}
-                                style={{margin:5}}
-                                contentStyle={{backgroundColor:'#FBA33F'}}
-                                labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>this.props.navigation.navigate("MeusPedidosAjuda",{params:{cartid:item._id}})}>
-                                  Ajuda
-                                </Button>
-                              </View>  
-                          </View> 
+                      <View style={{borderBottomWidth: 1,borderBottomColor: '#737373',width: 400, paddingTop:30, paddingVertical:15}}/>
+                        <View style={{ flexDirection: "column",}}>
+                            <Text style={{ flexDirection: "column", fontWeight: "100", paddingVertical:15}}>Ajuda com o pedido</Text>
+                            <Text style={{ flexDirection: "column", fontWeight: "bold", paddingVertical:15}}>Problemas com a entrega</Text>
+                            <Text style={{ flexDirection: "column", fontWeight: "bold", paddingVertical:15}}>Problemas de Segurança</Text>
+                        </View>  
+                      </View> 
                   )
                 })}
               </View>
