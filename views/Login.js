@@ -53,7 +53,7 @@ class Login extends React.Component {
               lastLogIn: Date.now(),
             });
 
-            this.onLoginSuccess.bind(this)
+            this.onLoginSuccess()
         }
         
       }
@@ -108,7 +108,7 @@ class Login extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onLoginSuccess();
       }
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
@@ -156,7 +156,7 @@ class Login extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onLoginSuccess();
       }
     } catch ({ message }) {
       alert("login: Error:" + message);

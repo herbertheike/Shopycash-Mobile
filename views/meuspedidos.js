@@ -7,7 +7,9 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
+  BackHandler,
   FlatList,
+  ToastAndroid,
   Button
 } from "react-native";
 import moment from 'moment'
@@ -52,7 +54,10 @@ export default class MeusPedidos extends React.Component {
       .then((res) => this.setState({compraresult:res}))
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading:false}),[]);
+      
   }
+
+
 
   render() {
     const data = this.state.compraresult;

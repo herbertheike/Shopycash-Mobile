@@ -26,63 +26,58 @@ export default class Cart extends React.Component {
       selectAll: false,
       cartItemsIsLoading: false,
       cartItems: [],
-      loja:null,
-      lojaid:null,
-      shopping:null,
-      shoppingid:null,
+      loja: null,
+      lojaid: null,
+      shopping: null,
+      shoppingid: null,
       totalPrice: 0,
       refreshing: false,
-      delivery:'',
-      jsonarray:[],
-      jsonarray2:[],
+      delivery: "",
+      jsonarray: [],
+      jsonarray2: [],
     };
   }
 
-  componentDidMount = async () =>{
+  componentDidMount = async () => {
     const nome = await AsyncStorage.getItem("nome");
     const user = firebase.auth().currentUser;
 
-    await AsyncStorage.getItem('cartstatus')
-    .then((cartstatus)=>{
-      if (cartstatus === 'checkout'){
+    await AsyncStorage.getItem("cartstatus").then((cartstatus) => {
+      if (cartstatus === "checkout") {
         this.props.navigation.navigate("Checkout");
       }
-    })
+    });
 
-    await AsyncStorage.getItem('loja')
-    .then((loja)=>{
-      this.setState({loja:loja})
-      console.log(this.state.loja)
-    })
-    await AsyncStorage.getItem('lojaid')
-    .then((lojaid)=>{
-      this.setState({lojaid:lojaid})
-      console.log(this.state.lojaid)
-    })
-    await AsyncStorage.getItem('shopping')
-    .then((shopping)=>{
-      this.setState({shopping:shopping})
-      console.log(this.state.shopping)
-    })
-    await AsyncStorage.getItem('shoppingid')
-    .then((shoppingid)=>{
-      this.setState({shoppingid:shoppingid})
-      console.log(this.state.shoppingid)
-    })
-    
+    await AsyncStorage.getItem("loja").then((loja) => {
+      this.setState({ loja: loja });
+      console.log(this.state.loja);
+    });
+    await AsyncStorage.getItem("lojaid").then((lojaid) => {
+      this.setState({ lojaid: lojaid });
+      console.log(this.state.lojaid);
+    });
+    await AsyncStorage.getItem("shopping").then((shopping) => {
+      this.setState({ shopping: shopping });
+      console.log(this.state.shopping);
+    });
+    await AsyncStorage.getItem("shoppingid").then((shoppingid) => {
+      this.setState({ shoppingid: shoppingid });
+      console.log(this.state.shoppingid);
+    });
+
     await AsyncStorage.getItem("cart")
       .then((cart) => {
         if (cart !== null) {
           // We have data!!
           const cartgoods = JSON.parse(cart);
-          console.log(cartgoods.length)
+          console.log(cartgoods.length);
           this.setState({ cartItems: cartgoods });
         }
       })
       .catch((err) => {
         alert(err);
       });
-  }
+  };
 
   selectHandler = (index, value) => {
     const newItems = [...this.state.cartItems]; // clone the array
@@ -115,9 +110,12 @@ export default class Cart extends React.Component {
           text: "Deletar",
           onPress: async () => {
             //let updatedCart = this.state.cartItems; /* Clone it first */
-            this.state.cartItems.splice(index,1);
+            this.state.cartItems.splice(index, 1);
             /* Remove item from the cloned cart state */
-            await AsyncStorage.setItem("cart",JSON.stringify(this.state.cartItems));
+            await AsyncStorage.setItem(
+              "cart",
+              JSON.stringify(this.state.cartItems)
+            );
             this.onRefresh();
           },
         },
@@ -144,7 +142,8 @@ export default class Cart extends React.Component {
     const { cartItems } = this.state;
     if (cartItems) {
       return cartItems.reduce(
-        (sum, item) => sum + (item.checked == 1 ? item.qty * item.unitPrice : 0),
+        (sum, item) =>
+          sum + (item.checked == 1 ? item.qty * item.unitPrice : 0),
         0
       );
     }
@@ -175,96 +174,118 @@ export default class Cart extends React.Component {
 
   repopulate = async () => {
     const newItems = [...this.state.cartItems];
-   // console.log(newItems)
+    // console.log(newItems)
     const jsonarray = this.state.jsonarray;
-    const jsonarray2 = this.state.jsonarray2
-    for(var i=0; i< newItems.length;i++){
+    const jsonarray2 = this.state.jsonarray2;
+    for (var i = 0; i < newItems.length; i++) {
       try {
-        const obj = JSON.parse(JSON.stringify({
-          produtoid: newItems[i].produtoid,
-          produto:newItems[i].produto,
-          categoria:newItems[i].categoria,
-          unitPrice:newItems[i].unitPrice,
-          qty: newItems[i].qty,
-          image: newItems[i].imagem,  
-        }))
+        const obj = JSON.parse(
+          JSON.stringify({
+            produtoid: newItems[i].produtoid,
+            produto: newItems[i].produto,
+            categoria: newItems[i].categoria,
+            unitPrice: newItems[i].unitPrice,
+            qty: newItems[i].qty,
+            image: newItems[i].imagem,
+          })
+        );
         //console.log(obj)
-    const obj2 = JSON.parse(JSON.stringify({
-      produto:newItems[i].produto,
-      produtoid: newItems[i].produtoid,
-      qty: newItems[i].qty,
-    }))
-    if(i<= newItems.length){
-      jsonarray.push(obj);
-      jsonarray2.push(obj2);
-    }
-    //console.log(jsonarray)
+        const obj2 = JSON.parse(
+          JSON.stringify({
+            produto: newItems[i].produto,
+            produtoid: newItems[i].produtoid,
+            qty: newItems[i].qty,
+          })
+        );
+        if (i <= newItems.length) {
+          jsonarray.push(obj);
+          jsonarray2.push(obj2);
+        }
+        //console.log(jsonarray)
       } catch (error) {
-        console.log("THIS ERROR"+error)
-      }   
-  }
-  }
+        console.log("THIS ERROR" + error);
+      }
+    }
+  };
   checkOut = async () => {
-    const setnome = await AsyncStorage.getItem("nome")
-    .then((nome)=>{
-      this.setState({nome:JSON.parse(nome)})
-    })
+    firebase.auth().onAuthStateChanged((user) => {
+    if(user){
+    const setnome = AsyncStorage.getItem("nome").then((nome) => {
+      this.setState({ nome: JSON.parse(nome) });
+    });
     const loja = this.state.loja;
     const lojaid = this.state.lojaid;
     const shopping = this.state.shopping;
     const shoppingid = this.state.shoppingid;
     const userId = firebase.auth().currentUser.uid;
     const email = firebase.auth().currentUser.email;
-    const nome = this.state.nome
-    console.log(nome)
-
+    const nome = this.state.nome;
+    console.log(nome);
 
     const payload = JSON.stringify({
-            loja:loja,
-            lojaid: lojaid,
-            shopping: shopping,
-            shoppingid: shoppingid,
-            produtos:
-            [...this.state.cartItems],
-            dadoscliente:
-            {
-              userid: userId,
-              nome:nome,
-              email: email,
-            },
-            cartstatus:'checkout',
-            datacompra: Date.now(),
-            subTotal: this.subtotalPrice()			
-  })
-   try {
-     this.repopulate()
-     await fetch("https://api-shopycash1.herokuapp.com/cart/", {
-				method: "POST",
-				headers: {
-				  Accept: "application/json",
-				  "Content-Type": "application/json",
-				},
-					body: payload,
-				  })
-			  .then((response) => response.json())
-			  .then((res) => this.setState({delivery: res}))
-			  .catch((error) => console.error(error))
-        .finally(() => console.log("delivery ok"),[]);
-              
-   } catch (error) {
-     console.log(error)
-   }
-   this.state.jsonarray.length = 0;
-   console.log("checkout: \n"+ JSON.stringify(this.state.delivery))
-   if(this.state.delivery.status === 'OK'){
-     const cartstatus = await AsyncStorage.setItem("cartstatus",'checkout')
-     const cartid = await AsyncStorage.setItem("cartid",this.state.delivery.InsertID)
-     console.log('909090')
-    this.props.navigation.navigate("Checkout");       
-   }else{
-      Alert.alert("Shopycash Payment", "Infelizmente houve um problema com seu carrinho.\nVerique os produtos e tente novamente.")
-   }
-   
+      loja: loja,
+      lojaid: lojaid,
+      shopping: shopping,
+      shoppingid: shoppingid,
+      produtos: [...this.state.cartItems],
+      dadoscliente: {
+        userid: userId,
+        nome: nome,
+        email: email,
+      },
+      cartstatus: "checkout",
+      datacompra: Date.now(),
+      subTotal: this.subtotalPrice(),
+    });
+    console.log("Payload",payload)
+    try {
+      this.repopulate();
+     fetch("https://api-shopycash1.herokuapp.com/cart/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: payload,
+      })
+        .then((response) => response.json())
+        .then((res) => this.setState({ delivery: res }))
+        .catch((error) => console.error(error))
+        .finally(() => console.log("delivery ok"), []);
+    } catch (error) {
+      console.log(error);
+    }
+    this.state.jsonarray.length = 0;
+    console.log("checkout: \n" + JSON.stringify(this.state.delivery));
+    if (this.state.delivery.status === "OK") {
+      const cartstatus =  AsyncStorage.setItem("cartstatus", "checkout");
+      const cartid =  AsyncStorage.setItem(
+        "cartid",
+        this.state.delivery.InsertID
+      );
+      console.log("909090");
+      this.props.navigation.navigate("Checkout");
+    } else {
+      Alert.alert(
+        "Shopycash Payment",
+        "Infelizmente houve um problema com seu carrinho.\nVerique os produtos e tente novamente."
+      );
+    }
+    }else{
+      Alert.alert(
+        "Aviso",
+        "Para continuar realize o login\nOu Cadastre-se!",
+        [
+          {
+            text: "Cancelar",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "Logar agora", onPress: () => this.props.navigation.navigate("Cadastro") }
+        ]
+      );
+    }
+  });
   };
 
   render() {
@@ -358,12 +379,19 @@ export default class Cart extends React.Component {
                       <Text numberOfLines={1} style={{ fontSize: 16 }}>
                         {item.produto}
                       </Text>
-                      <Text numberOfLines={1} style={{ color: "#8f8f8f",fontSize: 12 }}>
+                      <Text
+                        numberOfLines={1}
+                        style={{ color: "#8f8f8f", fontSize: 12 }}
+                      >
                         {item.categoria ? "Categoria: " + item.categoria : ""}
                       </Text>
                       <Text
                         numberOfLines={1}
-                        style={{ color: "#333333", marginBottom: 10,fontSize: 15 }}
+                        style={{
+                          color: "#333333",
+                          marginBottom: 10,
+                          fontSize: 15,
+                        }}
                       >
                         Preço: R${item.qty * item.unitPrice}
                       </Text>
@@ -473,7 +501,7 @@ export default class Cart extends React.Component {
               justifyContent: "flex-end",
             }}
           >
-			              <TouchableOpacity
+            <TouchableOpacity
               style={[
                 styles.centerElement,
                 {
@@ -488,12 +516,10 @@ export default class Cart extends React.Component {
               <Text
                 style={{ color: "#ffffff", fontSize: 12, fontWeight: "bold" }}
               >
-                
                 Checkout
               </Text>
             </TouchableOpacity>
-            
-		  </View>
+          </View>
         </View>
       </View>
     );

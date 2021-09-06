@@ -25,6 +25,7 @@ export default class Checkout extends React.Component {
       nome: '',
       cpf: '',
       email: '',
+      userid:'',
       telefone: '',
       shippingtax: 0,
       shipping:'',
@@ -98,6 +99,7 @@ export default class Checkout extends React.Component {
           .finally(() => this.setState({isLoaded: true}));
         
           console.log('ORDER DATA', this.state.orderdata)
+          this.setState({userid:this.state.orderdata[0].dadoscliente.userid})
           this.setState({nome:this.state.orderdata[0].dadoscliente.nome})
           this.setState({email:this.state.orderdata[0].dadoscliente.email})
           this.setState({subtotalPrice:this.state.orderdata[0].subTotal})
@@ -166,6 +168,12 @@ export default class Checkout extends React.Component {
 
   payment = async () => {
     const payload = JSON.stringify({
+      dadoscliente:
+            {
+              userid: this.state.userid,
+              nome:this.state.nome,
+              email: this.state.email,
+            },
       deliveryadress: 
         {
           logradouro: this.state.logradouro,

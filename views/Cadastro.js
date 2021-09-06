@@ -46,6 +46,8 @@ class Cadastro extends React.Component {
         }
        let apikey = await Location.setApiKey("AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ");
     this.Locale();
+   // this.onLoginSuccess = this.onLoginSuccess.bind(this);
+ //   this.onLoginFailure = this.onLoginFailure.bind(this);
   }
 
   onLoginSuccess = ()=> {
@@ -140,7 +142,7 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onLoginSuccess();
       }
     } catch ({ message }) {
       alert(`Erro ao logar com o facebook: ${message}`);
@@ -187,7 +189,7 @@ class Cadastro extends React.Component {
               lastLogIn: Date.now(),
             });
         }
-        this.onLoginSuccess.bind(this);
+        this.onLoginSuccess();
       }
     } catch ({ message }) {
       alert("login: Error:" + message);

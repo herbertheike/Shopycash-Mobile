@@ -123,6 +123,7 @@ class CadMap extends React.Component {
           <Text style={styles.label}>
             Olá, qual seu CEP?
           </Text>
+          <View style={{alignItems: "center", justifyContent:'space-between'}}>
           <TextInputMask
             type={'zip-code'}
             value={this.state.cep}
@@ -140,6 +141,7 @@ class CadMap extends React.Component {
               onPress={()=>this.viaCep()}>
                 Pesquisar
               </Button>
+              </View>
               </View>
               <View style={{widtth:'100%'}}>
               <TextInput
@@ -198,7 +200,7 @@ class CadMap extends React.Component {
               underlineColor={"#5eaaa8"}
               selectionColor={"#5eaaa8"}
               theme={temaInput}
-                placeholder="Estado"
+                placeholder="Ponto de referencia"
                 value={this.state.addressReference}
                 onChangeText={addressReference => this.setState({ addressReference:addressReference })}
               />

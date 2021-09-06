@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import BackHandler from "react-native"
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -55,7 +56,10 @@ class App extends React.Component {
         this.setState({ user: user });
       }
     });
+
+  
   }
+
   render() {
     return (
       <NavigationContainer>
