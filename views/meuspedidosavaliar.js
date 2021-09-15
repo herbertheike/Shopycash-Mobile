@@ -24,10 +24,13 @@ export default class MeusPedidosAvaliar extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
+      comentresult: null,
       cartresult: [],
       lojarray: [],
       caracnumber: 140,
       comentario:'',
+      nota:1,
+      editable:true,
       datearray: [
         {
           month: "Anteriores",
@@ -48,7 +51,20 @@ export default class MeusPedidosAvaliar extends React.Component {
     const cartid = this.props.route.params.params.cartid;
     console.log("CARTID", cartid);
 
-    await fetch("https://api-shopycash1.herokuapp.com/cart/" + cartid)
+      await fetch("https://api-shopycash1.herokuapp.com/comentarios/cart/" + cartid)
+      .then((response) => response.json())
+      .then((res) => this.setState({ comentresult: res }))
+      .catch((error) => console.error(error))
+      .finally(() => this.setState({ isLoading: false }), []);
+
+        if(this.state.comentresult != null){
+          this.setState({comentario:this.state.comentresult[0].comentario})
+          this.setState({nota:this.state.comentresult[0].nota})
+          this.setState({editable:false})
+          console.log(this.state.comentresult)
+        }
+
+      await fetch("https://api-shopycash1.herokuapp.com/cart/" + cartid)
       .then((response) => response.json())
       .then((res) => this.setState({ cartresult: res }))
       .catch((error) => console.error(error))
@@ -56,9 +72,6 @@ export default class MeusPedidosAvaliar extends React.Component {
 
     this.storeInfo();
     console.log();
-
-
-    
 
   };
 
@@ -71,22 +84,60 @@ export default class MeusPedidosAvaliar extends React.Component {
       .finally(() => this.setState({ isLoading: false }), []);
 
     console.log(this.state.lojarray);
-
   };
 
+  onFinishrating = async () => {
 
+  }
+
+  comentsend = async () =>{
+    const payload = JSON.stringify({
+      userid:this.state.cartresult[0].dadoscliente.userid,
+      username:this.state.cartresult[0].dadoscliente.nome,
+      order:this.state.cartresult[0]._id,
+      lojaid: this.state.cartresult[0].lojaid,
+      lojanome:this.state.cartresult[0].loja,
+      nota:this.state.nota,
+      comentario:this.state.comentario,
+    })
+    console.log(payload)
+    const showToastWithGravity = () => {
+      ToastAndroid.showWithGravity(
+        "Comentario enviado, Obrigado!\nSeu feedback é muito importante.",
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM
+      ); 
+    };
+    await fetch(
+      "https://api-shopycash1.herokuapp.com/comentarios/",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: payload,
+      })
+      .then((response) => response.json())
+      .then((res) => console.log("Result", res))
+      .catch((error) => console.error(error));
+
+      showToastWithGravity();
+      this.props.navigation.navigate("MeusPedidos")
+    }
   render() {
     const backicon = (
       <Icon
         name="arrow-left"
         style={{ marginLeft: 10 }}
-        onPress={() => props.navigation.goBack()}
+        onPress={() => this.props.navigation.goBack()}
         color="#5eaaa8"
         size={25}
       />
     );
     const lojarray = this.state.lojarray;
     const cartresult = this.state.cartresult;
+    const comentresult = this.state.comentresult;
 
     
     console.log(lojarray);
@@ -165,31 +216,24 @@ export default class MeusPedidosAvaliar extends React.Component {
                 </Text>
               </View>
               <View>
-                {cartresult.map((item)=>{
+              {cartresult.map((item)=>{
                   var fullcount = 140
                   var countinput = this.state.comentario.length
                   var emptycount = fullcount-countinput
-                  const showToastWithGravity = () => {
-                    ToastAndroid.showWithGravity(
-                      "Comentario enviado, Obrigado!\nSeu feedback é muito importante.",
-                      ToastAndroid.LONG,
-                      ToastAndroid.BOTTOM
-                    );
-                    this.props.navigation.navigate("MeusPedidos")
-                  };
                   
-                  return(
+                  
+                  return(  
                     <View style={{paddingLeft:15, paddingRight:15}}>
-                      <View style={{flexDirection: "column"}}>
+                        <View style={{flexDirection: "column",alignItems: "center"}}>
                         <Text style={{fontSize:12, fontWeight: "100"}}>Data e hora do pedido: 
-                          <Text style={{fontSize:12, fontWeight: "300", }}> {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
+                          <Text style={{fontSize:12, fontWeight: "300"}}> {moment(item.datacompra).format("DD [de] MMMM [de] YYYY [às] hh:mm")}</Text>
                         </Text>
                         </View>
                         <View style={{padding:15}}>
                         <Text>Comentario:</Text>
                         <TextInput
                         style={{padding: 10,borderColor:"#dedede", borderWidth:0.6, borderRadius:5, textAlignVertical:"top"}}
-                        editable
+                        editable={this.state.editable}
                         multiline
                         numberOfLines={4}
                         onChangeText={text => this.setState({comentario:text})}
@@ -199,28 +243,27 @@ export default class MeusPedidosAvaliar extends React.Component {
                         <Text style={{fontSize:12,color:"#808080"}}>{emptycount}</Text>
                         <View style={{padding: 10}}>
                         <AirbnbRating
-                        reviews={["Pessimo", "Ruim", "Razoavel", "Bom", "Otimo"]}
+                        reviews={[1,2,3,4,5]}
                         showRating={true}
-                        type='heart'
+                        type='star'
                         size={40} 
-                        defaultRating={1}/>
+                        defaultRating={this.state.nota}
+                        onFinishRating={this.state.nota}/>
                               <Button 
                                 mode={"contained"}
                                 style={{margin:5}}
                                 contentStyle={{backgroundColor:'#53aaa8'}}
                                 labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
-                                onPress={() =>showToastWithGravity()}>
+                                onPress={() =>this.comentsend()}>
                                   Enviar
                                 </Button>
                         </View>
                       </View>
-                      
-                          </View> 
-                  )
-                })}
-              </View>
-            </View>
+                    </View> 
+                  )})}
                 
+              </View>
+            </View> 
           )}
         </ScrollView>
       </SafeAreaView>
