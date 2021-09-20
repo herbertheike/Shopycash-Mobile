@@ -16,7 +16,7 @@ import moment from "moment";
 import { Header } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { MaterialIndicator } from "react-native-indicators";
-import {AirbnbRating } from "react-native-elements";
+import {Rating } from "react-native-elements";
 import "moment/locale/pt-br";
 
 export default class MeusPedidosAvaliar extends React.Component {
@@ -24,13 +24,14 @@ export default class MeusPedidosAvaliar extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
-      comentresult: null,
+      comentresult: '',
       cartresult: [],
       lojarray: [],
       caracnumber: 140,
       comentario:'',
       nota:1,
       editable:true,
+      disable:false,
       datearray: [
         {
           month: "Anteriores",
@@ -57,10 +58,11 @@ export default class MeusPedidosAvaliar extends React.Component {
       .catch((error) => console.error(error))
       .finally(() => this.setState({ isLoading: false }), []);
 
-        if(this.state.comentresult != null){
+        if(this.state.comentresult != ''){
           this.setState({comentario:this.state.comentresult[0].comentario})
           this.setState({nota:this.state.comentresult[0].nota})
           this.setState({editable:false})
+          this.setState({disable:true})
           console.log(this.state.comentresult)
         }
 
@@ -86,8 +88,8 @@ export default class MeusPedidosAvaliar extends React.Component {
     console.log(this.state.lojarray);
   };
 
-  onFinishrating = async () => {
-
+  ratingCompleted(rating) {
+    console.log("Rating is: " + rating)
   }
 
   comentsend = async () =>{
@@ -242,18 +244,20 @@ export default class MeusPedidosAvaliar extends React.Component {
                         />
                         <Text style={{fontSize:12,color:"#808080"}}>{emptycount}</Text>
                         <View style={{padding: 10}}>
-                        <AirbnbRating
-                        reviews={[1,2,3,4,5]}
-                        showRating={true}
-                        type='star'
-                        size={40} 
-                        defaultRating={this.state.nota}
-                        onFinishRating={this.state.nota}/>
+                            <Rating
+                            reviews={[1,2,3,4,5]}
+                            type='star'
+                            size={35} 
+                            readonly={this.state.disable}
+                            startingValue={this.state.nota}
+                            onFinishRating={(rating)=>{this.setState({nota:rating})}}
+                            />
                               <Button 
-                                mode={"contained"}
+                                mode={"contained"} 
                                 style={{margin:5}}
                                 contentStyle={{backgroundColor:'#53aaa8'}}
                                 labelStyle={{color:"white",fontSize: 18, fontWeight:"100"}}
+                                disabled={this.state.disable}
                                 onPress={() =>this.comentsend()}>
                                   Enviar
                                 </Button>
