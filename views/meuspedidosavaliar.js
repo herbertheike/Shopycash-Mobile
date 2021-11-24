@@ -222,8 +222,6 @@ export default class MeusPedidosAvaliar extends React.Component {
                   var fullcount = 140
                   var countinput = this.state.comentario.length
                   var emptycount = fullcount-countinput
-                  
-                  
                   return(  
                     <View style={{paddingLeft:15, paddingRight:15}}>
                         <View style={{flexDirection: "column",alignItems: "center"}}>

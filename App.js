@@ -41,7 +41,6 @@ const firebaseConfig = {
   appId: "1:98141338607:android:d26ae530b6bf906cb9d41a",
 };
 
-
 //Navigators
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,8 +55,6 @@ class App extends React.Component {
         this.setState({ user: user });
       }
     });
-
-  
   }
 
   render() {

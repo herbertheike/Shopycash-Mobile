@@ -42,7 +42,7 @@ function GetShoppings(props) {
     try {
       const result = await Share.share({
         message:
-          "Instale a Shopycash e receba uma parte do seu dinheiro de volta em suas compras.\n(aqui vai ter um link)\n" 
+          "Instale agora mesmo O APP da ShopyCash.\n(aqui vai ter um link)\n" 
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

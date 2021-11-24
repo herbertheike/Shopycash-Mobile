@@ -74,7 +74,7 @@ export default class MeusPedidosAjuda extends React.Component {
       <Icon
         name="arrow-left"
         style={{ marginLeft: 10 }}
-        onPress={() => props.navigation.goBack()}
+        onPress={() => this.props.navigation.goBack()}
         color="#5eaaa8"
         size={25}
       />

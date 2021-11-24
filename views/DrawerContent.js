@@ -137,16 +137,7 @@ export class DrawerContentMenu extends React.Component {
                 }}
               />
 
-              <DrawerItem
-                style={styles.draweritemStyle}
-                icon={({ color, size }) => (
-                  <Icon name="hand-holding-usd"  color={"#5eaaa8"} size={25}  />
-                )}
-                label="Pagar com ShopyCash"
-                onPress={() => {
-                  this.props.navigation.navigate("PaymentScan");
-                }}
-              />
+              
               <DrawerItem
                 style={styles.draweritemStyle}
                 icon={({ color, size }) => (
@@ -176,7 +167,7 @@ export class DrawerContentMenu extends React.Component {
                 )}
                 label="Ajuda"
                 onPress={() => {
-                  firebase.auth().signOut();
+                  alert("Entre em contato com o suporte atraves do site.");
                 }}
               />
             </Drawer.Section>
@@ -252,3 +243,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
+/***
+ * DEPRECATED
+ * 
+ * <DrawerItem
+                style={styles.draweritemStyle}
+                icon={({ color, size }) => (
+                  <Icon name="hand-holding-usd"  color={"#5eaaa8"} size={25}  />
+                )}
+                label="Pagar com ShopyCash"
+                onPress={() => {
+                  this.props.navigation.navigate("PaymentScan");
+                }}
+              />
+ */

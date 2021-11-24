@@ -135,11 +135,7 @@ function GetShoppings(props) {
                   style={{
                     width: "100%",
                     borderRadius: 5,
-                    backgroundColor:
-                      "#" +
-                      (0x1000000 + Math.random() * 0xffffff)
-                        .toString(16)
-                        .substr(1, 6),
+                    backgroundColor:"white",
                     marginVertical: 10,
                     alignItems: "center",
                     justifyContent: "center",
@@ -245,11 +241,12 @@ const styles = StyleSheet.create({
   lojades: {
     fontSize: 12,
     position: "relative",
-    color: "#ffffff",
+    fontWeight: "100",
+    color: "black",
   },
   lojastext: {
     fontWeight: "bold",
-    color: "#000000",
+    color: "black",
   },
   starloja: {
     fontWeight: "bold",
