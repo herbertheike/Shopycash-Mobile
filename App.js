@@ -31,6 +31,7 @@ import Checkout from "./views/checkout"
 import Payment from "./views/payment"
 import { Icon } from "react-native-elements";
 import * as firebase from "firebase";
+import lojasMain from "./views/lojasMain";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCI_8KYJblO2KFRY6vuwy3qa3rmLcnMhPQ",
@@ -76,11 +77,11 @@ class App extends React.Component {
             component={TelefoneLogin}
             options={{ headerShown: false }}
           />
-          <MainStack.Screen
+        <MainStack.Screen
             name="MainPage"
             component={MainPage}
             options={{ headerShown: false }}
-          />
+    />
           <MainStack.Screen
             name="GetShoppings"
             component={GetShoppings}
@@ -214,7 +215,7 @@ function GetCategorias() {
 }
 
 function MainPage({ navigation }) {
-  return (
+  /*return (
     <Drawer.Navigator>
       <Drawer.Screen
         name="LojasMain"
@@ -235,7 +236,14 @@ function MainPage({ navigation }) {
         }}
       />
     </Drawer.Navigator>
-  );
+  );*/
+  return(<Stack.Navigator>
+    <Stack.Screen
+      name="LojasMain"
+      component={lojasMain}
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>)
 }
 
 export default App;

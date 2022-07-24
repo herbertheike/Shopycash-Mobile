@@ -94,9 +94,9 @@ export default function Getloja(props) {
         </View>
       )}
       renderForeground={() => (
-        <View style={{ marginTop: 60 }}>
+        <View style={{ marginTop: 30 }}>
           <View
-            style={{ alignItems: "center", padding: 20, paddingVertical: 30 }}
+            style={{ alignItems: "center", padding: 10, paddingVertical: 30 }}
           >
             <TouchableOpacity
               style={{
@@ -104,15 +104,17 @@ export default function Getloja(props) {
                 borderWidth: 0.1,
                 borderColor: "#565656",
                 backgroundColor: "#ffffff",
-                height: 300,
-                flex: 1,
+                height: 'auto',
+                flex:0,
                 flexDirection: "row",
-                justifyContent: "center",
+                justifyContent: 'space-between',
+                alignItems:'flex-start',
                 width: "auto",
                 padding: 30,
                 paddingVertical: 50,
+                zIndex:-1
               }}
-              title="Login"
+              title="SHOPCARD"
               color="#ffffff"
               onPress={() => alert(data.nomefantasia)}
             >
@@ -121,6 +123,7 @@ export default function Getloja(props) {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "flex-start",
+                  width:250
                 }}
               >
                 <Text style={styles.lojastext}>
@@ -207,7 +210,7 @@ console.log(route.params.params.id)
               <TouchableOpacity
                 style={{
                   width: 300,
-                  borderRadius: 15,
+                  borderRadius: 5,
                   borderWidth: 0.1,
                   backgroundColor: "#ffffff",
                   color: "#000000",
@@ -243,7 +246,7 @@ console.log(route.params.params.id)
                 <Text style={styles.ofertastext} numberOfLines={1}>{item.nome}</Text>
                 <Text style={styles.lojades}>R${item.preco}</Text>
                 <Text style={styles.lojades}> Disponivel em: {item.loja} - {item.shopping}</Text>
-                <Text style={{color: "#ffffff", fontWeight: "100", fontSize: 10, backgroundColor: "#34CC95", borderRadius: 15, padding: 2}}>
+                <Text style={{color: "#ffffff", fontWeight: "100", fontSize: 10, backgroundColor: "#34CC95", borderRadius: 5, padding: 2}}>
                   Cashback disponivel: 1%
                   </Text>
               </TouchableOpacity>
@@ -348,7 +351,7 @@ console.log(route.params.params.id)
                                   fontSize: 10,
                                   textAlign:"center",
                                   backgroundColor: "#34CC95",
-                                  borderRadius: 15,
+                                  borderRadius: 5,
                                   padding: 2,
                                 }}
                                 
