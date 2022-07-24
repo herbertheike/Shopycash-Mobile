@@ -34,6 +34,7 @@ class HomeScreen extends React.Component{
 
     state = {
       search: '',
+      refreshing:false,
       isLoading:true,
       data:[],
       datal:[],
@@ -86,7 +87,7 @@ class HomeScreen extends React.Component{
        firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           const userId = firebase.auth().currentUser.uid;
-           await firebase
+           firebase
             .database()
             .ref("/user/" + userId)
             .once(
@@ -120,7 +121,7 @@ class HomeScreen extends React.Component{
   const menuicon = (
     <Icon
       style={{ marginLeft: 10 }}
-      onPress={() => this.props.navigation.toggleDrawer}
+      onPress={() => this.props.navigation.toggleDrawer()}
       name="bars"
       color="#5eaaa8"
       size={25}
@@ -138,14 +139,10 @@ class HomeScreen extends React.Component{
   
   const staricon = <Icon name="star" size={12} />;
 
-
-  const refreshing = false;
-
-  
   const onRefresh = (() => {
       refreshing = true;
   
-      wait(2000).then(() => refreshing = false);
+      wait(2000).then(() => this.state.refreshing = false);
     }, []);
     const filtered = this.state.datal.filter((item) => {
       return item.nomefantasia.match(this.state.search) || item.shopping.match(this.state.search) || item.segmento[0].match(this.state.search);
@@ -187,7 +184,7 @@ class HomeScreen extends React.Component{
       </View>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={onRefresh} />
         }
       > 
         <View style={{ height: 'auto', padding: 10 }}>
