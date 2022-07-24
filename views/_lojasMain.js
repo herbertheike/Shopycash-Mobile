@@ -27,8 +27,8 @@ import Profile from "./userProfile"
 import Cart from "./cart"
 import * as Location from "expo-location";
 import firebase from "firebase";
-const Drawer = createDrawerNavigator();
 
+const Drawer = createDrawerNavigator();
 
 //função principal
 function HomeScreen(props) {
